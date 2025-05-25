@@ -1,75 +1,168 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Clock, MapPin, PhoneCall, Sparkles, CheckCircle, ArrowRight, Calendar, MessageSquare, ChevronDown, Star } from 'lucide-react';
-import { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Clock,
+  MapPin,
+  PhoneCall,
+  Sparkles,
+  CheckCircle,
+  ArrowRight,
+  Calendar,
+  MessageSquare,
+  ChevronDown,
+  Star,
+  Menu,
+  X,
+} from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Home() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
   const [showLocations, setShowLocations] = useState(false);
   const [showServices, setShowServices] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const services = [
     {
-      title: 'Deep Cleaning',
-      description: 'Are you looking for a professional cleaning service that specialises in deep cleaning?',
-      image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3',
+      title: "Deep Cleaning",
+      description:
+        "Are you looking for a professional cleaning service that specialises in deep cleaning?",
+      image:
+        "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3",
     },
     {
-      title: 'Carpet Cleaning',
-      description: 'Let us delve into the world of carpet cleaning and discover how No Sweat Cleaning can transform your space.',
-      image: 'https://images.unsplash.com/photo-1558317374-067fb5f30001?ixlib=rb-4.0.3',
+      title: "Carpet Cleaning",
+      description:
+        "Let us delve into the world of carpet cleaning and discover how No Sweat Cleaning can transform your space.",
+      image:
+        "https://images.unsplash.com/photo-1558317374-067fb5f30001?ixlib=rb-4.0.3",
     },
     {
-      title: 'Commercial Cleaning',
-      description: 'Do you ever feel like you are constantly cleaning your house, but it never seems clean enough?',
-      image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
-    }
+      title: "Commercial Cleaning",
+      description:
+        "Do you ever feel like you are constantly cleaning your house, but it never seems clean enough?",
+      image:
+        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+    },
   ];
 
   const locations = [
-    'Downtown',
-    'North Side',
-    'South Side',
-    'East Side',
-    'West Side',
+    "Downtown",
+    "North Side",
+    "South Side",
+    "East Side",
+    "West Side",
   ];
 
   const servicesList = [
-    'House Cleaning',
-    'Office Cleaning',
-    'Deep Cleaning',
-    'Move-in/Move-out Cleaning',
-    'Post-construction Cleaning',
+    "House Cleaning",
+    "Office Cleaning",
+    "Deep Cleaning",
+    "Move-in/Move-out Cleaning",
+    "Post-construction Cleaning",
   ];
 
   const features = [
     {
-      text: '100% Guaranteed',
+      text: "100% Guaranteed",
       icon: <Star className="h-5 w-5 text-yellow-400" />,
     },
     {
-      text: 'Liaise directly with real estate to secure bond',
+      text: "Liaise directly with real estate to secure bond",
       icon: <Star className="h-5 w-5 text-yellow-400" />,
     },
     {
-      text: '50+ 5 Star Google Reviews',
+      text: "50+ 5 Star Google Reviews",
       icon: <Star className="h-5 w-5 text-yellow-400" />,
     },
     {
-      text: 'Flexible, Local, Trusted by 100+ clients',
+      text: "Flexible, Local, Trusted by 100+ clients",
       icon: <Star className="h-5 w-5 text-yellow-400" />,
     },
     {
-      text: 'Accept credit cards including Amex',
+      text: "Accept credit cards including Amex",
       icon: <Star className="h-5 w-5 text-yellow-400" />,
     },
   ];
+
+  // Función para scroll suave
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+      setIsMenuOpen(false);
+    }
+  };
+
+  // Cerrar menú móvil al redimensionar ventana
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const menuVariants = {
+    closed: {
+      opacity: 0,
+      height: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+    open: {
+      opacity: 1,
+      height: "auto",
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+  };
+
+  const submenuVariants = {
+    closed: {
+      opacity: 0,
+      y: -10,
+      transition: {
+        duration: 0.2,
+        ease: "easeInOut",
+      },
+    },
+    open: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.2,
+        ease: "easeInOut",
+      },
+    },
+  };
+
+  const menuItemVariants = {
+    closed: { x: -20, opacity: 0 },
+    open: (i: number) => ({
+      x: 0,
+      opacity: 1,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.3,
+        ease: "easeOut",
+      },
+    }),
+  };
 
   return (
     <main className="min-h-screen relative">
@@ -81,60 +174,237 @@ export default function Home() {
               <Sparkles className="h-8 w-8 text-primary" />
               <span className="ml-2 text-xl font-bold">Fresh & Clean</span>
             </div>
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#about" className="text-gray-600 hover:text-primary">About</a>
-              
+
+            {/* Botón de menú móvil */}
+            <motion.button
+              className="md:hidden p-2"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              whileTap={{ scale: 0.95 }}
+            >
+              {isMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </motion.button>
+
+            {/* Menú de escritorio */}
+            <div className="hidden md:flex items-center justify-center space-x-8">
+              <motion.button
+                onClick={() => scrollToSection("about")}
+                className="text-gray-600 hover:text-primary"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                About
+              </motion.button>
+
               {/* Services Dropdown */}
-              <div 
+              <div
                 className="relative"
                 onMouseEnter={() => setShowServices(true)}
                 onMouseLeave={() => setShowServices(false)}
               >
-                <button className="text-gray-600 hover:text-primary flex items-center">
+                <motion.button
+                  className="text-gray-600 hover:text-primary flex items-center"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   Services <ChevronDown className="ml-1 h-4 w-4" />
-                </button>
-                {showServices && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
-                    {servicesList.map((service, index) => (
-                      <a
-                        key={index}
-                        href="#services"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        {service}
-                      </a>
-                    ))}
-                  </div>
-                )}
+                </motion.button>
+                <AnimatePresence>
+                  {showServices && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1"
+                    >
+                      {servicesList.map((service, index) => (
+                        <motion.button
+                          key={index}
+                          onClick={() => {
+                            scrollToSection("services");
+                            setShowServices(false);
+                          }}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          whileHover={{ x: 5 }}
+                          custom={index}
+                          variants={menuItemVariants}
+                          initial="closed"
+                          animate="open"
+                        >
+                          {service}
+                        </motion.button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Locations Dropdown */}
-              <div 
+              <div
                 className="relative"
                 onMouseEnter={() => setShowLocations(true)}
                 onMouseLeave={() => setShowLocations(false)}
               >
-                <button className="text-gray-600 hover:text-primary flex items-center">
+                <motion.button
+                  className="text-gray-600 hover:text-primary flex items-center"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   Locations <ChevronDown className="ml-1 h-4 w-4" />
-                </button>
-                {showLocations && (
-                  <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
-                    {locations.map((location, index) => (
-                      <a
-                        key={index}
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        {location}
-                      </a>
-                    ))}
-                  </div>
-                )}
+                </motion.button>
+                <AnimatePresence>
+                  {showLocations && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1"
+                    >
+                      {locations.map((location, index) => (
+                        <motion.button
+                          key={index}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          whileHover={{ x: 5 }}
+                          custom={index}
+                          variants={menuItemVariants}
+                          initial="closed"
+                          animate="open"
+                        >
+                          {location}
+                        </motion.button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
-              <Button>Book Now</Button>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Button onClick={() => scrollToSection("contact")}>
+                  Book Now
+                </Button>
+              </motion.div>
             </div>
           </div>
+
+          {/* Menú móvil */}
+          <AnimatePresence>
+            {isMenuOpen && (
+              <motion.div
+                variants={menuVariants}
+                initial="closed"
+                animate="open"
+                exit="closed"
+                className="md:hidden overflow-hidden"
+              >
+                <div className="flex flex-col space-y-4 py-4">
+                  <motion.button
+                    variants={menuItemVariants}
+                    custom={0}
+                    onClick={() => scrollToSection("about")}
+                    className="text-left text-gray-600 hover:text-primary px-4 py-2"
+                  >
+                    About
+                  </motion.button>
+
+                  {/* Services en móvil */}
+                  <div className="px-4">
+                    <motion.button
+                      variants={menuItemVariants}
+                      custom={1}
+                      onClick={() => setShowServices(!showServices)}
+                      className="text-left text-gray-600 hover:text-primary flex items-center"
+                    >
+                      Services <ChevronDown className="ml-1 h-4 w-4" />
+                    </motion.button>
+                    <AnimatePresence>
+                      {showServices && (
+                        <motion.div
+                          variants={submenuVariants}
+                          initial="closed"
+                          animate="open"
+                          exit="closed"
+                          className="mt-2 space-y-2 pl-4 overflow-hidden"
+                        >
+                          {servicesList.map((service, index) => (
+                            <motion.button
+                              key={index}
+                              variants={menuItemVariants}
+                              custom={index + 2}
+                              onClick={() => {
+                                scrollToSection("services");
+                                setShowServices(false);
+                                setIsMenuOpen(false);
+                              }}
+                              className="block w-full text-left py-2 text-sm text-gray-700 hover:text-primary"
+                            >
+                              {service}
+                            </motion.button>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Locations en móvil */}
+                  <div className="px-4">
+                    <motion.button
+                      variants={menuItemVariants}
+                      custom={2}
+                      onClick={() => setShowLocations(!showLocations)}
+                      className="text-left text-gray-600 hover:text-primary flex items-center"
+                    >
+                      Locations <ChevronDown className="ml-1 h-4 w-4" />
+                    </motion.button>
+                    <AnimatePresence>
+                      {showLocations && (
+                        <motion.div
+                          variants={submenuVariants}
+                          initial="closed"
+                          animate="open"
+                          exit="closed"
+                          className="mt-2 space-y-2 pl-4 overflow-hidden"
+                        >
+                          {locations.map((location, index) => (
+                            <motion.button
+                              key={index}
+                              variants={menuItemVariants}
+                              custom={index + 3}
+                              onClick={() => {
+                                setShowLocations(false);
+                                setIsMenuOpen(false);
+                              }}
+                              className="block w-full text-left py-2 text-sm text-gray-700 hover:text-primary"
+                            >
+                              {location}
+                            </motion.button>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  <motion.div
+                    variants={menuItemVariants}
+                    custom={3}
+                    className="px-4"
+                  >
+                    <Button
+                      onClick={() => scrollToSection("contact")}
+                      className="w-full"
+                    >
+                      Book Now
+                    </Button>
+                  </motion.div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </nav>
 
@@ -166,11 +436,14 @@ export default function Home() {
             Professional Cleaning Services for Your Home & Office
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Experience the difference with our expert cleaning services. We bring sparkle to every corner.
+            Experience the difference with our expert cleaning services. We
+            bring sparkle to every corner.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg">Book Now</Button>
-            <Button size="lg" variant="outline">Learn More</Button>
+            <Button size="lg" variant="outline">
+              Learn More
+            </Button>
           </div>
         </div>
       </section>
@@ -180,8 +453,12 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-2xl font-semibold text-blue-400 mb-4">CLEANING MADE EASY</h2>
-              <h3 className="text-4xl font-bold mb-8">The No Sweat Difference</h3>
+              <h2 className="text-2xl font-semibold text-blue-400 mb-4">
+                CLEANING MADE EASY
+              </h2>
+              <h3 className="text-4xl font-bold mb-8">
+                The No Sweat Difference
+              </h3>
               <div className="space-y-4">
                 {features.map((feature, index) => (
                   <div key={index} className="flex items-center gap-3">
@@ -190,15 +467,15 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="mt-8 bg-blue-500 hover:bg-blue-600 text-white"
               >
                 GET INSTANT QUOTE
               </Button>
             </div>
             <div className="relative h-[400px]">
-              <img 
+              <img
                 src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3"
                 alt="Professional cleaning team"
                 className="rounded-lg object-cover w-full h-full"
@@ -219,7 +496,10 @@ export default function Home() {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {services.map((service, index) => (
-              <div key={index} className="group relative overflow-hidden rounded-lg">
+              <div
+                key={index}
+                className="group relative overflow-hidden rounded-lg"
+              >
                 <div className="relative h-[300px] overflow-hidden">
                   <img
                     src={service.image}
@@ -228,11 +508,11 @@ export default function Home() {
                   />
                 </div>
                 <div className="p-6 bg-white">
-                  <h3 className="text-2xl font-semibold mb-3">{service.title}</h3>
+                  <h3 className="text-2xl font-semibold mb-3">
+                    {service.title}
+                  </h3>
                   <p className="text-gray-600 mb-4">{service.description}</p>
-                  <Button 
-                    className="w-full bg-blue-100 text-blue-600 hover:bg-blue-200"
-                  >
+                  <Button className="w-full bg-blue-100 text-blue-600 hover:bg-blue-200">
                     BOOK NOW
                   </Button>
                 </div>
@@ -249,9 +529,10 @@ export default function Home() {
             <div>
               <h2 className="text-4xl font-bold mb-6">About Fresh & Clean</h2>
               <p className="text-gray-600 mb-6">
-                Fresh & Clean is your trusted partner in maintaining a clean and healthy environment. 
-                With years of experience and a dedicated team of professionals, we deliver exceptional 
-                cleaning services that exceed expectations.
+                Fresh & Clean is your trusted partner in maintaining a clean and
+                healthy environment. With years of experience and a dedicated
+                team of professionals, we deliver exceptional cleaning services
+                that exceed expectations.
               </p>
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center">
@@ -273,7 +554,7 @@ export default function Home() {
               </div>
             </div>
             <div className="relative h-[400px]">
-              <img 
+              <img
                 src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3"
                 alt="Cleaning professional at work"
                 className="rounded-lg object-cover w-full h-full"
@@ -350,9 +631,21 @@ export default function Home() {
             <div>
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-2">
-                <li><a href="#about" className="hover:text-primary">About Us</a></li>
-                <li><a href="#services" className="hover:text-primary">Services</a></li>
-                <li><a href="#contact" className="hover:text-primary">Contact</a></li>
+                <li>
+                  <a href="#about" className="hover:text-primary">
+                    About Us
+                  </a>
+                </li>
+                <li>
+                  <a href="#services" className="hover:text-primary">
+                    Services
+                  </a>
+                </li>
+                <li>
+                  <a href="#contact" className="hover:text-primary">
+                    Contact
+                  </a>
+                </li>
               </ul>
             </div>
             <div>
@@ -374,7 +667,10 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; {new Date().getFullYear()} Fresh & Clean. All rights reserved.</p>
+            <p>
+              &copy; {new Date().getFullYear()} Fresh & Clean. All rights
+              reserved.
+            </p>
           </div>
         </div>
       </footer>
