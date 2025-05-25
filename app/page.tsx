@@ -15,21 +15,56 @@ export default function Home() {
   const [showServices, setShowServices] = useState(false);
 
   const services = [
-    {
-      title: 'Deep Cleaning',
-      description: 'Are you looking for a professional cleaning service that specialises in deep cleaning?',
-      image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3',
-    },
-    {
-      title: 'Carpet Cleaning',
-      description: 'Let us delve into the world of carpet cleaning and discover how No Sweat Cleaning can transform your space.',
-      image: 'https://images.unsplash.com/photo-1558317374-067fb5f30001?ixlib=rb-4.0.3',
-    },
-    {
-      title: 'Commercial Cleaning',
-      description: 'Do you ever feel like you are constantly cleaning your house, but it never seems clean enough?',
-      image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
-    }
+      {
+        title: 'Airbnb Cleaning',
+        description: 'Airbnb cleaning services are professional services specifically designed to clean Airbnb properties.',
+        image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3',
+      },
+      {
+        title: 'After Construction Cleaning',
+        description: 'Do you need professional and reliable after-construction cleaning services in Sydney? Look no further',
+        image: 'https://images.unsplash.com/photo-1558317374-067fb5f30001?ixlib=rb-4.0.3',
+      },
+      {
+        title: 'End of Lease Cleaning',
+        description: 'No Sweat Cleaning is a professional cleaning company that specialises in end-of-lease cleaning.',
+        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
+      },
+      {
+        title: 'Residential Cleaning',
+        description: 'Do you ever feel like you’re constantly cleaning your house, but it never seems clean enough?',
+        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
+
+      },
+      {
+        title: 'Deep Cleaning',
+        description: 'Are you looking for a professional cleaning service that specialises in deep cleaning?',
+        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
+
+      },
+      {
+        title: 'Carpet Cleaning',
+        description: 'Let us delve into the world of carpet cleaning and discover how No Sweat Cleaning can transform your space.',
+        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
+
+      },
+      {
+        title: 'Commercial Cleaning',
+        description: 'When it comes to maintaining a clean and sanitary work environment, businesses in Sydney’s Northern Beaches turn to No Sweat Cleaning.',
+        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
+
+      },
+      {
+        title: 'Office Cleaning',
+        description: 'A clean office creates a positive impression on visitors and employees alike. It shows that the company is organised, professional, and cares about its employees.',
+        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
+      },
+      {
+        title: 'Strata Cleaning',
+        description: 'In properties with strata titles, such as apartment buildings, condominiums, or business complexes, common areas are cleaned and maintained as part of the strata cleaning service.',
+        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
+      }
+    ]    
   ];
 
   const locations = [
