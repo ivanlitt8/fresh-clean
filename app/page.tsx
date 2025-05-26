@@ -10,16 +10,18 @@ import {
   PhoneCall,
   Sparkles,
   CheckCircle,
-  ArrowRight,
-  Calendar,
   MessageSquare,
   ChevronDown,
   Star,
   Menu,
   X,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -28,59 +30,64 @@ export default function Home() {
   const [showLocations, setShowLocations] = useState(false);
   const [showServices, setShowServices] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [servicesPerPage, setServicesPerPage] = useState(3);
 
   const services = [
-      {
-        title: 'Airbnb Cleaning',
-        description: 'Airbnb cleaning services are professional services specifically designed to clean Airbnb properties.',
-        image: 'https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3',
-      },
-      {
-        title: 'After Construction Cleaning',
-        description: 'Do you need professional and reliable after-construction cleaning services in Sydney? Look no further',
-        image: 'https://images.unsplash.com/photo-1558317374-067fb5f30001?ixlib=rb-4.0.3',
-      },
-      {
-        title: 'End of Lease Cleaning',
-        description: 'No Sweat Cleaning is a professional cleaning company that specialises in end-of-lease cleaning.',
-        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
-      },
-      {
-        title: 'Residential Cleaning',
-        description: 'Do you ever feel like you’re constantly cleaning your house, but it never seems clean enough?',
-        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
+    {
+      title: "Airbnb Cleaning",
+      description: "Airbnb cleaning services are professional services specifically designed to clean Airbnb properties.",
+      image: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3",
+    },
+    {
+      title: "After Construction Cleaning",
+      description: "Do you need professional and reliable after-construction cleaning services in Sydney? Look no further",
+      image: "https://images.unsplash.com/photo-1558317374-067fb5f30001?ixlib=rb-4.0.3",
+    },
+    {
+      title: "End of Lease Cleaning",
+      description: "No Sweat Cleaning is a professional cleaning company that specialises in end-of-lease cleaning.",
+      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+    },
+    {
+      title: "Residential Cleaning",
+      description: "Do you ever feel like you're constantly cleaning your house, but it never seems clean enough?",
+      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+    },
+    {
+      title: "Deep Cleaning",
+      description: "Are you looking for a professional cleaning service that specialises in deep cleaning?",
+      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+    },
+    {
+      title: "Carpet Cleaning",
+      description: "Let us delve into the world of carpet cleaning and discover how No Sweat Cleaning can transform your space.",
+      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+    },
+    {
+      title: "Commercial Cleaning",
+      description: "When it comes to maintaining a clean and sanitary work environment, businesses in Sydney's Northern Beaches turn to No Sweat Cleaning.",
+      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+    },
+    {
+      title: "Office Cleaning",
+      description: "A clean office creates a positive impression on visitors and employees alike. It shows that the company is organised, professional, and cares about its employees.",
+      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+    },
+    {
+      title: "Strata Cleaning",
+      description: "In properties with strata titles, such as apartment buildings, condominiums, or business complexes, common areas are cleaned and maintained as part of the strata cleaning service.",
+      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+    }
+  ];
 
-      },
-      {
-        title: 'Deep Cleaning',
-        description: 'Are you looking for a professional cleaning service that specialises in deep cleaning?',
-        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
+  const totalPages = Math.ceil(services.length / servicesPerPage);
 
-      },
-      {
-        title: 'Carpet Cleaning',
-        description: 'Let us delve into the world of carpet cleaning and discover how No Sweat Cleaning can transform your space.',
-        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
-
-      },
-      {
-        title: 'Commercial Cleaning',
-        description: 'When it comes to maintaining a clean and sanitary work environment, businesses in Sydney’s Northern Beaches turn to No Sweat Cleaning.',
-        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
-
-      },
-      {
-        title: 'Office Cleaning',
-        description: 'A clean office creates a positive impression on visitors and employees alike. It shows that the company is organised, professional, and cares about its employees.',
-        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
-      },
-      {
-        title: 'Strata Cleaning',
-        description: 'In properties with strata titles, such as apartment buildings, condominiums, or business complexes, common areas are cleaned and maintained as part of the strata cleaning service.',
-        image: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3',
-      }
-    ]    
-
+  const paginatedServices = services.slice(
+    carouselIndex * servicesPerPage,
+    carouselIndex * servicesPerPage + servicesPerPage
+  );
 
   const locations = [
     "Downtown",
@@ -192,6 +199,38 @@ export default function Home() {
       },
     }),
   };
+
+  useEffect(() => {
+    const updateServicesPerPage = () => {
+      setServicesPerPage(window.innerWidth >= 768 ? 3 : 1);
+    };
+    
+    // Inicializar en el montaje
+    updateServicesPerPage();
+    
+    // Actualizar en resize
+    window.addEventListener('resize', updateServicesPerPage);
+    return () => window.removeEventListener('resize', updateServicesPerPage);
+  }, []);
+
+  // Efecto para la transición automática
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    
+    if (isAutoPlaying) {
+      interval = setInterval(() => {
+        setCarouselIndex((prevIndex) => 
+          prevIndex === totalPages - 1 ? 0 : prevIndex + 1
+        );
+      }, 5000); // Cambia cada 5 segundos
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isAutoPlaying, totalPages]);
 
   return (
     <main className="min-h-screen relative">
@@ -442,20 +481,9 @@ export default function Home() {
         href="https://wa.me/1234567890"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 bg-green-500 text-white rounded-full p-4 shadow-lg hover:bg-green-600 transition-colors z-50"
+        className="fixed bottom-6 right-6 w-16 h-16 flex items-center justify-center bg-green-500 text-white rounded-full p-4 shadow-lg hover:bg-green-600 transition-colors z-50"
       >
-        <svg
-          viewBox="0 0 24 24"
-          width="24"
-          height="24"
-          stroke="currentColor"
-          strokeWidth="2"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-        </svg>
+      <FontAwesomeIcon icon={faWhatsapp} size="2x" color="#ffffff" />
       </a>
 
       {/* Hero Section */}
@@ -523,30 +551,94 @@ export default function Home() {
               ALL SERVICES
             </Button>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <div
-                key={index}
-                className="group relative overflow-hidden rounded-lg"
+          <div 
+            className="relative"
+            onMouseEnter={() => setIsAutoPlaying(false)}
+            onMouseLeave={() => setIsAutoPlaying(true)}
+          >
+            <div className="overflow-hidden">
+              <motion.div 
+                className="flex"
+                initial={false}
+                animate={{ x: `${-carouselIndex * 100}%` }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
-                <div className="relative h-[300px] overflow-hidden">
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
-                </div>
-                <div className="p-6 bg-white">
-                  <h3 className="text-2xl font-semibold mb-3">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4">{service.description}</p>
-                  <Button className="w-full bg-blue-100 text-blue-600 hover:bg-blue-200">
-                    BOOK NOW
-                  </Button>
-                </div>
-              </div>
-            ))}
+                {Array.from({ length: Math.ceil(services.length / servicesPerPage) }).map((_, pageIndex) => (
+                  <div 
+                    key={pageIndex} 
+                    className="w-full flex-shrink-0 flex gap-8"
+                    style={{ padding: "0 1rem" }}
+                  >
+                    {services
+                      .slice(pageIndex * servicesPerPage, (pageIndex + 1) * servicesPerPage)
+                      .map((service, index) => (
+                        <div
+                          key={index}
+                          className="flex-1"
+                        >
+                          <div className="group relative overflow-hidden rounded-lg h-full bg-white">
+                            <div className="relative h-[300px] overflow-hidden">
+                              <img
+                                src={service.image}
+                                alt={service.title}
+                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                              />
+                            </div>
+                            <div className="p-6">
+                              <h3 className="text-2xl font-semibold mb-3">
+                                {service.title}
+                              </h3>
+                              <p className="text-gray-600 mb-4">{service.description}</p>
+                              <Button className="w-full bg-blue-100 text-blue-600 hover:bg-blue-200">
+                                BOOK NOW
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Botones de navegación */}
+            <button
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full shadow p-3 z-10 hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => {
+                setCarouselIndex((prev) => Math.max(prev - 1, 0));
+                setIsAutoPlaying(false);
+              }}
+              disabled={carouselIndex === 0}
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </button>
+            <button
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full shadow p-3 z-10 hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => {
+                setCarouselIndex((prev) => Math.min(prev + 1, totalPages - 1));
+                setIsAutoPlaying(false);
+              }}
+              disabled={carouselIndex === totalPages - 1}
+            >
+              <ChevronRight className="h-6 w-6" />
+            </button>
+
+            {/* Indicadores de página */}
+            <div className="flex justify-center mt-8 space-x-2">
+              {Array.from({ length: totalPages }).map((_, idx) => (
+                <button
+                  key={idx}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    carouselIndex === idx ? 'bg-blue-600' : 'bg-gray-300'
+                  } hover:bg-blue-400`}
+                  onClick={() => {
+                    setCarouselIndex(idx);
+                    setIsAutoPlaying(false);
+                  }}
+                  aria-label={`Go to page ${idx + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
