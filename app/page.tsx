@@ -505,6 +505,8 @@ export default function Home() {
         </div>
       </section>
 
+    
+
       {/* CTA Section */}
       <section className="py-20 bg-[#0B1C2C] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -535,6 +537,48 @@ export default function Home() {
               <img
                 src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3"
                 alt="Professional cleaning team"
+                className="rounded-lg object-cover w-full h-full"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+        {/* About Section */}
+        <section id="about" className="py-20 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl font-bold mb-6">About Fresh & Clean</h2>
+              <p className="text-gray-600 mb-6">
+                Fresh & Clean is your trusted partner in maintaining a clean and
+                healthy environment. With years of experience and a dedicated
+                team of professionals, we deliver exceptional cleaning services
+                that exceed expectations.
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-primary mr-2" />
+                  <span>Experienced Team</span>
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-primary mr-2" />
+                  <span>Eco-friendly Products</span>
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-primary mr-2" />
+                  <span>100% Satisfaction</span>
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-primary mr-2" />
+                  <span>Flexible Scheduling</span>
+                </div>
+              </div>
+            </div>
+            <div className="relative h-[400px]">
+              <img
+                src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3"
+                alt="Cleaning professional at work"
                 className="rounded-lg object-cover w-full h-full"
               />
             </div>
@@ -643,42 +687,178 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="py-20 px-4">
+      {/* Our Process Section */}
+      <section className="py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl font-bold mb-6">About Fresh & Clean</h2>
-              <p className="text-gray-600 mb-6">
-                Fresh & Clean is your trusted partner in maintaining a clean and
-                healthy environment. With years of experience and a dedicated
-                team of professionals, we deliver exceptional cleaning services
-                that exceed expectations.
-              </p>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-primary mr-2" />
-                  <span>Experienced Team</span>
-                </div>
-                <div className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-primary mr-2" />
-                  <span>Eco-friendly Products</span>
-                </div>
-                <div className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-primary mr-2" />
-                  <span>100% Satisfaction</span>
-                </div>
-                <div className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-primary mr-2" />
-                  <span>Flexible Scheduling</span>
-                </div>
-              </div>
-            </div>
-            <div className="relative h-[400px]">
+          <div className="grid md:grid-cols-2 gap-12 items-start">
+            {/* Columna Izquierda - Imagen */}
+            <div className="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden shadow-xl">
               <img
                 src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3"
                 alt="Cleaning professional at work"
-                className="rounded-lg object-cover w-full h-full"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* Columna Derecha - Proceso */}
+            <div className="space-y-12">
+              <div>
+                <p className="text-blue-600 font-medium uppercase tracking-wide mb-2">OUR PROCESS</p>
+                <h2 className="text-3xl md:text-4xl font-bold">How it works</h2>
+              </div>
+
+              {/* Paso 1 */}
+              <div className="relative flex gap-4 md:gap-8">
+                <div className="text-[80px] md:text-[120px] font-bold leading-none text-[#e1ebf7] select-none">
+                  01
+                </div>
+                <div className="pt-4 md:pt-6 flex-1 mb-4">
+                  <h3 className="text-xl font-bold mb-2">Fill out the online form</h3>
+                  <p className="text-gray-600">
+                    Choose your home size in terms of bedrooms and bathrooms or select an hourly rate for the partial cleaning of extra large, or really dirty homes.
+                  </p>
+                  <div className="absolute bottom-0 left-0 right-0 h-px bg-gray-200 mt-8"></div>
+                </div>
+              </div>
+
+              {/* Paso 2 */}
+              <div className="relative flex gap-4 md:gap-8">
+                <div className="text-[80px] md:text-[120px] font-bold leading-none text-[#e1ebf7] select-none">
+                  02
+                </div>
+                <div className="pt-4 md:pt-6 flex-1 mb-4">
+                  <h3 className="text-xl font-bold mb-2">Configure your booking</h3>
+                  <p className="text-gray-600">
+                    Select the added extras you wish to add to your booking
+                  </p>
+                  <div className="absolute bottom-0 left-0 right-0 h-px bg-gray-200 mt-8"></div>
+                </div>
+              </div>
+
+              {/* Paso 3 */}
+              <div className="relative flex gap-4 md:gap-8">
+                <div className="text-[80px] md:text-[120px] font-bold leading-none text-[#e1ebf7] select-none">
+                  03
+                </div>
+                <div className="pt-4 md:pt-6 flex-1">
+                  <h3 className="text-xl font-bold mb-2">Select the service frequency that suits your needs</h3>
+                  <p className="text-gray-600">
+                    Choose your service frequency and complete our online booking form. Our team will quickly assign expert cleaners who are the perfect fit for your needs. You'll receive confirmation and detailed information about your service. Book now for an elevated cleaning experience.
+                  </p>
+                </div>
+              </div>
+
+              {/* Botón Book Now */}
+              <div className="flex justify-center md:justify-start">
+                <Button 
+                  size="lg"
+                  className="mt-8 bg-[#00AEEF] hover:bg-blue-500 text-white font-semibold px-8"
+                >
+                  BOOK NOW
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    
+
+       {/* Why Choose Us Section */}
+       <section className="py-20 px-4 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 items-start">
+            {/* Columna Izquierda - Contenido */}
+            <div className="flex flex-col gap-8 order-2 md:order-1">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                  Why Choose No Sweat Cleaning?
+                </h2>
+                <p className="text-gray-600 text-lg">
+                  Bid farewell to germs, dust, and dirt! Our loyal customers return to us time and time again because...
+                </p>
+              </div>
+
+              <div className="space-y-8">
+                {/* Beneficio 1 */}
+                <div>
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#00AEEF] flex items-center justify-center mt-1">
+                      <CheckCircle className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold mb-2">
+                        Professionalism and Expertise
+                      </h3>
+                      <p className="text-gray-600">
+                        We prides ourselves on maintaining a highly professional and experienced team of cleaners.
+                      </p>
+                    </div>
+                  </div>
+                  <hr className="my-6 border-gray-200" />
+                </div>
+
+                {/* Beneficio 2 */}
+                <div>
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#00AEEF] flex items-center justify-center mt-1">
+                      <CheckCircle className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold mb-2">
+                        Comprehensive Cleaning Solutions
+                      </h3>
+                      <p className="text-gray-600">
+                        Whether you need residential, commercial, or specialised cleaning services, we offer a wide range of cleaning solutions to meet your specific requirements.
+                      </p>
+                    </div>
+                  </div>
+                  <hr className="my-6 border-gray-200" />
+                </div>
+
+                {/* Beneficio 3 */}
+                <div>
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#00AEEF] flex items-center justify-center mt-1">
+                      <CheckCircle className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold mb-2">
+                        Good Practices
+                      </h3>
+                      <p className="text-gray-600">
+                        If you value good practices, you'll be pleased to know that we emphasise using quality cleaning products and methods.
+                      </p>
+                    </div>
+                  </div>
+                  <hr className="my-6 border-gray-200" />
+                </div>
+
+                {/* Beneficio 4 */}
+                <div>
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#00AEEF] flex items-center justify-center mt-1">
+                      <CheckCircle className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold mb-2">
+                        Customer Satisfaction
+                      </h3>
+                      <p className="text-gray-600">
+                        We places a strong emphasis on customer satisfaction. They strive to exceed your expectations and ensure that you are completely satisfied with their services.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Columna Derecha - Imagen */}
+            <div className="relative h-[400px] md:h-[600px] rounded-3xl overflow-hidden shadow-xl order-1 md:order-2">
+              <img
+                src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3"
+                alt="Professional cleaning team at work"
+                className="w-full h-full object-cover"
               />
             </div>
           </div>
