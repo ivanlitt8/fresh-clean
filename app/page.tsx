@@ -20,8 +20,9 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { BubblesBackground } from "./components/BubblesBackground";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -37,49 +38,67 @@ export default function Home() {
   const services = [
     {
       title: "Airbnb Cleaning",
-      description: "Airbnb cleaning services are professional services specifically designed to clean Airbnb properties.",
-      image: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3",
+      description:
+        "Airbnb cleaning services are professional services specifically designed to clean Airbnb properties.",
+      image:
+        "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3",
     },
     {
       title: "After Construction Cleaning",
-      description: "Do you need professional and reliable after-construction cleaning services in Sydney? Look no further",
-      image: "https://images.unsplash.com/photo-1558317374-067fb5f30001?ixlib=rb-4.0.3",
+      description:
+        "Do you need professional and reliable after-construction cleaning services in Sydney? Look no further",
+      image:
+        "https://images.unsplash.com/photo-1558317374-067fb5f30001?ixlib=rb-4.0.3",
     },
     {
       title: "End of Lease Cleaning",
-      description: "No Sweat Cleaning is a professional cleaning company that specialises in end-of-lease cleaning.",
-      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+      description:
+        "No Sweat Cleaning is a professional cleaning company that specialises in end-of-lease cleaning.",
+      image:
+        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Residential Cleaning",
-      description: "Do you ever feel like you're constantly cleaning your house, but it never seems clean enough?",
-      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+      description:
+        "Do you ever feel like you're constantly cleaning your house, but it never seems clean enough?",
+      image:
+        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Deep Cleaning",
-      description: "Are you looking for a professional cleaning service that specialises in deep cleaning?",
-      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+      description:
+        "Are you looking for a professional cleaning service that specialises in deep cleaning?",
+      image:
+        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Carpet Cleaning",
-      description: "Let us delve into the world of carpet cleaning and discover how No Sweat Cleaning can transform your space.",
-      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+      description:
+        "Let us delve into the world of carpet cleaning and discover how No Sweat Cleaning can transform your space.",
+      image:
+        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Commercial Cleaning",
-      description: "When it comes to maintaining a clean and sanitary work environment, businesses in Sydney's Northern Beaches turn to No Sweat Cleaning.",
-      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+      description:
+        "When it comes to maintaining a clean and sanitary work environment, businesses in Sydney's Northern Beaches turn to No Sweat Cleaning.",
+      image:
+        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Office Cleaning",
-      description: "A clean office creates a positive impression on visitors and employees alike. It shows that the company is organised, professional, and cares about its employees.",
-      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+      description:
+        "A clean office creates a positive impression on visitors and employees alike. It shows that the company is organised, professional, and cares about its employees.",
+      image:
+        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Strata Cleaning",
-      description: "In properties with strata titles, such as apartment buildings, condominiums, or business complexes, common areas are cleaned and maintained as part of the strata cleaning service.",
-      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
-    }
+      description:
+        "In properties with strata titles, such as apartment buildings, condominiums, or business complexes, common areas are cleaned and maintained as part of the strata cleaning service.",
+      image:
+        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+    },
   ];
 
   const totalPages = Math.ceil(services.length / servicesPerPage);
@@ -204,22 +223,22 @@ export default function Home() {
     const updateServicesPerPage = () => {
       setServicesPerPage(window.innerWidth >= 768 ? 3 : 1);
     };
-    
+
     // Inicializar en el montaje
     updateServicesPerPage();
-    
+
     // Actualizar en resize
-    window.addEventListener('resize', updateServicesPerPage);
-    return () => window.removeEventListener('resize', updateServicesPerPage);
+    window.addEventListener("resize", updateServicesPerPage);
+    return () => window.removeEventListener("resize", updateServicesPerPage);
   }, []);
 
   // Efecto para la transición automática
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
+
     if (isAutoPlaying) {
       interval = setInterval(() => {
-        setCarouselIndex((prevIndex) => 
+        setCarouselIndex((prevIndex) =>
           prevIndex === totalPages - 1 ? 0 : prevIndex + 1
         );
       }, 5000); // Cambia cada 5 segundos
@@ -483,29 +502,53 @@ export default function Home() {
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 w-16 h-16 flex items-center justify-center bg-green-500 text-white rounded-full p-4 shadow-lg hover:bg-green-600 transition-colors z-50"
       >
-      <FontAwesomeIcon icon={faWhatsapp} size="2x" color="#ffffff" />
+        <FontAwesomeIcon icon={faWhatsapp} size="2x" color="#ffffff" />
       </a>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 bg-gradient-to-b from-blue-50 to-white">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+      <section className="relative min-h-[80vh] pt-32 pb-20 px-4 bg-gradient-to-b from-blue-50/50 to-white/50 overflow-hidden">
+        <div className="absolute inset-0 bg-white/30"></div>
+        <BubblesBackground />
+        <div className="max-w-7xl mx-auto text-center relative z-10">
+          <motion.h1
+            className="text-5xl md:text-6xl font-bold text-gray-900 mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
             Professional Cleaning Services for Your Home & Office
-          </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          </motion.h1>
+          <motion.p
+            className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
             Experience the difference with our expert cleaning services. We
             bring sparkle to every corner.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg">Book Now</Button>
-            <Button size="lg" variant="outline">
+          </motion.p>
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <Button
+              size="lg"
+              className="bg-[#00AEEF] hover:bg-[#0098d1] text-white"
+            >
+              Book Now
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-[#00AEEF] text-[#00AEEF] hover:bg-[#00AEEF] hover:text-white"
+            >
               Learn More
             </Button>
-          </div>
+          </motion.div>
         </div>
       </section>
-
-    
 
       {/* CTA Section */}
       <section className="py-20 bg-[#0B1C2C] text-white">
@@ -544,8 +587,8 @@ export default function Home() {
         </div>
       </section>
 
-        {/* About Section */}
-        <section id="about" className="py-20 px-4">
+      {/* About Section */}
+      <section id="about" className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
@@ -595,31 +638,33 @@ export default function Home() {
               ALL SERVICES
             </Button>
           </div>
-          <div 
+          <div
             className="relative"
             onMouseEnter={() => setIsAutoPlaying(false)}
             onMouseLeave={() => setIsAutoPlaying(true)}
           >
             <div className="overflow-hidden">
-              <motion.div 
+              <motion.div
                 className="flex"
                 initial={false}
                 animate={{ x: `${-carouselIndex * 100}%` }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
-                {Array.from({ length: Math.ceil(services.length / servicesPerPage) }).map((_, pageIndex) => (
-                  <div 
-                    key={pageIndex} 
+                {Array.from({
+                  length: Math.ceil(services.length / servicesPerPage),
+                }).map((_, pageIndex) => (
+                  <div
+                    key={pageIndex}
                     className="w-full flex-shrink-0 flex gap-8"
                     style={{ padding: "0 1rem" }}
                   >
                     {services
-                      .slice(pageIndex * servicesPerPage, (pageIndex + 1) * servicesPerPage)
+                      .slice(
+                        pageIndex * servicesPerPage,
+                        (pageIndex + 1) * servicesPerPage
+                      )
                       .map((service, index) => (
-                        <div
-                          key={index}
-                          className="flex-1"
-                        >
+                        <div key={index} className="flex-1">
                           <div className="group relative overflow-hidden rounded-lg h-full bg-white">
                             <div className="relative h-[300px] overflow-hidden">
                               <img
@@ -632,7 +677,9 @@ export default function Home() {
                               <h3 className="text-2xl font-semibold mb-3">
                                 {service.title}
                               </h3>
-                              <p className="text-gray-600 mb-4">{service.description}</p>
+                              <p className="text-gray-600 mb-4">
+                                {service.description}
+                              </p>
                               <Button className="w-full bg-blue-100 text-blue-600 hover:bg-blue-200">
                                 BOOK NOW
                               </Button>
@@ -673,7 +720,7 @@ export default function Home() {
                 <button
                   key={idx}
                   className={`w-3 h-3 rounded-full transition-colors ${
-                    carouselIndex === idx ? 'bg-blue-600' : 'bg-gray-300'
+                    carouselIndex === idx ? "bg-blue-600" : "bg-gray-300"
                   } hover:bg-blue-400`}
                   onClick={() => {
                     setCarouselIndex(idx);
@@ -703,7 +750,9 @@ export default function Home() {
             {/* Columna Derecha - Proceso */}
             <div className="space-y-12">
               <div>
-                <p className="text-blue-600 font-medium uppercase tracking-wide mb-2">OUR PROCESS</p>
+                <p className="text-blue-600 font-medium uppercase tracking-wide mb-2">
+                  OUR PROCESS
+                </p>
                 <h2 className="text-3xl md:text-4xl font-bold">How it works</h2>
               </div>
 
@@ -713,9 +762,13 @@ export default function Home() {
                   01
                 </div>
                 <div className="pt-4 md:pt-6 flex-1 mb-4">
-                  <h3 className="text-xl font-bold mb-2">Fill out the online form</h3>
+                  <h3 className="text-xl font-bold mb-2">
+                    Fill out the online form
+                  </h3>
                   <p className="text-gray-600">
-                    Choose your home size in terms of bedrooms and bathrooms or select an hourly rate for the partial cleaning of extra large, or really dirty homes.
+                    Choose your home size in terms of bedrooms and bathrooms or
+                    select an hourly rate for the partial cleaning of extra
+                    large, or really dirty homes.
                   </p>
                   <div className="absolute bottom-0 left-0 right-0 h-px bg-gray-200 mt-8"></div>
                 </div>
@@ -727,7 +780,9 @@ export default function Home() {
                   02
                 </div>
                 <div className="pt-4 md:pt-6 flex-1 mb-4">
-                  <h3 className="text-xl font-bold mb-2">Configure your booking</h3>
+                  <h3 className="text-xl font-bold mb-2">
+                    Configure your booking
+                  </h3>
                   <p className="text-gray-600">
                     Select the added extras you wish to add to your booking
                   </p>
@@ -741,16 +796,22 @@ export default function Home() {
                   03
                 </div>
                 <div className="pt-4 md:pt-6 flex-1">
-                  <h3 className="text-xl font-bold mb-2">Select the service frequency that suits your needs</h3>
+                  <h3 className="text-xl font-bold mb-2">
+                    Select the service frequency that suits your needs
+                  </h3>
                   <p className="text-gray-600">
-                    Choose your service frequency and complete our online booking form. Our team will quickly assign expert cleaners who are the perfect fit for your needs. You'll receive confirmation and detailed information about your service. Book now for an elevated cleaning experience.
+                    Choose your service frequency and complete our online
+                    booking form. Our team will quickly assign expert cleaners
+                    who are the perfect fit for your needs. You&apos;ll receive
+                    confirmation and detailed information about your service.
+                    Book now for an elevated cleaning experience.
                   </p>
                 </div>
               </div>
 
               {/* Botón Book Now */}
               <div className="flex justify-center md:justify-start">
-                <Button 
+                <Button
                   size="lg"
                   className="mt-8 bg-[#00AEEF] hover:bg-blue-500 text-white font-semibold px-8"
                 >
@@ -762,10 +823,8 @@ export default function Home() {
         </div>
       </section>
 
-    
-
-       {/* Why Choose Us Section */}
-       <section className="py-20 px-4 bg-gray-50">
+      {/* Why Choose Us Section */}
+      <section className="py-20 px-4 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-start">
             {/* Columna Izquierda - Contenido */}
@@ -775,7 +834,8 @@ export default function Home() {
                   Why Choose No Sweat Cleaning?
                 </h2>
                 <p className="text-gray-600 text-lg">
-                  Bid farewell to germs, dust, and dirt! Our loyal customers return to us time and time again because...
+                  Bid farewell to germs, dust, and dirt! Our loyal customers
+                  return to us time and time again because...
                 </p>
               </div>
 
@@ -791,7 +851,8 @@ export default function Home() {
                         Professionalism and Expertise
                       </h3>
                       <p className="text-gray-600">
-                        We prides ourselves on maintaining a highly professional and experienced team of cleaners.
+                        We prides ourselves on maintaining a highly professional
+                        and experienced team of cleaners.
                       </p>
                     </div>
                   </div>
@@ -809,7 +870,9 @@ export default function Home() {
                         Comprehensive Cleaning Solutions
                       </h3>
                       <p className="text-gray-600">
-                        Whether you need residential, commercial, or specialised cleaning services, we offer a wide range of cleaning solutions to meet your specific requirements.
+                        Whether you need residential, commercial, or specialised
+                        cleaning services, we offer a wide range of cleaning
+                        solutions to meet your specific requirements.
                       </p>
                     </div>
                   </div>
@@ -827,7 +890,9 @@ export default function Home() {
                         Good Practices
                       </h3>
                       <p className="text-gray-600">
-                        If you value good practices, you'll be pleased to know that we emphasise using quality cleaning products and methods.
+                        If you value good practices, you&apos;ll be pleased to
+                        know that we emphasise using quality cleaning products
+                        and methods.
                       </p>
                     </div>
                   </div>
@@ -845,7 +910,9 @@ export default function Home() {
                         Customer Satisfaction
                       </h3>
                       <p className="text-gray-600">
-                        We places a strong emphasis on customer satisfaction. They strive to exceed your expectations and ensure that you are completely satisfied with their services.
+                        We places a strong emphasis on customer satisfaction.
+                        They strive to exceed your expectations and ensure that
+                        you are completely satisfied with their services.
                       </p>
                     </div>
                   </div>
