@@ -23,6 +23,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { BubblesBackground } from "./components/BubblesBackground";
+import { QuoteForm } from "./components/QuoteForm";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -151,8 +152,18 @@ export default function Home() {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      // Cerrar el menú primero
       setIsMenuOpen(false);
+      setShowServices(false);
+      setShowLocations(false);
+
+      // Pequeño delay para asegurar que el menú se cierre antes del scroll
+      setTimeout(() => {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 300);
     }
   };
 
@@ -368,6 +379,15 @@ export default function Home() {
                 </AnimatePresence>
               </div>
 
+              <motion.button
+                onClick={() => scrollToSection("contact")}
+                className="text-gray-600 hover:text-primary"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Contact
+              </motion.button>
+
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -412,22 +432,17 @@ export default function Home() {
                     <AnimatePresence>
                       {showServices && (
                         <motion.div
-                          variants={submenuVariants}
-                          initial="closed"
-                          animate="open"
-                          exit="closed"
-                          className="mt-2 space-y-2 pl-4 overflow-hidden"
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="mt-2 space-y-2 pl-4"
                         >
                           {servicesList.map((service, index) => (
                             <motion.button
                               key={index}
                               variants={menuItemVariants}
                               custom={index + 2}
-                              onClick={() => {
-                                scrollToSection("services");
-                                setShowServices(false);
-                                setIsMenuOpen(false);
-                              }}
+                              onClick={() => scrollToSection("services")}
                               className="block w-full text-left py-2 text-sm text-gray-700 hover:text-primary"
                             >
                               {service}
@@ -451,21 +466,17 @@ export default function Home() {
                     <AnimatePresence>
                       {showLocations && (
                         <motion.div
-                          variants={submenuVariants}
-                          initial="closed"
-                          animate="open"
-                          exit="closed"
-                          className="mt-2 space-y-2 pl-4 overflow-hidden"
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="mt-2 space-y-2 pl-4"
                         >
                           {locations.map((location, index) => (
                             <motion.button
                               key={index}
                               variants={menuItemVariants}
                               custom={index + 3}
-                              onClick={() => {
-                                setShowLocations(false);
-                                setIsMenuOpen(false);
-                              }}
+                              onClick={() => setShowLocations(false)}
                               className="block w-full text-left py-2 text-sm text-gray-700 hover:text-primary"
                             >
                               {location}
@@ -476,9 +487,18 @@ export default function Home() {
                     </AnimatePresence>
                   </div>
 
-                  <motion.div
+                  <motion.button
                     variants={menuItemVariants}
                     custom={3}
+                    onClick={() => scrollToSection("contact")}
+                    className="text-left text-gray-600 hover:text-primary px-4 py-2"
+                  >
+                    Contact
+                  </motion.button>
+
+                  <motion.div
+                    variants={menuItemVariants}
+                    custom={4}
                     className="px-4"
                   >
                     <Button
@@ -511,7 +531,7 @@ export default function Home() {
         <BubblesBackground />
         <div className="max-w-7xl mx-auto text-center relative z-10">
           <motion.h1
-            className="text-5xl md:text-6xl font-bold text-gray-900 mb-6"
+            className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 font-heading"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -555,10 +575,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-2xl font-semibold text-blue-400 mb-4">
+              <h2 className="text-2xl font-semibold text-blue-400 mb-4 font-heading">
                 CLEANING MADE EASY
               </h2>
-              <h3 className="text-4xl font-bold mb-8">
+              <h3 className="text-4xl font-bold mb-8 font-heading">
                 The No Sweat Difference
               </h3>
               <div className="space-y-4">
@@ -592,7 +612,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-4xl font-bold mb-6">About Fresh & Clean</h2>
+              <h2 className="text-4xl font-bold mb-6 font-heading">
+                About Fresh & Clean
+              </h2>
               <p className="text-gray-600 mb-6">
                 Fresh & Clean is your trusted partner in maintaining a clean and
                 healthy environment. With years of experience and a dedicated
@@ -633,7 +655,9 @@ export default function Home() {
       <section id="services" className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-12">
-            <h2 className="text-4xl font-bold">Our Cleaning Services</h2>
+            <h2 className="text-4xl font-bold font-heading">
+              Our Cleaning Services
+            </h2>
             <Button variant="outline" size="lg">
               ALL SERVICES
             </Button>
@@ -674,7 +698,7 @@ export default function Home() {
                               />
                             </div>
                             <div className="p-6">
-                              <h3 className="text-2xl font-semibold mb-3">
+                              <h3 className="text-2xl font-semibold mb-3 font-heading">
                                 {service.title}
                               </h3>
                               <p className="text-gray-600 mb-4">
@@ -750,10 +774,12 @@ export default function Home() {
             {/* Columna Derecha - Proceso */}
             <div className="space-y-12">
               <div>
-                <p className="text-blue-600 font-medium uppercase tracking-wide mb-2">
+                <p className="text-blue-600 font-medium uppercase tracking-wide mb-2 font-heading">
                   OUR PROCESS
                 </p>
-                <h2 className="text-3xl md:text-4xl font-bold">How it works</h2>
+                <h2 className="text-3xl md:text-4xl font-bold font-heading">
+                  How it works
+                </h2>
               </div>
 
               {/* Paso 1 */}
@@ -762,7 +788,7 @@ export default function Home() {
                   01
                 </div>
                 <div className="pt-4 md:pt-6 flex-1 mb-4">
-                  <h3 className="text-xl font-bold mb-2">
+                  <h3 className="text-xl font-bold mb-2 font-heading">
                     Fill out the online form
                   </h3>
                   <p className="text-gray-600">
@@ -780,7 +806,7 @@ export default function Home() {
                   02
                 </div>
                 <div className="pt-4 md:pt-6 flex-1 mb-4">
-                  <h3 className="text-xl font-bold mb-2">
+                  <h3 className="text-xl font-bold mb-2 font-heading">
                     Configure your booking
                   </h3>
                   <p className="text-gray-600">
@@ -796,7 +822,7 @@ export default function Home() {
                   03
                 </div>
                 <div className="pt-4 md:pt-6 flex-1">
-                  <h3 className="text-xl font-bold mb-2">
+                  <h3 className="text-xl font-bold mb-2 font-heading">
                     Select the service frequency that suits your needs
                   </h3>
                   <p className="text-gray-600">
@@ -830,7 +856,7 @@ export default function Home() {
             {/* Columna Izquierda - Contenido */}
             <div className="flex flex-col gap-8 order-2 md:order-1">
               <div>
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 font-heading">
                   Why Choose No Sweat Cleaning?
                 </h2>
                 <p className="text-gray-600 text-lg">
@@ -847,7 +873,7 @@ export default function Home() {
                       <CheckCircle className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-2">
+                      <h3 className="text-xl font-semibold mb-2 font-heading">
                         Professionalism and Expertise
                       </h3>
                       <p className="text-gray-600">
@@ -866,7 +892,7 @@ export default function Home() {
                       <CheckCircle className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-2">
+                      <h3 className="text-xl font-semibold mb-2 font-heading">
                         Comprehensive Cleaning Solutions
                       </h3>
                       <p className="text-gray-600">
@@ -886,7 +912,7 @@ export default function Home() {
                       <CheckCircle className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-2">
+                      <h3 className="text-xl font-semibold mb-2 font-heading">
                         Good Practices
                       </h3>
                       <p className="text-gray-600">
@@ -906,7 +932,7 @@ export default function Home() {
                       <CheckCircle className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-2">
+                      <h3 className="text-xl font-semibold mb-2 font-heading">
                         Customer Satisfaction
                       </h3>
                       <p className="text-gray-600">
@@ -934,7 +960,7 @@ export default function Home() {
 
       {/* Contact Form */}
       <section id="contact" className="py-20 px-4 bg-gray-50">
-        <div className="max-w-3xl mx-auto">
+        {/* <div className="max-w-3xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-12">Get in Touch</h2>
           <Card className="p-6">
             <form className="space-y-6">
@@ -963,7 +989,8 @@ export default function Home() {
               <Button className="w-full">Send Message</Button>
             </form>
           </Card>
-        </div>
+        </div> */}
+        <QuoteForm />
       </section>
 
       {/* Footer */}
