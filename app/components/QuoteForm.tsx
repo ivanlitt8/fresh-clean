@@ -15,6 +15,9 @@ import { Upload, X, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { v4 as uuidv4 } from "uuid";
+import { db } from "@/lib/firebase";
+import { collection, addDoc } from "firebase/firestore";
+import { useToast } from "@/hooks/use-toast";
 
 interface FormData {
   firstName: string;
@@ -28,9 +31,12 @@ interface FormData {
   message: string;
   acceptTerms: boolean;
   imageUrls: string[];
+  createdAt: Date;
+  status: string;
 }
 
 export const QuoteForm = () => {
+  const { toast } = useToast();
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
@@ -43,6 +49,8 @@ export const QuoteForm = () => {
     message: "",
     acceptTerms: false,
     imageUrls: [],
+    createdAt: new Date(),
+    status: "pending",
   });
 
   const [images, setImages] = useState<File[]>([]);
@@ -150,15 +158,21 @@ export const QuoteForm = () => {
         (url): url is string => url !== null
       );
 
-      // Update form data with uploaded image URLs
+      // Update form data with uploaded image URLs and timestamp
       const updatedFormData = {
         ...formData,
         imageUrls: successfulUrls,
+        createdAt: new Date(),
       };
 
-      // Mostrar las URLs de las imágenes subidas
-      console.log("URLs de las imágenes subidas:", successfulUrls);
-      console.log("Datos completos del formulario:", updatedFormData);
+      // Save to Firestore
+      const docRef = await addDoc(collection(db, "quotes"), updatedFormData);
+
+      // Show success toast
+      toast({
+        title: "¡Cotización enviada!",
+        description: "Nos pondremos en contacto contigo pronto.",
+      });
 
       // Clear form and images after successful submission
       setFormData({
@@ -173,12 +187,20 @@ export const QuoteForm = () => {
         message: "",
         acceptTerms: false,
         imageUrls: [],
+        createdAt: new Date(),
+        status: "pending",
       });
       setImages([]);
       setPreviewUrls([]);
     } catch (error) {
       console.error("Error submitting form:", error);
       setError("Error al enviar el formulario. Por favor, inténtelo de nuevo.");
+      toast({
+        title: "Error",
+        description:
+          "Hubo un problema al enviar tu cotización. Por favor, inténtalo de nuevo.",
+        variant: "destructive",
+      });
     } finally {
       setIsUploading(false);
     }
