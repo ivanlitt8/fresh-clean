@@ -11,8 +11,10 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Upload, X } from "lucide-react";
+import { Upload, X, Loader2 } from "lucide-react";
 import Image from "next/image";
+import { supabase } from "@/lib/supabase";
+import { v4 as uuidv4 } from "uuid";
 
 interface FormData {
   firstName: string;
@@ -25,6 +27,7 @@ interface FormData {
   bathrooms: string;
   message: string;
   acceptTerms: boolean;
+  imageUrls: string[];
 }
 
 export const QuoteForm = () => {
@@ -39,11 +42,13 @@ export const QuoteForm = () => {
     bathrooms: "",
     message: "",
     acceptTerms: false,
+    imageUrls: [],
   });
 
   const [images, setImages] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [error, setError] = useState<string>("");
+  const [isUploading, setIsUploading] = useState(false);
 
   const services = [
     "Deep Cleaning",
@@ -68,11 +73,37 @@ export const QuoteForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const uploadImageToSupabase = async (file: File): Promise<string | null> => {
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${uuidv4()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { data, error } = await supabase.storage
+        .from("documents")
+        .upload(filePath, file);
+
+      if (error) {
+        throw error;
+      }
+
+      // Get public URL
+      const {
+        data: { publicUrl },
+      } = supabase.storage.from("documents").getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      return null;
+    }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     const validFiles = files.filter((file) => {
       if (file.size > 5 * 1024 * 1024) {
-        setError("File size should not exceed 5MB");
+        setError("El tamaño del archivo no debe exceder 5MB");
         return false;
       }
       return true;
@@ -98,13 +129,59 @@ export const QuoteForm = () => {
       URL.revokeObjectURL(prev[index]);
       return newUrls;
     });
+    setFormData((prev) => ({
+      ...prev,
+      imageUrls: prev.imageUrls.filter((_, i) => i !== index),
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí iría la lógica de envío del formulario
-    console.log("Form Data:", formData);
-    console.log("Images:", images);
+    setIsUploading(true);
+    setError("");
+
+    try {
+      // Upload all images to Supabase
+      const uploadPromises = images.map((file) => uploadImageToSupabase(file));
+      const uploadedUrls = await Promise.all(uploadPromises);
+
+      // Filter out any failed uploads
+      const successfulUrls = uploadedUrls.filter(
+        (url): url is string => url !== null
+      );
+
+      // Update form data with uploaded image URLs
+      const updatedFormData = {
+        ...formData,
+        imageUrls: successfulUrls,
+      };
+
+      // Mostrar las URLs de las imágenes subidas
+      console.log("URLs de las imágenes subidas:", successfulUrls);
+      console.log("Datos completos del formulario:", updatedFormData);
+
+      // Clear form and images after successful submission
+      setFormData({
+        firstName: "",
+        lastName: "",
+        phone: "",
+        email: "",
+        service: "",
+        levels: "",
+        bedrooms: "",
+        bathrooms: "",
+        message: "",
+        acceptTerms: false,
+        imageUrls: [],
+      });
+      setImages([]);
+      setPreviewUrls([]);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setError("Error al enviar el formulario. Por favor, inténtelo de nuevo.");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -252,6 +329,7 @@ export const QuoteForm = () => {
               onChange={handleImageUpload}
               className="hidden"
               id="image-upload"
+              disabled={isUploading}
             />
             <label
               htmlFor="image-upload"
@@ -280,6 +358,7 @@ export const QuoteForm = () => {
                     type="button"
                     onClick={() => removeImage(index)}
                     className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
+                    disabled={isUploading}
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -326,9 +405,16 @@ export const QuoteForm = () => {
         <Button
           type="submit"
           className="w-full bg-primary"
-          disabled={!formData.acceptTerms}
+          disabled={!formData.acceptTerms || isUploading}
         >
-          Get Your Quote
+          {isUploading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Uploading...
+            </>
+          ) : (
+            "Get Your Quote"
+          )}
         </Button>
       </form>
     </div>
