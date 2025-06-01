@@ -1,6 +1,9 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
+import { NavigationProvider } from "./context/NavigationContext";
+import { Navbar } from "./components/Navbar";
+import { Footer } from "./components/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,7 +30,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${outfit.variable} font-sans`}>
-        {children}
+        <NavigationProvider>
+          <Navbar />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+        </NavigationProvider>
       </body>
     </html>
   );

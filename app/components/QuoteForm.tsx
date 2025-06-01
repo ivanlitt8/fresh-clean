@@ -210,15 +210,26 @@ export const QuoteForm = () => {
     <div className="w-full max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-3 font-heading">
-          Get Instant Quote
+          Get Your Cleaning Quote in Seconds
         </h2>
         <p className="text-gray-600">
-          Fill out the form below and receive your personalized quote within 30
-          seconds via email.
+          Tell us what you need and get an instant, personalized price directly
+          to your email.
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="relative py-4">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-200"></div>
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-white px-3 text-sm text-gray-500">
+              Personal Info
+            </span>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <Label htmlFor="firstName">First Name</Label>
@@ -264,6 +275,17 @@ export const QuoteForm = () => {
               onChange={handleInputChange}
               required
             />
+          </div>
+        </div>
+
+        <div className="relative py-4">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-200"></div>
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-white px-3 text-sm text-gray-500">
+              Property Details
+            </span>
           </div>
         </div>
 
@@ -338,6 +360,17 @@ export const QuoteForm = () => {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+        </div>
+
+        <div className="relative py-4">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-200"></div>
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-white px-3 text-sm text-gray-500">
+              Extra Info
+            </span>
           </div>
         </div>
 

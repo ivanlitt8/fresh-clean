@@ -24,6 +24,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { BubblesBackground } from "./components/BubblesBackground";
 import { QuoteForm } from "./components/QuoteForm";
+import Link from "next/link";
+import { CTASection } from "./components/CTASection";
+import { Navbar } from "./components/Navbar";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -264,258 +267,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen relative">
-      {/* Navbar */}
-      <nav className="fixed w-full bg-white/80 backdrop-blur-md z-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Sparkles className="h-8 w-8 text-primary" />
-              <span className="ml-2 text-xl font-bold">Fresh & Clean</span>
-            </div>
-
-            {/* Botón de menú móvil */}
-            <motion.button
-              className="md:hidden p-2"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              whileTap={{ scale: 0.95 }}
-            >
-              {isMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </motion.button>
-
-            {/* Menú de escritorio */}
-            <div className="hidden md:flex items-center justify-center space-x-8">
-              <motion.button
-                onClick={() => scrollToSection("about")}
-                className="text-gray-600 hover:text-primary"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                About
-              </motion.button>
-
-              {/* Services Dropdown */}
-              <div
-                className="relative"
-                onMouseEnter={() => setShowServices(true)}
-                onMouseLeave={() => setShowServices(false)}
-              >
-                <motion.button
-                  className="text-gray-600 hover:text-primary flex items-center"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Services <ChevronDown className="ml-1 h-4 w-4" />
-                </motion.button>
-                <AnimatePresence>
-                  {showServices && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1"
-                    >
-                      {servicesList.map((service, index) => (
-                        <motion.button
-                          key={index}
-                          onClick={() => {
-                            scrollToSection("services");
-                            setShowServices(false);
-                          }}
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          whileHover={{ x: 5 }}
-                          custom={index}
-                          variants={menuItemVariants}
-                          initial="closed"
-                          animate="open"
-                        >
-                          {service}
-                        </motion.button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Locations Dropdown */}
-              <div
-                className="relative"
-                onMouseEnter={() => setShowLocations(true)}
-                onMouseLeave={() => setShowLocations(false)}
-              >
-                <motion.button
-                  className="text-gray-600 hover:text-primary flex items-center"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Locations <ChevronDown className="ml-1 h-4 w-4" />
-                </motion.button>
-                <AnimatePresence>
-                  {showLocations && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1"
-                    >
-                      {locations.map((location, index) => (
-                        <motion.button
-                          key={index}
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          whileHover={{ x: 5 }}
-                          custom={index}
-                          variants={menuItemVariants}
-                          initial="closed"
-                          animate="open"
-                        >
-                          {location}
-                        </motion.button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <motion.button
-                onClick={() => scrollToSection("contact")}
-                className="text-gray-600 hover:text-primary"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Contact
-              </motion.button>
-
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button onClick={() => scrollToSection("contact")}>
-                  Book Now
-                </Button>
-              </motion.div>
-            </div>
-          </div>
-
-          {/* Menú móvil */}
-          <AnimatePresence>
-            {isMenuOpen && (
-              <motion.div
-                variants={menuVariants}
-                initial="closed"
-                animate="open"
-                exit="closed"
-                className="md:hidden overflow-hidden"
-              >
-                <div className="flex flex-col space-y-4 py-4">
-                  <motion.button
-                    variants={menuItemVariants}
-                    custom={0}
-                    onClick={() => scrollToSection("about")}
-                    className="text-left text-gray-600 hover:text-primary px-4 py-2"
-                  >
-                    About
-                  </motion.button>
-
-                  {/* Services en móvil */}
-                  <div className="px-4">
-                    <motion.button
-                      variants={menuItemVariants}
-                      custom={1}
-                      onClick={() => setShowServices(!showServices)}
-                      className="text-left text-gray-600 hover:text-primary flex items-center"
-                    >
-                      Services <ChevronDown className="ml-1 h-4 w-4" />
-                    </motion.button>
-                    <AnimatePresence>
-                      {showServices && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mt-2 space-y-2 pl-4"
-                        >
-                          {servicesList.map((service, index) => (
-                            <motion.button
-                              key={index}
-                              variants={menuItemVariants}
-                              custom={index + 2}
-                              onClick={() => scrollToSection("services")}
-                              className="block w-full text-left py-2 text-sm text-gray-700 hover:text-primary"
-                            >
-                              {service}
-                            </motion.button>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  {/* Locations en móvil */}
-                  <div className="px-4">
-                    <motion.button
-                      variants={menuItemVariants}
-                      custom={2}
-                      onClick={() => setShowLocations(!showLocations)}
-                      className="text-left text-gray-600 hover:text-primary flex items-center"
-                    >
-                      Locations <ChevronDown className="ml-1 h-4 w-4" />
-                    </motion.button>
-                    <AnimatePresence>
-                      {showLocations && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mt-2 space-y-2 pl-4"
-                        >
-                          {locations.map((location, index) => (
-                            <motion.button
-                              key={index}
-                              variants={menuItemVariants}
-                              custom={index + 3}
-                              onClick={() => setShowLocations(false)}
-                              className="block w-full text-left py-2 text-sm text-gray-700 hover:text-primary"
-                            >
-                              {location}
-                            </motion.button>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-
-                  <motion.button
-                    variants={menuItemVariants}
-                    custom={3}
-                    onClick={() => scrollToSection("contact")}
-                    className="text-left text-gray-600 hover:text-primary px-4 py-2"
-                  >
-                    Contact
-                  </motion.button>
-
-                  <motion.div
-                    variants={menuItemVariants}
-                    custom={4}
-                    className="px-4"
-                  >
-                    <Button
-                      onClick={() => scrollToSection("contact")}
-                      className="w-full"
-                    >
-                      Book Now
-                    </Button>
-                  </motion.div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </nav>
-
-      {/* WhatsApp Button */}
       <a
         href="https://wa.me/1234567890"
         target="_blank"
@@ -525,7 +276,6 @@ export default function Home() {
         <FontAwesomeIcon icon={faWhatsapp} size="2x" color="#ffffff" />
       </a>
 
-      {/* Hero Section */}
       <section className="relative min-h-[80vh] pt-32 pb-20 px-4 bg-gradient-to-b from-blue-50/50 to-white/50 overflow-hidden">
         <div className="absolute inset-0 bg-white/30"></div>
         <BubblesBackground />
@@ -570,7 +320,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-20 bg-[#0B1C2C] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -658,8 +407,8 @@ export default function Home() {
             <h2 className="text-4xl font-bold font-heading">
               Our Cleaning Services
             </h2>
-            <Button variant="outline" size="lg">
-              ALL SERVICES
+            <Button variant="outline" size="lg" asChild>
+              <Link href="/services">ALL SERVICES</Link>
             </Button>
           </div>
           <div
@@ -960,7 +709,7 @@ export default function Home() {
 
       {/* Contact Form */}
       <section id="contact" className="py-20 px-4 bg-gray-50">
-        {/* <div className="max-w-3xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-12">Get in Touch</h2>
           <Card className="p-6">
             <form className="space-y-6">
@@ -989,86 +738,10 @@ export default function Home() {
               <Button className="w-full">Send Message</Button>
             </form>
           </Card>
-        </div> */}
-        <QuoteForm />
+        </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center mb-4">
-                <Sparkles className="h-6 w-6" />
-                <span className="ml-2 text-lg font-bold">Fresh & Clean</span>
-              </div>
-              <p className="text-gray-400">
-                Professional cleaning services for homes and businesses.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Contact</h3>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <PhoneCall className="h-5 w-5 mr-2" />
-                  <span>(555) 123-4567</span>
-                </div>
-                <div className="flex items-center">
-                  <MessageSquare className="h-5 w-5 mr-2" />
-                  <span>info@freshandclean.com</span>
-                </div>
-                <div className="flex items-center">
-                  <MapPin className="h-5 w-5 mr-2" />
-                  <span>123 Clean Street, City</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-              <ul className="space-y-2">
-                <li>
-                  <a href="#about" className="hover:text-primary">
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a href="#services" className="hover:text-primary">
-                    Services
-                  </a>
-                </li>
-                <li>
-                  <a href="#contact" className="hover:text-primary">
-                    Contact
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Business Hours</h3>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <Clock className="h-5 w-5 mr-2" />
-                  <span>Mon - Fri: 8am - 6pm</span>
-                </div>
-                <div className="flex items-center">
-                  <Clock className="h-5 w-5 mr-2" />
-                  <span>Sat: 9am - 4pm</span>
-                </div>
-                <div className="flex items-center">
-                  <Clock className="h-5 w-5 mr-2" />
-                  <span>Sun: Closed</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>
-              &copy; {new Date().getFullYear()} Fresh & Clean. All rights
-              reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <CTASection onButtonClick={() => scrollToSection("contact")} />
     </main>
   );
 }
