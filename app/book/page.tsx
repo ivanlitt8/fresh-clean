@@ -1,33 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Clock,
-  MapPin,
-  PhoneCall,
-  Sparkles,
-  MessageSquare,
-  ChevronDown,
-  Star,
-  Menu,
-  X,
-} from "lucide-react";
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import { CTASection } from "../components/CTASection";
-import { Navbar } from "../components/Navbar";
+import BookingForm from "../components/BookingForm";
 
 export default function Home() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [showLocations, setShowLocations] = useState(false);
-  const [showServices, setShowServices] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
@@ -101,69 +79,6 @@ export default function Home() {
 
   const totalPages = Math.ceil(services.length / servicesPerPage);
 
-  const paginatedServices = services.slice(
-    carouselIndex * servicesPerPage,
-    carouselIndex * servicesPerPage + servicesPerPage
-  );
-
-  const locations = [
-    "Downtown",
-    "North Side",
-    "South Side",
-    "East Side",
-    "West Side",
-  ];
-
-  const servicesList = [
-    "House Cleaning",
-    "Office Cleaning",
-    "Deep Cleaning",
-    "Move-in/Move-out Cleaning",
-    "Post-construction Cleaning",
-  ];
-
-  const features = [
-    {
-      text: "100% Guaranteed",
-      icon: <Star className="h-5 w-5 text-yellow-400" />,
-    },
-    {
-      text: "Liaise directly with real estate to secure bond",
-      icon: <Star className="h-5 w-5 text-yellow-400" />,
-    },
-    {
-      text: "50+ 5 Star Google Reviews",
-      icon: <Star className="h-5 w-5 text-yellow-400" />,
-    },
-    {
-      text: "Flexible, Local, Trusted by 100+ clients",
-      icon: <Star className="h-5 w-5 text-yellow-400" />,
-    },
-    {
-      text: "Accept credit cards including Amex",
-      icon: <Star className="h-5 w-5 text-yellow-400" />,
-    },
-  ];
-
-  // Función para scroll suave
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      // Cerrar el menú primero
-      setIsMenuOpen(false);
-      setShowServices(false);
-      setShowLocations(false);
-
-      // Pequeño delay para asegurar que el menú se cierre antes del scroll
-      setTimeout(() => {
-        element.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-      }, 300);
-    }
-  };
-
   // Cerrar menú móvil al redimensionar ventana
   useEffect(() => {
     const handleResize = () => {
@@ -175,57 +90,6 @@ export default function Home() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const menuVariants = {
-    closed: {
-      opacity: 0,
-      height: 0,
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut",
-      },
-    },
-    open: {
-      opacity: 1,
-      height: "auto",
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut",
-      },
-    },
-  };
-
-  const submenuVariants = {
-    closed: {
-      opacity: 0,
-      y: -10,
-      transition: {
-        duration: 0.2,
-        ease: "easeInOut",
-      },
-    },
-    open: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.2,
-        ease: "easeInOut",
-      },
-    },
-  };
-
-  const menuItemVariants = {
-    closed: { x: -20, opacity: 0 },
-    open: (i: number) => ({
-      x: 0,
-      opacity: 1,
-      transition: {
-        delay: i * 0.1,
-        duration: 0.3,
-        ease: "easeOut",
-      },
-    }),
-  };
 
   useEffect(() => {
     const updateServicesPerPage = () => {
@@ -270,45 +134,12 @@ export default function Home() {
         <FontAwesomeIcon icon={faWhatsapp} size="2x" color="#ffffff" />
       </a>
 
-      <section id="all-services" className="py-20 px-4 bg-gray-50">
+      <section id="book" className="py-20 px-4 bg-gray-50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">
-            Nuestros Servicios
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-xl shadow-lg overflow-hidden"
-              >
-                <div className="relative h-48">
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-600">{service.description}</p>
-                  <Button
-                    className="mt-4 w-full"
-                    onClick={() => scrollToSection("contact")}
-                  >
-                    Solicitar Cotización
-                  </Button>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <h2 className="text-4xl font-bold text-center mb-12">Book Now</h2>
+          <BookingForm />
         </div>
       </section>
-      <CTASection onButtonClick={() => scrollToSection("contact")} />
     </main>
   );
 }

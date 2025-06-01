@@ -8,9 +8,9 @@ interface CTASectionProps {
 }
 
 export const CTASection = ({
-  title = "¡Comienza tu servicio de limpieza con nuestra ayuda!",
-  description = "Contacta a No Sweat Cleaning Services hoy para descubrir cómo podemos transformar tu espacio en un refugio impecable, sin importar dónde te encuentres en Sydney.",
-  buttonText = "CONTÁCTANOS",
+  title = "Start your cleaning service with our help!",
+  description = "Contact Fresh & Clean Cleaning Services today to find out how we can transform your space into a spotless haven, no matter where you are in Sydney.",
+  buttonText = "Contact us",
   onButtonClick,
 }: CTASectionProps) => {
   return (

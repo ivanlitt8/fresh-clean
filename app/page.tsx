@@ -107,27 +107,6 @@ export default function Home() {
 
   const totalPages = Math.ceil(services.length / servicesPerPage);
 
-  const paginatedServices = services.slice(
-    carouselIndex * servicesPerPage,
-    carouselIndex * servicesPerPage + servicesPerPage
-  );
-
-  const locations = [
-    "Downtown",
-    "North Side",
-    "South Side",
-    "East Side",
-    "West Side",
-  ];
-
-  const servicesList = [
-    "House Cleaning",
-    "Office Cleaning",
-    "Deep Cleaning",
-    "Move-in/Move-out Cleaning",
-    "Post-construction Cleaning",
-  ];
-
   const features = [
     {
       text: "100% Guaranteed",
@@ -181,57 +160,6 @@ export default function Home() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const menuVariants = {
-    closed: {
-      opacity: 0,
-      height: 0,
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut",
-      },
-    },
-    open: {
-      opacity: 1,
-      height: "auto",
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut",
-      },
-    },
-  };
-
-  const submenuVariants = {
-    closed: {
-      opacity: 0,
-      y: -10,
-      transition: {
-        duration: 0.2,
-        ease: "easeInOut",
-      },
-    },
-    open: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.2,
-        ease: "easeInOut",
-      },
-    },
-  };
-
-  const menuItemVariants = {
-    closed: { x: -20, opacity: 0 },
-    open: (i: number) => ({
-      x: 0,
-      opacity: 1,
-      transition: {
-        delay: i * 0.1,
-        duration: 0.3,
-        ease: "easeOut",
-      },
-    }),
-  };
 
   useEffect(() => {
     const updateServicesPerPage = () => {

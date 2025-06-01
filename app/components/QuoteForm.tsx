@@ -207,19 +207,9 @@ export const QuoteForm = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-3 font-heading">
-          Get Your Cleaning Quote in Seconds
-        </h2>
-        <p className="text-gray-600">
-          Tell us what you need and get an instant, personalized price directly
-          to your email.
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="relative py-4">
+    <div className="w-full max-w-xl mx-auto bg-white rounded-lg shadow-lg p-3">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="relative pb-4">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-200"></div>
           </div>
@@ -230,7 +220,7 @@ export const QuoteForm = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="firstName">First Name</Label>
             <Input
@@ -249,11 +239,12 @@ export const QuoteForm = () => {
               value={formData.lastName}
               onChange={handleInputChange}
               required
+              className="w-44 h-6"
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="phone">Phone Number</Label>
             <Input
@@ -289,7 +280,7 @@ export const QuoteForm = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label>Select Service</Label>
             <Select
@@ -326,7 +317,7 @@ export const QuoteForm = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label>No. of Bedrooms</Label>
             <Select
@@ -376,7 +367,7 @@ export const QuoteForm = () => {
 
         <div className="space-y-2">
           <Label>Upload Images (Optional)</Label>
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+          <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
             <input
               type="file"
               multiple
@@ -390,24 +381,24 @@ export const QuoteForm = () => {
               htmlFor="image-upload"
               className="cursor-pointer flex flex-col items-center"
             >
-              <Upload className="h-12 w-12 text-gray-400 mb-2" />
-              <span className="text-gray-600">
+              <Upload className="h-8 w-8 text-gray-400 mb-1" />
+              <span className="text-gray-600 text-sm">
                 Drop your images here or click to upload
               </span>
-              <span className="text-sm text-gray-500 mt-1">
+              <span className="text-xs text-gray-500 mt-0.5">
                 Maximum file size: 5MB
               </span>
             </label>
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
           {previewUrls.length > 0 && (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
               {previewUrls.map((url, index) => (
                 <div key={index} className="relative">
                   <img
                     src={url}
                     alt={`Preview ${index + 1}`}
-                    className="w-full h-24 object-cover rounded-lg"
+                    className="w-full h-20 object-cover rounded-lg"
                   />
                   <button
                     type="button"
@@ -431,7 +422,7 @@ export const QuoteForm = () => {
             value={formData.message}
             onChange={handleInputChange}
             placeholder="Any specific requirements or details..."
-            className="h-32"
+            className="h-24"
           />
         </div>
 

@@ -1,24 +1,13 @@
 "use client";
 
-import {
-  Clock,
-  MapPin,
-  PhoneCall,
-  Sparkles,
-  MessageSquare,
-  Star,
-} from "lucide-react";
+import { Star } from "lucide-react";
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { QuoteForm } from "../components/QuoteForm";
 import { CTASection } from "../components/CTASection";
-import { Navbar } from "../components/Navbar";
 
 export default function Home() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
   const [showLocations, setShowLocations] = useState(false);
   const [showServices, setShowServices] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -94,50 +83,6 @@ export default function Home() {
 
   const totalPages = Math.ceil(services.length / servicesPerPage);
 
-  const paginatedServices = services.slice(
-    carouselIndex * servicesPerPage,
-    carouselIndex * servicesPerPage + servicesPerPage
-  );
-
-  const locations = [
-    "Downtown",
-    "North Side",
-    "South Side",
-    "East Side",
-    "West Side",
-  ];
-
-  const servicesList = [
-    "House Cleaning",
-    "Office Cleaning",
-    "Deep Cleaning",
-    "Move-in/Move-out Cleaning",
-    "Post-construction Cleaning",
-  ];
-
-  const features = [
-    {
-      text: "100% Guaranteed",
-      icon: <Star className="h-5 w-5 text-yellow-400" />,
-    },
-    {
-      text: "Liaise directly with real estate to secure bond",
-      icon: <Star className="h-5 w-5 text-yellow-400" />,
-    },
-    {
-      text: "50+ 5 Star Google Reviews",
-      icon: <Star className="h-5 w-5 text-yellow-400" />,
-    },
-    {
-      text: "Flexible, Local, Trusted by 100+ clients",
-      icon: <Star className="h-5 w-5 text-yellow-400" />,
-    },
-    {
-      text: "Accept credit cards including Amex",
-      icon: <Star className="h-5 w-5 text-yellow-400" />,
-    },
-  ];
-
   // Función para scroll suave
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -168,57 +113,6 @@ export default function Home() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const menuVariants = {
-    closed: {
-      opacity: 0,
-      height: 0,
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut",
-      },
-    },
-    open: {
-      opacity: 1,
-      height: "auto",
-      transition: {
-        duration: 0.3,
-        ease: "easeInOut",
-      },
-    },
-  };
-
-  const submenuVariants = {
-    closed: {
-      opacity: 0,
-      y: -10,
-      transition: {
-        duration: 0.2,
-        ease: "easeInOut",
-      },
-    },
-    open: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.2,
-        ease: "easeInOut",
-      },
-    },
-  };
-
-  const menuItemVariants = {
-    closed: { x: -20, opacity: 0 },
-    open: (i: number) => ({
-      x: 0,
-      opacity: 1,
-      transition: {
-        delay: i * 0.1,
-        duration: 0.3,
-        ease: "easeOut",
-      },
-    }),
-  };
 
   useEffect(() => {
     const updateServicesPerPage = () => {
@@ -254,10 +148,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen relative">
-      {/* Navbar */}
-      <Navbar />
-
-      {/* WhatsApp Button */}
       <a
         href="https://wa.me/1234567890"
         target="_blank"
@@ -269,86 +159,16 @@ export default function Home() {
 
       {/* Contact Form */}
       <section id="contact" className="py-20 px-4 bg-gray-50">
+        {/* <h2 className="text-3xl font-bold text-gray-900 mb-3 font-heading">
+          Get Your Cleaning Quote in Seconds
+        </h2>
+        <p className="text-gray-600">
+          Tell us what you need and get an instant, personalized price directly
+          to your email.
+        </p> */}
         <QuoteForm />
       </section>
       <CTASection onButtonClick={() => scrollToSection("contact")} />
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center mb-4">
-                <Sparkles className="h-6 w-6" />
-                <span className="ml-2 text-lg font-bold">Fresh & Clean</span>
-              </div>
-              <p className="text-gray-400">
-                Professional cleaning services for homes and businesses.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Contact</h3>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <PhoneCall className="h-5 w-5 mr-2" />
-                  <span>(555) 123-4567</span>
-                </div>
-                <div className="flex items-center">
-                  <MessageSquare className="h-5 w-5 mr-2" />
-                  <span>info@freshandclean.com</span>
-                </div>
-                <div className="flex items-center">
-                  <MapPin className="h-5 w-5 mr-2" />
-                  <span>123 Clean Street, City</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-              <ul className="space-y-2">
-                <li>
-                  <a href="#about" className="hover:text-primary">
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a href="#services" className="hover:text-primary">
-                    Services
-                  </a>
-                </li>
-                <li>
-                  <a href="#contact" className="hover:text-primary">
-                    Contact
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Business Hours</h3>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <Clock className="h-5 w-5 mr-2" />
-                  <span>Mon - Fri: 8am - 6pm</span>
-                </div>
-                <div className="flex items-center">
-                  <Clock className="h-5 w-5 mr-2" />
-                  <span>Sat: 9am - 4pm</span>
-                </div>
-                <div className="flex items-center">
-                  <Clock className="h-5 w-5 mr-2" />
-                  <span>Sun: Closed</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>
-              &copy; {new Date().getFullYear()} Fresh & Clean. All rights
-              reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
     </main>
   );
 }

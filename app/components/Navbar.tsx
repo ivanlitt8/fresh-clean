@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sparkles, ChevronDown, Menu, X } from "lucide-react";
 import { useNavigation } from "../context/NavigationContext";
@@ -11,6 +12,7 @@ export const Navbar = () => {
   const [showServices, setShowServices] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { navigateToSection } = useNavigation();
+  const router = useRouter();
 
   const locations = [
     "Downtown",
@@ -71,6 +73,13 @@ export const Navbar = () => {
     navigateToSection("/", sectionId);
   };
 
+  const handleBookNow = () => {
+    setIsMenuOpen(false);
+    setShowServices(false);
+    setShowLocations(false);
+    router.push("/book");
+  };
+
   return (
     <nav className="fixed w-full bg-white/80 backdrop-blur-md z-50 border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -114,6 +123,7 @@ export const Navbar = () => {
                 className="text-gray-600 hover:text-primary flex items-center"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => handleNavigation("services")}
               >
                 Services <ChevronDown className="ml-1 h-4 w-4" />
               </motion.button>
@@ -128,7 +138,10 @@ export const Navbar = () => {
                     {servicesList.map((service, index) => (
                       <motion.button
                         key={index}
-                        onClick={() => handleNavigation("services")}
+                        onClick={() => {
+                          setShowServices(false);
+                          router.push("/services");
+                        }}
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         whileHover={{ x: 5 }}
                         custom={index}
@@ -193,9 +206,7 @@ export const Navbar = () => {
             </motion.button>
 
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button onClick={() => handleNavigation("contact")}>
-                Book Now
-              </Button>
+              <Button onClick={handleBookNow}>Book Now</Button>
             </motion.div>
           </div>
         </div>
@@ -225,7 +236,7 @@ export const Navbar = () => {
                   <motion.button
                     variants={menuItemVariants}
                     custom={1}
-                    onClick={() => setShowServices(!showServices)}
+                    onClick={() => handleNavigation("services")}
                     className="text-left text-gray-600 hover:text-primary flex items-center"
                   >
                     Services <ChevronDown className="ml-1 h-4 w-4" />
@@ -243,7 +254,13 @@ export const Navbar = () => {
                             key={index}
                             variants={menuItemVariants}
                             custom={index + 2}
-                            onClick={() => handleNavigation("services")}
+                            initial="closed"
+                            animate="open"
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                              setShowServices(false);
+                              router.push("/services");
+                            }}
                             className="block w-full text-left py-2 text-sm text-gray-700 hover:text-primary"
                           >
                             {service}
@@ -277,6 +294,8 @@ export const Navbar = () => {
                             key={index}
                             variants={menuItemVariants}
                             custom={index + 3}
+                            initial="closed"
+                            animate="open"
                             onClick={() => setShowLocations(false)}
                             className="block w-full text-left py-2 text-sm text-gray-700 hover:text-primary"
                           >
@@ -302,10 +321,7 @@ export const Navbar = () => {
                   custom={4}
                   className="px-4"
                 >
-                  <Button
-                    onClick={() => handleNavigation("contact")}
-                    className="w-full"
-                  >
+                  <Button onClick={handleBookNow} className="w-full">
                     Book Now
                   </Button>
                 </motion.div>
