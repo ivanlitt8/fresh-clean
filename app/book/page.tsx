@@ -126,6 +126,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen relative">
+      {/* WhatsApp button */}
       <a
         href="https://wa.me/1234567890"
         target="_blank"
@@ -135,24 +136,35 @@ export default function Home() {
         <FontAwesomeIcon icon={faWhatsapp} size="2x" color="#ffffff" />
       </a>
 
-      <section className="relative h-[30vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+      {/* Fondo de burbujas */}
+      <div className="absolute inset-0">
         <BubblesBackground />
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 to-blue-600/30 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 to-blue-600/20 backdrop-blur-[2px]" />
+      </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-4xl font-bold text-center mb-12">Book Now</h2>
+      {/* Contenedor del formulario */}
+      <div className="relative z-10 min-h-screen">
+        {/* Header fijo */}
+        <div className="sticky top-0 pt-24 pb-8 bg-gradient-to-b from-white/80 to-transparent backdrop-blur-sm">
+          <div className="container mx-auto px-4">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                Reserva tu Servicio
+              </h1>
+              <p className="text-lg text-gray-600">
+                Completa el formulario para agendar tu servicio de limpieza
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Contenedor del formulario con scroll independiente */}
+        <div className="container mx-auto px-4 pb-16">
+          <div className="max-w-2xl mx-auto">
             <BookingForm />
           </div>
         </div>
-      </section>
-
-      {/* <section id="book" className="py-20 px-4 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">Book Now</h2>
-          <BookingForm />
-        </div>
-      </section> */}
+      </div>
     </main>
   );
 }
