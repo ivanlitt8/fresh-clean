@@ -206,7 +206,12 @@ export const Navbar = () => {
             </motion.button>
 
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button onClick={handleBookNow}>Book Now</Button>
+              <Button
+                onClick={handleBookNow}
+                className="bg-[#00AEEF] hover:bg-[#0098d1] text-white"
+              >
+                Book Now
+              </Button>
             </motion.div>
           </div>
         </div>
@@ -321,7 +326,10 @@ export const Navbar = () => {
                   custom={4}
                   className="px-4"
                 >
-                  <Button onClick={handleBookNow} className="w-full">
+                  <Button
+                    onClick={handleBookNow}
+                    className="w-full bg-[#00AEEF] hover:bg-[#0098d1] text-white"
+                  >
                     Book Now
                   </Button>
                 </motion.div>

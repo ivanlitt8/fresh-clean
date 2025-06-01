@@ -176,7 +176,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-4xl md:text-6xl font-bold text-gray-900 mb-6"
+            className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 font-heading"
           >
             Expert Cleaning Services
             <br />
@@ -201,18 +201,18 @@ export default function Home() {
           >
             <Button
               size="lg"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg"
+              className="bg-[#00AEEF] hover:bg-[#0098d1] text-white"
               onClick={() => scrollToSection("contact")}
             >
-              Reservar Ahora
+              Get Free Quote
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="bg-white/80 hover:bg-white text-blue-600 border-blue-600 px-8 py-6 text-lg"
+              className="border-[#00AEEF] text-[#00AEEF] hover:bg-[#00AEEF] hover:text-white"
               onClick={() => scrollToSection("all-services")}
             >
-              Ver Servicios
+              See Services
             </Button>
           </motion.div>
         </div>
@@ -220,9 +220,13 @@ export default function Home() {
 
       <section id="all-services" className="py-20 px-4 bg-gray-50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">
-            Nuestros Servicios
+          <h2 className="text-4xl font-bold text-center mb-12 font-heading">
+            Our Services
           </h2>
+          <p className="text-center text-gray-600 mb-12 text-lg">
+            Choose the type of cleaning that best suits your needs. Reliable,
+            timely services with impeccable results.
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => (
               <motion.div

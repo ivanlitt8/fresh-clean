@@ -28,6 +28,9 @@ import {
   MessageSquare,
   CheckCircle2,
   Loader2,
+  Mail,
+  Phone,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -439,39 +442,73 @@ export default function BookingForm() {
 
             {currentStep === 2 && (
               <div className="space-y-4">
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-medium mb-2">Booking Summary</h3>
-                  <div className="space-y-2 text-sm">
-                    <p>
-                      <span className="font-medium">Service:</span>{" "}
-                      {services.find((s) => s.id === selectedService)?.name}
-                    </p>
-                    <p>
-                      <span className="font-medium">Date:</span>{" "}
-                      {selectedDate
-                        ? format(selectedDate, "PPP", { locale: enUS })
-                        : ""}
-                    </p>
-                    <p>
-                      <span className="font-medium">Time:</span> {selectedTime}
-                    </p>
-                    <p>
-                      <span className="font-medium">Name:</span>{" "}
-                      {formData.fullName}
-                    </p>
-                    <p>
-                      <span className="font-medium">Email:</span>{" "}
-                      {formData.email}
-                    </p>
-                    <p>
-                      <span className="font-medium">Phone:</span>{" "}
-                      {formData.phone}
-                    </p>
+                <div className="bg-[#F9F9F9] p-6 rounded-xl">
+                  <h3 className="font-semibold text-lg mb-4">
+                    Booking Summary
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-start gap-3">
+                      <Sparkles className="h-5 w-5 text-primary mt-0.5" />
+                      <div>
+                        <p className="text-sm text-gray-500">Service:</p>
+                        <p className="font-medium">
+                          {services.find((s) => s.id === selectedService)?.name}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <CalendarIcon className="h-5 w-5 text-primary mt-0.5" />
+                      <div>
+                        <p className="text-sm text-gray-500">Date:</p>
+                        <p className="font-medium">
+                          {selectedDate
+                            ? format(selectedDate, "PPP", { locale: enUS })
+                            : ""}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <Clock className="h-5 w-5 text-primary mt-0.5" />
+                      <div>
+                        <p className="text-sm text-gray-500">Time:</p>
+                        <p className="font-medium">{selectedTime}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <User className="h-5 w-5 text-primary mt-0.5" />
+                      <div>
+                        <p className="text-sm text-gray-500">Name:</p>
+                        <p className="font-medium">{formData.fullName}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <Mail className="h-5 w-5 text-primary mt-0.5" />
+                      <div>
+                        <p className="text-sm text-gray-500">Email:</p>
+                        <p className="font-medium">{formData.email}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <Phone className="h-5 w-5 text-primary mt-0.5" />
+                      <div>
+                        <p className="text-sm text-gray-500">Phone:</p>
+                        <p className="font-medium">{formData.phone}</p>
+                      </div>
+                    </div>
+
                     {formData.comments && (
-                      <p>
-                        <span className="font-medium">Comments:</span>{" "}
-                        {formData.comments}
-                      </p>
+                      <div className="flex items-start gap-3 col-span-2">
+                        <MessageSquare className="h-5 w-5 text-primary mt-0.5" />
+                        <div>
+                          <p className="text-sm text-gray-500">Comments:</p>
+                          <p className="font-medium">{formData.comments}</p>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>

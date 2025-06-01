@@ -149,10 +149,10 @@ export default function Home() {
           <div className="container mx-auto px-4">
             <div className="text-center">
               <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                Reserva tu Servicio
+                Book your Service
               </h1>
               <p className="text-lg text-gray-600">
-                Completa el formulario para agendar tu servicio de limpieza
+                Complete the form to schedule your cleaning service
               </p>
             </div>
           </div>

@@ -256,7 +256,7 @@ export default function Home() {
                 CLEANING MADE EASY
               </h2>
               <h3 className="text-4xl font-bold mb-8 font-heading">
-                The No Sweat Difference
+                The Fresh & Clean Difference
               </h3>
               <div className="space-y-4">
                 {features.map((feature, index) => (
@@ -335,7 +335,12 @@ export default function Home() {
             <h2 className="text-4xl font-bold font-heading">
               Our Cleaning Services
             </h2>
-            <Button variant="outline" size="lg" asChild>
+            <Button
+              variant="outline"
+              size="lg"
+              className="border-[#00AEEF] text-[#00AEEF] hover:bg-[#00AEEF] hover:text-white"
+              asChild
+            >
               <Link href="/services">ALL SERVICES</Link>
             </Button>
           </div>
@@ -516,7 +521,7 @@ export default function Home() {
               <div className="flex justify-center md:justify-start">
                 <Button
                   size="lg"
-                  className="mt-8 bg-[#00AEEF] hover:bg-blue-500 text-white font-semibold px-8"
+                  className="mt-8 bg-[#00AEEF] hover:bg-[#0098d1] text-white font-semibold px-8"
                 >
                   BOOK NOW
                 </Button>
