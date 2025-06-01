@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { CTASection } from "../components/CTASection";
+import { BubblesBackground } from "../components/BubblesBackground";
 
 export default function Home() {
   const [showLocations, setShowLocations] = useState(false);
@@ -155,6 +156,67 @@ export default function Home() {
       >
         <FontAwesomeIcon icon={faWhatsapp} size="2x" color="#ffffff" />
       </a>
+
+      {/* Nueva sección Hero */}
+      <section className="relative h-[30vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+        <BubblesBackground />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 to-blue-600/30 backdrop-blur-sm" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-block bg-blue-100 text-blue-800 text-sm font-medium px-4 py-1 rounded-full mb-6"
+          >
+            CLEANING SERVICES
+          </motion.span>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-4xl md:text-6xl font-bold text-gray-900 mb-6"
+          >
+            Expert Cleaning Services
+            <br />
+            for Homes & Businesses
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto mb-8"
+          >
+            Specialized in residential, commercial, and end-of-lease cleaning.
+            Fresh results, every time.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <Button
+              size="lg"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg"
+              onClick={() => scrollToSection("contact")}
+            >
+              Reservar Ahora
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="bg-white/80 hover:bg-white text-blue-600 border-blue-600 px-8 py-6 text-lg"
+              onClick={() => scrollToSection("all-services")}
+            >
+              Ver Servicios
+            </Button>
+          </motion.div>
+        </div>
+      </section>
 
       <section id="all-services" className="py-20 px-4 bg-gray-50">
         <div className="max-w-7xl mx-auto">

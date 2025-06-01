@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import BookingForm from "../components/BookingForm";
+import { BubblesBackground } from "../components/BubblesBackground";
 
 export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -134,12 +135,24 @@ export default function Home() {
         <FontAwesomeIcon icon={faWhatsapp} size="2x" color="#ffffff" />
       </a>
 
-      <section id="book" className="py-20 px-4 bg-gray-50">
+      <section className="relative h-[30vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+        <BubblesBackground />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-500/10 to-blue-600/30 backdrop-blur-sm" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-4xl font-bold text-center mb-12">Book Now</h2>
+            <BookingForm />
+          </div>
+        </div>
+      </section>
+
+      {/* <section id="book" className="py-20 px-4 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-12">Book Now</h2>
           <BookingForm />
         </div>
-      </section>
+      </section> */}
     </main>
   );
 }
