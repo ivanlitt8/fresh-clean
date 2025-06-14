@@ -1,40 +1,13 @@
 "use client";
 
-import type React from "react";
-
-import { useState } from "react";
-import { Calendar } from "@/components/ui/calendar";
+import { Dispatch, SetStateAction } from "react";
+import { FormData } from "../book/page";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  CalendarIcon,
-  Clock,
-  User,
-  MessageSquare,
-  CheckCircle2,
-  Loader2,
-  Mail,
-  Phone,
-  Sparkles,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { enUS } from "date-fns/locale";
 import {
   Select,
   SelectContent,
@@ -42,27 +15,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { CalendarIcon, Upload, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface BookingFormProps {
+  currentStep: number;
+  setCurrentStep: Dispatch<SetStateAction<number>>;
+  formData: FormData;
+  setFormData: Dispatch<SetStateAction<FormData>>;
+  steps: { id: number; title: string }[];
+  onConfirm: () => void;
+}
 
 const services = [
-  {
-    id: "general",
-    name: "General Cleaning",
-    duration: "2-3 horas",
-    description: "Complete cleaning of all areas",
-  },
-  {
-    id: "deep",
-    name: "Deep Cleaning",
-    duration: "4-6 horas",
-    description: "Detailed cleaning including hard-to-reach areas",
-  },
-  {
-    id: "post-construction",
-    name: "Post-Construction Cleaning",
-    duration: "6-8 horas",
-    description: "Specialized cleaning after construction",
-  },
+  "Deep Cleaning",
+  "Regular Cleaning",
+  "Move In/Out Cleaning",
+  "Post Construction Cleaning",
+  "Office Cleaning",
 ];
+
+const frequencies = ["Una vez", "Semanal", "Quincenal", "Mensual"];
+
+const levels = ["1", "2", "3", "4", "5+"];
+const bedrooms = ["1", "2", "3", "4", "5+"];
+const bathrooms = ["1", "2", "3", "4", "5+"];
 
 const timeSlots = [
   "08:00",
@@ -75,506 +59,410 @@ const timeSlots = [
   "15:00",
   "16:00",
   "17:00",
-  "18:00",
 ];
 
-type OccupiedSlotsType = { [key: string]: string[] };
-
-const occupiedSlots: OccupiedSlotsType = {
-  "2024-12-20": ["10:00", "14:00"],
-  "2024-12-21": ["09:00", "15:00", "16:00"],
-};
-
-type Step = {
-  title: string;
-  description: string;
-};
-
-const steps: Step[] = [
-  {
-    title: "Service Details",
-    description: "Select your service and preferred date",
-  },
-  {
-    title: "Your Information",
-    description: "Fill in your contact details",
-  },
-  {
-    title: "Confirm Booking",
-    description: "Review and confirm your appointment",
-  },
-];
-
-export default function BookingForm() {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [selectedService, setSelectedService] = useState("");
-  const [selectedDate, setSelectedDate] = useState<Date>();
-  const [selectedTime, setSelectedTime] = useState("");
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    comments: "",
-  });
-  const [acceptTerms, setAcceptTerms] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
-  // Fechas bloqueadas (fines de semana y fechas pasadas)
-  const isDateDisabled = (date: Date) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    // Bloquear fechas pasadas y fines de semana
-    return date < today || date.getDay() === 0 || date.getDay() === 6;
-  };
-
-  // Obtener horarios disponibles para la fecha seleccionada
-  const getAvailableTimeSlots = () => {
-    if (!selectedDate) return [];
-
-    const dateKey = format(selectedDate, "yyyy-MM-dd");
-    const occupied = occupiedSlots[dateKey] || [];
-
-    return timeSlots.filter((slot) => !occupied.includes(slot));
-  };
-
-  const validateStep = () => {
-    const newErrors: Record<string, string> = {};
-
-    switch (currentStep) {
-      case 0:
-        if (!selectedService) newErrors.service = "Select a service";
-        if (!selectedDate) newErrors.date = "Select a date";
-        if (!selectedTime) newErrors.time = "Select a time";
-        break;
-      case 1:
-        if (!formData.fullName.trim()) newErrors.fullName = "Name is required";
-        if (!formData.email.trim()) {
-          newErrors.email = "Email is required";
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-          newErrors.email = "Invalid email";
-        }
-        if (!formData.phone.trim()) {
-          newErrors.phone = "Phone is required";
-        } else if (!/^\d{8,}$/.test(formData.phone.replace(/\s/g, ""))) {
-          newErrors.phone = "Invalid phone (minimum 8 digits)";
-        }
-        break;
-      case 2:
-        if (!acceptTerms)
-          newErrors.terms = "You must accept the terms and conditions";
-        break;
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
+export default function BookingForm({
+  currentStep,
+  setCurrentStep,
+  formData,
+  setFormData,
+  steps,
+  onConfirm,
+}: BookingFormProps) {
   const handleNext = () => {
-    if (validateStep()) {
-      setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1));
+    if (currentStep < steps.length) {
+      setCurrentStep(currentStep + 1);
     }
   };
 
   const handleBack = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateStep()) return;
+  const renderServiceSelection = () => (
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Label>Tipo de Servicio</Label>
+        <Select
+          value={formData.service}
+          onValueChange={(value) =>
+            setFormData((prev) => ({ ...prev, service: value }))
+          }
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Selecciona un servicio" />
+          </SelectTrigger>
+          <SelectContent>
+            {services.map((service) => (
+              <SelectItem key={service} value={service}>
+                {service}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-    setIsSubmitting(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log("Reserva enviada:", {
-        service: selectedService,
-        date: selectedDate,
-        time: selectedTime,
-        ...formData,
-        acceptTerms,
-      });
-      alert("Booking confirmed! We will contact you soon.");
-      // Reset form
-      setCurrentStep(0);
-      setSelectedService("");
-      setSelectedDate(undefined);
-      setSelectedTime("");
-      setFormData({ fullName: "", email: "", phone: "", comments: "" });
-      setAcceptTerms(false);
-    } catch (error) {
-      alert("Error processing booking. Please try again.");
-    } finally {
-      setIsSubmitting(false);
+      <div className="space-y-2">
+        <Label>Frecuencia</Label>
+        <Select
+          value={formData.frequency}
+          onValueChange={(value) =>
+            setFormData((prev) => ({ ...prev, frequency: value }))
+          }
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Selecciona la frecuencia" />
+          </SelectTrigger>
+          <SelectContent>
+            {frequencies.map((frequency) => (
+              <SelectItem key={frequency} value={frequency}>
+                {frequency}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+  );
+
+  const renderPropertyDetails = () => (
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="space-y-2">
+          <Label>Niveles</Label>
+          <Select
+            value={formData.levels}
+            onValueChange={(value) =>
+              setFormData((prev) => ({ ...prev, levels: value }))
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Selecciona" />
+            </SelectTrigger>
+            <SelectContent>
+              {levels.map((level) => (
+                <SelectItem key={level} value={level}>
+                  {level}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label>Dormitorios</Label>
+          <Select
+            value={formData.bedrooms}
+            onValueChange={(value) =>
+              setFormData((prev) => ({ ...prev, bedrooms: value }))
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Selecciona" />
+            </SelectTrigger>
+            <SelectContent>
+              {bedrooms.map((bedroom) => (
+                <SelectItem key={bedroom} value={bedroom}>
+                  {bedroom}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label>Baños</Label>
+          <Select
+            value={formData.bathrooms}
+            onValueChange={(value) =>
+              setFormData((prev) => ({ ...prev, bathrooms: value }))
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Selecciona" />
+            </SelectTrigger>
+            <SelectContent>
+              {bathrooms.map((bathroom) => (
+                <SelectItem key={bathroom} value={bathroom}>
+                  {bathroom}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label>Imágenes (Opcional)</Label>
+        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={(e) => {
+              const files = Array.from(e.target.files || []);
+              setFormData((prev) => ({ ...prev, images: files }));
+            }}
+            className="hidden"
+            id="image-upload"
+          />
+          <label
+            htmlFor="image-upload"
+            className="cursor-pointer flex flex-col items-center"
+          >
+            <Upload className="h-8 w-8 text-gray-400 mb-1" />
+            <span className="text-gray-600 text-sm">
+              Arrastra tus imágenes aquí o haz clic para subir
+            </span>
+            <span className="text-xs text-gray-500 mt-0.5">
+              Tamaño máximo: 5MB
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderDateAndTime = () => (
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Label>Fecha</Label>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className={cn(
+                "w-full justify-start text-left font-normal",
+                !formData.date && "text-muted-foreground"
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {formData.date
+                ? format(formData.date, "PPP", { locale: es })
+                : "Selecciona una fecha"}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={formData.date || undefined}
+              onSelect={(date) =>
+                setFormData((prev) => ({ ...prev, date: date || null }))
+              }
+              initialFocus
+              locale={es}
+            />
+          </PopoverContent>
+        </Popover>
+      </div>
+
+      <div className="space-y-2">
+        <Label>Hora</Label>
+        <Select
+          value={formData.time}
+          onValueChange={(value) =>
+            setFormData((prev) => ({ ...prev, time: value }))
+          }
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Selecciona hora" />
+          </SelectTrigger>
+          <SelectContent>
+            {timeSlots.map((time) => (
+              <SelectItem key={time} value={time}>
+                {time}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="space-y-2">
+        <Label>Notas Adicionales</Label>
+        <Textarea
+          value={formData.additionalNotes}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              additionalNotes: e.target.value,
+            }))
+          }
+          placeholder="Instrucciones especiales, acceso, etc..."
+        />
+      </div>
+    </div>
+  );
+
+  const renderPersonalInfo = () => (
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label>Nombre</Label>
+          <Input
+            value={formData.firstName}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, firstName: e.target.value }))
+            }
+            placeholder="Tu nombre"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label>Apellido</Label>
+          <Input
+            value={formData.lastName}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, lastName: e.target.value }))
+            }
+            placeholder="Tu apellido"
+          />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label>Email</Label>
+        <Input
+          type="email"
+          value={formData.email}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, email: e.target.value }))
+          }
+          placeholder="tu@email.com"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label>Teléfono</Label>
+        <Input
+          type="tel"
+          value={formData.phone}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, phone: e.target.value }))
+          }
+          placeholder="+1 234 567 8900"
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label>Dirección del Servicio</Label>
+        <Input
+          value={formData.address}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, address: e.target.value }))
+          }
+          placeholder="Ingresa la dirección completa donde se realizará el servicio"
+        />
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <Checkbox
+          id="terms"
+          checked={formData.acceptTerms}
+          onCheckedChange={(checked) =>
+            setFormData((prev) => ({
+              ...prev,
+              acceptTerms: checked as boolean,
+            }))
+          }
+        />
+        <label
+          htmlFor="terms"
+          className="text-sm text-gray-600 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          Acepto los términos y condiciones
+        </label>
+      </div>
+    </div>
+  );
+
+  const renderSummary = () => (
+    <div className="space-y-6">
+      <div className="bg-gray-50 p-6 rounded-lg space-y-4">
+        <h3 className="font-semibold text-lg">Resumen de la Reserva</h3>
+
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span className="text-gray-600">Servicio:</span>
+            <p className="font-medium">{formData.service}</p>
+          </div>
+          <div>
+            <span className="text-gray-600">Frecuencia:</span>
+            <p className="font-medium">{formData.frequency}</p>
+          </div>
+          <div>
+            <span className="text-gray-600">Fecha:</span>
+            <p className="font-medium">
+              {formData.date && format(formData.date, "PPP", { locale: es })}
+            </p>
+          </div>
+          <div>
+            <span className="text-gray-600">Hora:</span>
+            <p className="font-medium">{formData.time}</p>
+          </div>
+          <div>
+            <span className="text-gray-600">Nombre:</span>
+            <p className="font-medium">{`${formData.firstName} ${formData.lastName}`}</p>
+          </div>
+          <div>
+            <span className="text-gray-600">Email:</span>
+            <p className="font-medium">{formData.email}</p>
+          </div>
+          <div>
+            <span className="text-gray-600">Teléfono:</span>
+            <p className="font-medium">{formData.phone}</p>
+          </div>
+          <div className="col-span-2">
+            <span className="text-gray-600">Dirección:</span>
+            <p className="font-medium">{formData.address}</p>
+          </div>
+        </div>
+
+        {formData.additionalNotes && (
+          <div className="col-span-2">
+            <span className="text-gray-600">Notas Adicionales:</span>
+            <p className="font-medium">{formData.additionalNotes}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 1:
+        return renderServiceSelection();
+      case 2:
+        return renderPropertyDetails();
+      case 3:
+        return renderDateAndTime();
+      case 4:
+        return renderPersonalInfo();
+      case 5:
+        return renderSummary();
+      default:
+        return null;
     }
   };
 
   return (
-    <div className="w-full">
-      <div className="mb-8">
-        <div className="flex justify-between items-center">
-          {steps.map((step, index) => (
-            <div
-              key={step.title}
-              className={cn(
-                "flex flex-col items-center space-y-2",
-                currentStep === index ? "text-primary" : "text-gray-500"
-              )}
-            >
-              <div
-                className={cn(
-                  "w-8 h-8 rounded-full flex items-center justify-center border-2",
-                  currentStep === index
-                    ? "border-primary bg-primary text-white"
-                    : "border-gray-300",
-                  currentStep > index
-                    ? "bg-primary border-primary text-white"
-                    : ""
-                )}
-              >
-                {currentStep > index ? (
-                  <CheckCircle2 className="h-5 w-5" />
-                ) : (
-                  index + 1
-                )}
-              </div>
-              <span className="text-sm font-medium hidden sm:block">
-                {step.title}
-              </span>
-            </div>
-          ))}
-        </div>
+    <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="mb-8">{renderStepContent()}</div>
+
+      <div className="flex justify-between mt-8">
+        <Button
+          variant="outline"
+          onClick={handleBack}
+          disabled={currentStep === 1}
+        >
+          Anterior
+        </Button>
+        {currentStep === steps.length ? (
+          <Button onClick={onConfirm}>Confirmar Reserva</Button>
+        ) : (
+          <Button onClick={handleNext}>Siguiente</Button>
+        )}
       </div>
-
-      <Card className="bg-white/95 backdrop-blur-sm shadow-xl border-0">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-xl">{steps[currentStep].title}</CardTitle>
-          <CardDescription>{steps[currentStep].description}</CardDescription>
-        </CardHeader>
-
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {currentStep === 0 && (
-              <>
-                {/* Service Selection */}
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4" />
-                    Service
-                  </Label>
-                  <Select
-                    value={selectedService}
-                    onValueChange={setSelectedService}
-                  >
-                    <SelectTrigger
-                      className={errors.service ? "border-red-500" : ""}
-                    >
-                      <SelectValue placeholder="Select a service" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {services.map((service) => (
-                        <SelectItem key={service.id} value={service.id}>
-                          <div className="flex flex-col">
-                            <span className="font-medium">{service.name}</span>
-                            <span className="text-xs text-gray-500">
-                              {service.duration} • {service.description}
-                            </span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {errors.service && (
-                    <p className="text-xs text-red-500">{errors.service}</p>
-                  )}
-                </div>
-
-                {/* Date Selection */}
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium flex items-center gap-2">
-                    <CalendarIcon className="h-4 w-4" />
-                    Booking Date
-                  </Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !selectedDate && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {selectedDate
-                          ? format(selectedDate, "PPP", { locale: enUS })
-                          : "Select a date"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={(date) => {
-                          setSelectedDate(date);
-                          setSelectedTime("");
-                        }}
-                        disabled={isDateDisabled}
-                        initialFocus
-                        locale={enUS}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  {errors.date && (
-                    <p className="text-xs text-red-500">{errors.date}</p>
-                  )}
-                </div>
-
-                {/* Time Selection */}
-                {selectedDate && (
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium flex items-center gap-2">
-                      <Clock className="h-4 w-4" />
-                      Available Time
-                    </Label>
-                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                      {getAvailableTimeSlots().map((time) => (
-                        <Button
-                          key={time}
-                          type="button"
-                          variant={
-                            selectedTime === time ? "default" : "outline"
-                          }
-                          className="h-10"
-                          onClick={() => setSelectedTime(time)}
-                        >
-                          {time}
-                        </Button>
-                      ))}
-                    </div>
-                    {errors.time && (
-                      <p className="text-xs text-red-500">{errors.time}</p>
-                    )}
-                  </div>
-                )}
-              </>
-            )}
-
-            {currentStep === 1 && (
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="fullName">Full Name *</Label>
-                  <Input
-                    id="fullName"
-                    value={formData.fullName}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        fullName: e.target.value,
-                      }))
-                    }
-                    placeholder="Your full name"
-                    className={errors.fullName ? "border-red-500" : ""}
-                  />
-                  {errors.fullName && (
-                    <p className="text-xs text-red-500">{errors.fullName}</p>
-                  )}
-                </div>
-
-                <div>
-                  <Label htmlFor="email">Email *</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        email: e.target.value,
-                      }))
-                    }
-                    placeholder="your@email.com"
-                    className={errors.email ? "border-red-500" : ""}
-                  />
-                  {errors.email && (
-                    <p className="text-xs text-red-500">{errors.email}</p>
-                  )}
-                </div>
-
-                <div>
-                  <Label htmlFor="phone">Contact Phone *</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        phone: e.target.value,
-                      }))
-                    }
-                    placeholder="+1 234 567 8900"
-                    className={errors.phone ? "border-red-500" : ""}
-                  />
-                  {errors.phone && (
-                    <p className="text-xs text-red-500">{errors.phone}</p>
-                  )}
-                </div>
-
-                <div>
-                  <Label htmlFor="comments">
-                    Additional Comments (Optional)
-                  </Label>
-                  <Textarea
-                    id="comments"
-                    value={formData.comments}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        comments: e.target.value,
-                      }))
-                    }
-                    placeholder="Any special requirements or notes..."
-                  />
-                </div>
-              </div>
-            )}
-
-            {currentStep === 2 && (
-              <div className="space-y-4">
-                <div className="bg-[#F9F9F9] p-6 rounded-xl">
-                  <h3 className="font-semibold text-lg mb-4">
-                    Booking Summary
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-start gap-3">
-                      <Sparkles className="h-5 w-5 text-primary mt-0.5" />
-                      <div>
-                        <p className="text-sm text-gray-500">Service:</p>
-                        <p className="font-medium">
-                          {services.find((s) => s.id === selectedService)?.name}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                      <CalendarIcon className="h-5 w-5 text-primary mt-0.5" />
-                      <div>
-                        <p className="text-sm text-gray-500">Date:</p>
-                        <p className="font-medium">
-                          {selectedDate
-                            ? format(selectedDate, "PPP", { locale: enUS })
-                            : ""}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                      <Clock className="h-5 w-5 text-primary mt-0.5" />
-                      <div>
-                        <p className="text-sm text-gray-500">Time:</p>
-                        <p className="font-medium">{selectedTime}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                      <User className="h-5 w-5 text-primary mt-0.5" />
-                      <div>
-                        <p className="text-sm text-gray-500">Name:</p>
-                        <p className="font-medium">{formData.fullName}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                      <Mail className="h-5 w-5 text-primary mt-0.5" />
-                      <div>
-                        <p className="text-sm text-gray-500">Email:</p>
-                        <p className="font-medium">{formData.email}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-3">
-                      <Phone className="h-5 w-5 text-primary mt-0.5" />
-                      <div>
-                        <p className="text-sm text-gray-500">Phone:</p>
-                        <p className="font-medium">{formData.phone}</p>
-                      </div>
-                    </div>
-
-                    {formData.comments && (
-                      <div className="flex items-start gap-3 col-span-2">
-                        <MessageSquare className="h-5 w-5 text-primary mt-0.5" />
-                        <div>
-                          <p className="text-sm text-gray-500">Comments:</p>
-                          <p className="font-medium">{formData.comments}</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="flex items-start space-x-2">
-                    <Checkbox
-                      id="terms"
-                      checked={acceptTerms}
-                      onCheckedChange={(checked) =>
-                        setAcceptTerms(checked as boolean)
-                      }
-                      className={errors.terms ? "border-red-500" : ""}
-                    />
-                    <div className="grid gap-1.5 leading-none">
-                      <Label
-                        htmlFor="terms"
-                        className="text-sm font-medium leading-none"
-                      >
-                        I accept the terms and conditions *
-                      </Label>
-                      <p className="text-xs text-muted-foreground">
-                        <button
-                          type="button"
-                          className="text-primary hover:underline"
-                        >
-                          View terms and conditions
-                        </button>
-                      </p>
-                    </div>
-                  </div>
-                  {errors.terms && (
-                    <p className="text-xs text-red-500">{errors.terms}</p>
-                  )}
-                </div>
-              </div>
-            )}
-
-            <div className="flex justify-between pt-4">
-              {currentStep > 0 && (
-                <Button type="button" variant="outline" onClick={handleBack}>
-                  Back
-                </Button>
-              )}
-              <div className="ml-auto">
-                {currentStep < steps.length - 1 ? (
-                  <Button type="button" onClick={handleNext}>
-                    Next
-                  </Button>
-                ) : (
-                  <Button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      "Confirm Booking"
-                    )}
-                  </Button>
-                )}
-              </div>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
     </div>
   );
 }

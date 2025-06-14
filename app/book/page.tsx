@@ -2,15 +2,106 @@
 
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { calculatePrice } from "@/app/lib/pricing-config";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import BookingForm from "../components/BookingForm";
 import { BubblesBackground } from "../components/BubblesBackground";
+import { PricingPanel } from "../components/PricingPanel";
+import { Button } from "@/components/ui/button";
+import { Receipt } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
-export default function Home() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [carouselIndex, setCarouselIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [servicesPerPage, setServicesPerPage] = useState(3);
+export interface FormData {
+  // Paso 1 - Selección de Servicio
+  service: string;
+  frequency: string;
+
+  // Paso 2 - Detalles de la Propiedad
+  levels: string;
+  bedrooms: string;
+  bathrooms: string;
+  images: File[];
+
+  // Paso 3 - Fecha y Hora
+  date: Date | null;
+  time: string;
+  additionalNotes: string;
+
+  // Paso 4 - Información Personal
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  address: string;
+  acceptTerms: boolean;
+}
+
+export default function BookingPage() {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [showPricing, setShowPricing] = useState(false);
+  const [formData, setFormData] = useState<FormData>({
+    service: "",
+    frequency: "",
+    levels: "",
+    bedrooms: "",
+    bathrooms: "",
+    images: [],
+    date: null,
+    time: "",
+    additionalNotes: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    address: "",
+    acceptTerms: false,
+  });
+
+  const steps = [
+    { id: 1, title: "Selección de Servicio" },
+    { id: 2, title: "Detalles de la Propiedad" },
+    { id: 3, title: "Fecha y Hora" },
+    { id: 4, title: "Información Personal" },
+    { id: 5, title: "Resumen y Confirmación" },
+  ];
+
+  const [pricing, setPricing] = useState({
+    totalTime: 0,
+    basePrice: 0,
+    discount: 0,
+    finalPrice: 0,
+  });
+  const [extras, setExtras] = useState<string[]>([]);
+
+  // Efecto para calcular precios cuando cambian los datos relevantes
+  useEffect(() => {
+    if (
+      formData.service &&
+      formData.levels &&
+      formData.bedrooms &&
+      formData.bathrooms &&
+      formData.frequency
+    ) {
+      try {
+        const calculatedPricing = calculatePrice(
+          formData.service as any, // Temporal fix para el tipo
+          formData.levels as any,
+          formData.bedrooms as any,
+          formData.bathrooms as any,
+          formData.frequency as any
+        );
+        setPricing(calculatedPricing);
+      } catch (error) {
+        console.error("Error calculating price:", error);
+      }
+    }
+  }, [
+    formData.service,
+    formData.levels,
+    formData.bedrooms,
+    formData.bathrooms,
+    formData.frequency,
+  ]);
 
   const services = [
     {
@@ -78,52 +169,6 @@ export default function Home() {
     },
   ];
 
-  const totalPages = Math.ceil(services.length / servicesPerPage);
-
-  // Cerrar menú móvil al redimensionar ventana
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    const updateServicesPerPage = () => {
-      setServicesPerPage(window.innerWidth >= 768 ? 3 : 1);
-    };
-
-    // Inicializar en el montaje
-    updateServicesPerPage();
-
-    // Actualizar en resize
-    window.addEventListener("resize", updateServicesPerPage);
-    return () => window.removeEventListener("resize", updateServicesPerPage);
-  }, []);
-
-  // Efecto para la transición automática
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-
-    if (isAutoPlaying) {
-      interval = setInterval(() => {
-        setCarouselIndex((prevIndex) =>
-          prevIndex === totalPages - 1 ? 0 : prevIndex + 1
-        );
-      }, 5000); // Cambia cada 5 segundos
-    }
-
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [isAutoPlaying, totalPages]);
-
   return (
     <main className="min-h-screen relative">
       {/* WhatsApp button */}
@@ -144,10 +189,10 @@ export default function Home() {
 
       {/* Contenedor del formulario */}
       <div className="relative z-10 min-h-screen">
-        {/* Header fijo */}
+        {/* Header fijo con pasos */}
         <div className="sticky top-0 pt-24 pb-8 bg-gradient-to-b from-white/80 to-transparent backdrop-blur-sm">
           <div className="container mx-auto px-4">
-            <div className="text-center">
+            <div className="text-center mb-8">
               <h1 className="text-4xl font-bold text-gray-900 mb-2">
                 Book your Service
               </h1>
@@ -155,13 +200,59 @@ export default function Home() {
                 Complete the form to schedule your cleaning service
               </p>
             </div>
+
+            {/* Indicador de pasos */}
+            <div className="flex justify-center items-center space-x-4">
+              {steps.map((step, index) => (
+                <div key={step.id} className="flex items-center">
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                      currentStep >= step.id
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-200 text-gray-600"
+                    }`}
+                  >
+                    {step.id}
+                  </div>
+                  {index < steps.length - 1 && (
+                    <div
+                      className={`h-1 w-12 mx-2 ${
+                        currentStep > step.id ? "bg-blue-600" : "bg-gray-200"
+                      }`}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Contenedor del formulario con scroll independiente */}
+        {/* Container para Formulario o Panel de Precios */}
         <div className="container mx-auto px-4 pb-16">
           <div className="max-w-2xl mx-auto">
-            <BookingForm />
+            {!showPricing ? (
+              <BookingForm
+                currentStep={currentStep}
+                setCurrentStep={setCurrentStep}
+                formData={formData}
+                setFormData={setFormData}
+                steps={steps}
+                onConfirm={() => setShowPricing(true)}
+              />
+            ) : (
+              <PricingPanel
+                currentStep={currentStep}
+                totalSteps={steps.length}
+                selectedService={formData.service}
+                extras={extras}
+                frequency={formData.frequency}
+                subtotal={pricing.basePrice}
+                discount={pricing.discount}
+                total={pricing.finalPrice}
+                totalTime={pricing.totalTime}
+                onBack={() => setShowPricing(false)}
+              />
+            )}
           </div>
         </div>
       </div>
