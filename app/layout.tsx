@@ -1,9 +1,11 @@
-import "./globals.css";
+import "@/app/globals.css";
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import { NavigationProvider } from "./context/NavigationContext";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,6 +18,8 @@ const outfit = Outfit({
   weight: ["600", "700"],
   variable: "--font-outfit",
 });
+
+config.autoAddCss = false;
 
 export const metadata: Metadata = {
   title: "Fresh & Clean",

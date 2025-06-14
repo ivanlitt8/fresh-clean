@@ -76,13 +76,6 @@ export default function Home() {
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
-      title: "Carpet Cleaning",
-      description:
-        "Let us delve into the world of carpet cleaning and discover how No Sweat Cleaning can transform your space.",
-      image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
-    },
-    {
       title: "Commercial Cleaning",
       description:
         "When it comes to maintaining a clean and sanitary work environment, businesses in Sydney's Northern Beaches turn to No Sweat Cleaning.",
@@ -109,23 +102,23 @@ export default function Home() {
 
   const features = [
     {
-      text: "100% Guaranteed",
+      text: "We treat your home like our own",
       icon: <Star className="h-5 w-5 text-yellow-400" />,
     },
     {
-      text: "Liaise directly with real estate to secure bond",
+      text: "Always on time, focused, and reliable",
       icon: <Star className="h-5 w-5 text-yellow-400" />,
     },
     {
-      text: "50+ 5 Star Google Reviews",
+      text: "Transparent, respectful, and trustworthy team",
       icon: <Star className="h-5 w-5 text-yellow-400" />,
     },
     {
-      text: "Flexible, Local, Trusted by 100+ clients",
+      text: "We clean every corner — details matter",
       icon: <Star className="h-5 w-5 text-yellow-400" />,
     },
     {
-      text: "Accept credit cards including Amex",
+      text: "Passionate professionals who love what they do",
       icon: <Star className="h-5 w-5 text-yellow-400" />,
     },
   ];
@@ -253,7 +246,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-2xl font-semibold text-blue-400 mb-4 font-heading">
-                CLEANING MADE EASY
+                Because cleaning is just the beginning
               </h2>
               <h3 className="text-4xl font-bold mb-8 font-heading">
                 The Fresh & Clean Difference
@@ -293,10 +286,19 @@ export default function Home() {
                 About Fresh & Clean
               </h2>
               <p className="text-gray-600 mb-6">
-                Fresh & Clean is your trusted partner in maintaining a clean and
-                healthy environment. With years of experience and a dedicated
-                team of professionals, we deliver exceptional cleaning services
-                that exceed expectations.
+                At Fresh & Clean, we combine international experience with a
+                human, personalized approach. Our diverse and professional team
+                has worked in homes and businesses across different countries,
+                bringing excellence, discipline, and warmth to every service.{" "}
+                <br /> <br />
+                We believe cleaning is more than just a task — it&apos;s a way
+                of caring, renewing, and creating well-being. That&apos;s why we
+                carefully select each member of our team, prioritizing
+                responsibility, strong ethics, and human quality. <br />
+                <br /> We adapt to your real needs, offering close attention and
+                clear, honest communication. When we step into a home, our goal
+                isn&apos;t just to leave it clean — we want it to feel lighter,
+                more harmonious, and truly refreshed.
               </p>
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center">
@@ -454,74 +456,74 @@ export default function Home() {
             </div>
 
             {/* Columna Derecha - Proceso */}
-            <div className="space-y-12">
+            <div className="space-y-8 flex-1 max-w-2xl">
               <div>
                 <p className="text-blue-600 font-medium uppercase tracking-wide mb-2 font-heading">
-                  OUR PROCESS
+                  Simple, clear and designed around your needs.
                 </p>
                 <h2 className="text-3xl md:text-4xl font-bold font-heading">
                   How it works
                 </h2>
               </div>
 
-              {/* Paso 1 */}
-              <div className="relative flex gap-4 md:gap-8">
-                <div className="text-[80px] md:text-[120px] font-bold leading-none text-[#e1ebf7] select-none">
-                  01
+              {/* Pasos iterativos */}
+              {[
+                {
+                  number: "01",
+                  title: "Tell us what you need",
+                  description:
+                    "Fill out a short form or message us directly. Choose between general, deep, one-time or regular cleaning. Add details like number of rooms or extras like windows, ovens or fridge.",
+                },
+                {
+                  number: "02",
+                  title: "Get a tailored quote",
+                  description:
+                    "We'll ask a few key questions to better understand your space and your goals. Then, we'll send you a clear quote and a plan designed just for you.",
+                },
+                {
+                  number: "03",
+                  title: "Schedule your service",
+                  description:
+                    "Choose the best date and time for you. We're punctual, respectful and flexible with your routine.",
+                },
+                {
+                  number: "04",
+                  title: "We bring everything",
+                  description:
+                    "No need to worry about supplies — we arrive fully equipped with professional products and tools.",
+                },
+                {
+                  number: "05",
+                  title: "Enjoy your refreshed space",
+                  description:
+                    "We clean with care, precision and attention to detail. Once we finish, we'll check in with you to make sure everything met your expectations.",
+                },
+              ].map((step, index) => (
+                <div key={step.number} className="relative">
+                  <div className="flex gap-6 md:gap-6">
+                    <div className="text-[50px] md:text-[60px] font-bold leading-none text-[#e1ebf7] select-none min-w-[60px] md:min-w-[80px]">
+                      {step.number}
+                    </div>
+                    <div className="pt-1 md:pt-2 flex-1">
+                      <h3 className="text-md font-bold mb-3 font-heading">
+                        {step.title}
+                      </h3>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        {step.description}
+                      </p>
+                    </div>
+                  </div>
+                  {index < 4 && (
+                    <div className="h-px bg-gray-200 mt-4 ml-[66px] md:ml-[90px]"></div>
+                  )}
                 </div>
-                <div className="pt-4 md:pt-6 flex-1 mb-4">
-                  <h3 className="text-xl font-bold mb-2 font-heading">
-                    Fill out the online form
-                  </h3>
-                  <p className="text-gray-600">
-                    Choose your home size in terms of bedrooms and bathrooms or
-                    select an hourly rate for the partial cleaning of extra
-                    large, or really dirty homes.
-                  </p>
-                  <div className="absolute bottom-0 left-0 right-0 h-px bg-gray-200 mt-8"></div>
-                </div>
-              </div>
-
-              {/* Paso 2 */}
-              <div className="relative flex gap-4 md:gap-8">
-                <div className="text-[80px] md:text-[120px] font-bold leading-none text-[#e1ebf7] select-none">
-                  02
-                </div>
-                <div className="pt-4 md:pt-6 flex-1 mb-4">
-                  <h3 className="text-xl font-bold mb-2 font-heading">
-                    Configure your booking
-                  </h3>
-                  <p className="text-gray-600">
-                    Select the added extras you wish to add to your booking
-                  </p>
-                  <div className="absolute bottom-0 left-0 right-0 h-px bg-gray-200 mt-8"></div>
-                </div>
-              </div>
-
-              {/* Paso 3 */}
-              <div className="relative flex gap-4 md:gap-8">
-                <div className="text-[80px] md:text-[120px] font-bold leading-none text-[#e1ebf7] select-none">
-                  03
-                </div>
-                <div className="pt-4 md:pt-6 flex-1">
-                  <h3 className="text-xl font-bold mb-2 font-heading">
-                    Select the service frequency that suits your needs
-                  </h3>
-                  <p className="text-gray-600">
-                    Choose your service frequency and complete our online
-                    booking form. Our team will quickly assign expert cleaners
-                    who are the perfect fit for your needs. You&apos;ll receive
-                    confirmation and detailed information about your service.
-                    Book now for an elevated cleaning experience.
-                  </p>
-                </div>
-              </div>
+              ))}
 
               {/* Botón Book Now */}
-              <div className="flex justify-center md:justify-start">
+              <div className="flex justify-center md:justify-start pt-4">
                 <Button
                   size="lg"
-                  className="mt-8 bg-[#00AEEF] hover:bg-[#0098d1] text-white font-semibold px-8"
+                  className="bg-[#00AEEF] hover:bg-[#0098d1] text-white font-semibold px-8"
                 >
                   BOOK NOW
                 </Button>
@@ -542,8 +544,8 @@ export default function Home() {
                   Why Choose No Sweat Cleaning?
                 </h2>
                 <p className="text-gray-600 text-lg">
-                  Bid farewell to germs, dust, and dirt! Our loyal customers
-                  return to us time and time again because...
+                  Because cleaning is more than just a chore — it&apos;s about
+                  trust, care, and transformation.
                 </p>
               </div>
 
@@ -556,11 +558,11 @@ export default function Home() {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold mb-2 font-heading">
-                        Professionalism and Expertise
+                        International Standards
                       </h3>
                       <p className="text-gray-600">
-                        We prides ourselves on maintaining a highly professional
-                        and experienced team of cleaners.
+                        We bring global experience and attention to detail to
+                        every home or business we serve.
                       </p>
                     </div>
                   </div>
@@ -575,12 +577,11 @@ export default function Home() {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold mb-2 font-heading">
-                        Comprehensive Cleaning Solutions
+                        Reliable & On Time
                       </h3>
                       <p className="text-gray-600">
-                        Whether you need residential, commercial, or specialised
-                        cleaning services, we offer a wide range of cleaning
-                        solutions to meet your specific requirements.
+                        Punctual, efficient and consistent — we show up when we
+                        say we will and finish on schedule.
                       </p>
                     </div>
                   </div>
@@ -595,12 +596,11 @@ export default function Home() {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold mb-2 font-heading">
-                        Good Practices
+                        People You Can Trust
                       </h3>
                       <p className="text-gray-600">
-                        If you value good practices, you&apos;ll be pleased to
-                        know that we emphasise using quality cleaning products
-                        and methods.
+                        Our team is respectful, discreet and committed to
+                        quality. We build trust through real results.
                       </p>
                     </div>
                   </div>
@@ -615,12 +615,12 @@ export default function Home() {
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold mb-2 font-heading">
-                        Customer Satisfaction
+                        Trusted for Results
                       </h3>
                       <p className="text-gray-600">
-                        We places a strong emphasis on customer satisfaction.
-                        They strive to exceed your expectations and ensure that
-                        you are completely satisfied with their services.
+                        Over 90% of our clients recommend us — because we
+                        deliver consistent, visible results that make a real
+                        difference.
                       </p>
                     </div>
                   </div>
