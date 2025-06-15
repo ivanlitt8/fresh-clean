@@ -12,10 +12,7 @@ import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import BookingForm from "../components/BookingForm";
 import { BubblesBackground } from "../components/BubblesBackground";
 import { PricingPanel } from "../components/PricingPanel";
-// import { Button } from "@/components/ui/button";
-// import { Receipt } from "lucide-react";
-// import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { BookingService } from "@/app/lib/firebase/bookingService";
+import { BookingService } from "../lib/firebase/bookingService";
 import { toast } from "sonner";
 
 export interface FormData {
