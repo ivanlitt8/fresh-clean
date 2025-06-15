@@ -189,86 +189,86 @@ export default function BookingPage() {
 
       {/* Contenedor del formulario */}
       <div className="relative z-10 min-h-screen">
-        {/* Header fijo con pasos */}
-        <div className="sticky top-0 pt-24 pb-8 bg-gradient-to-b from-white/80 to-transparent backdrop-blur-sm">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                Book your Service
-              </h1>
-              <p className="text-lg text-gray-600">
-                Complete the form to schedule your cleaning service
-              </p>
-            </div>
+        <div className="container mx-auto px-4 py-24">
+          <div className="bg-transparent rounded-lg p-8">
+            {/* Header con pasos */}
+            <div className="relative pb-8">
+              <div className="text-center mb-8">
+                <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                  Book your Service
+                </h1>
+                <p className="text-lg text-gray-600">
+                  Complete the form to schedule your cleaning service
+                </p>
+              </div>
 
-            {/* Indicador de pasos */}
-            <div className="flex justify-center items-center">
-              <div className="grid grid-cols-5 gap-2 md:gap-4 w-full max-w-2xl px-4">
-                {steps.map((step, index) => (
-                  <div
-                    key={step.id}
-                    className="flex items-center justify-center"
-                  >
-                    <div className="flex-1 flex items-center">
-                      <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                          currentStep >= step.id
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-200 text-gray-600"
-                        }`}
-                      >
-                        {step.id}
-                      </div>
-                      {index < steps.length - 1 && (
+              {/* Indicador de pasos */}
+              <div className="flex justify-center items-center">
+                <div className="grid grid-cols-5 gap-2 md:gap-4 w-full max-w-2xl px-4">
+                  {steps.map((step, index) => (
+                    <div
+                      key={step.id}
+                      className="flex items-center justify-center"
+                    >
+                      <div className="flex-1 flex items-center">
                         <div
-                          className={`h-1 w-full mx-1 md:mx-2 ${
-                            currentStep > step.id
-                              ? "bg-blue-600"
-                              : "bg-gray-200"
+                          className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                            currentStep >= step.id
+                              ? "bg-blue-600 text-white"
+                              : "bg-gray-200 text-gray-600"
                           }`}
-                        />
-                      )}
+                        >
+                          {step.id}
+                        </div>
+                        {index < steps.length - 1 && (
+                          <div
+                            className={`h-1 w-full mx-1 md:mx-2 ${
+                              currentStep > step.id
+                                ? "bg-blue-600"
+                                : "bg-gray-200"
+                            }`}
+                          />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+              </div>
+
+              {/* Títulos de los pasos en móvil */}
+              <div className="mt-2 md:hidden">
+                <p className="text-sm text-center text-gray-600">
+                  Paso {currentStep}: {steps[currentStep - 1]?.title}
+                </p>
               </div>
             </div>
 
-            {/* Títulos de los pasos en móvil */}
-            <div className="mt-2 md:hidden">
-              <p className="text-sm text-center text-gray-600">
-                Paso {currentStep}: {steps[currentStep - 1]?.title}
-              </p>
+            {/* Container para Formulario o Panel de Precios */}
+            <div className="max-w-2xl mx-auto">
+              {!showPricing ? (
+                <BookingForm
+                  currentStep={currentStep}
+                  setCurrentStep={setCurrentStep}
+                  formData={formData}
+                  setFormData={setFormData}
+                  steps={steps}
+                  onConfirm={() => setShowPricing(true)}
+                />
+              ) : (
+                <PricingPanel
+                  currentStep={currentStep}
+                  totalSteps={steps.length}
+                  selectedService={formData.service}
+                  extras={extras}
+                  frequency={formData.frequency}
+                  subtotal={pricing.basePrice}
+                  discount={pricing.discount}
+                  total={pricing.finalPrice}
+                  totalTime={pricing.totalTime}
+                  onBack={() => setShowPricing(false)}
+                />
+              )}
             </div>
-          </div>
-        </div>
-
-        {/* Container para Formulario o Panel de Precios */}
-        <div className="container mx-auto px-4 pb-16">
-          <div className="max-w-2xl mx-auto">
-            {!showPricing ? (
-              <BookingForm
-                currentStep={currentStep}
-                setCurrentStep={setCurrentStep}
-                formData={formData}
-                setFormData={setFormData}
-                steps={steps}
-                onConfirm={() => setShowPricing(true)}
-              />
-            ) : (
-              <PricingPanel
-                currentStep={currentStep}
-                totalSteps={steps.length}
-                selectedService={formData.service}
-                extras={extras}
-                frequency={formData.frequency}
-                subtotal={pricing.basePrice}
-                discount={pricing.discount}
-                total={pricing.finalPrice}
-                totalTime={pricing.totalTime}
-                onBack={() => setShowPricing(false)}
-              />
-            )}
           </div>
         </div>
       </div>

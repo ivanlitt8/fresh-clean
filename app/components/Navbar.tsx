@@ -56,12 +56,16 @@ export const Navbar = () => {
   };
 
   const menuItemVariants = {
-    closed: { x: -20, opacity: 0 },
-    open: (i: number) => ({
+    closed: {
+      x: -20,
+      opacity: 0,
+      transition: { duration: 0.3, ease: "easeInOut" },
+    },
+    open: {
       x: 0,
       opacity: 1,
-      transition: { delay: i * 0.1, duration: 0.3, ease: "easeOut" },
-    }),
+      transition: { duration: 0.3, ease: "easeOut" },
+    },
   };
 
   const handleNavigation = (sectionId: string) => {
