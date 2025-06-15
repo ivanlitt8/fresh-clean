@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Sparkles, ChevronDown, Menu, X } from "lucide-react";
-import { useNavigation } from "../context/NavigationContext";
+import { ChevronDown, Menu, X } from "lucide-react";
+import { useNavigation } from "@/app/context/NavigationContext";
 import Image from "next/image";
 
 export const Navbar = () => {

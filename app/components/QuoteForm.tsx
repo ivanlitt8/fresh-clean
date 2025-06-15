@@ -12,7 +12,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Upload, X, Loader2 } from "lucide-react";
-import Image from "next/image";
+// import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "@/lib/firebase";

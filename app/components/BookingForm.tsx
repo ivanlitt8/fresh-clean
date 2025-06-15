@@ -1,12 +1,12 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState, useEffect } from "react";
-import { FormData } from "../book/page";
+import { Dispatch, SetStateAction } from "react";
+import { FormData } from "@/app/book/page";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
+// import { Textarea } from "@/components/ui/textarea";
+// import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
@@ -15,18 +15,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+// import {
+//   Popover,
+//   PopoverContent,
+//   PopoverTrigger,
+// } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { CalendarIcon, Upload, X } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { BookingService } from "@/app/lib/firebase/bookingService";
-import { TimeSlot } from "@/app/types/booking";
-import { calculateTotalTime } from "@/app/lib/pricing-config";
+import { Upload } from "lucide-react";
+// import { cn } from "@/lib/utils";
+// import { BookingService } from "@/app/lib/firebase/bookingService";
+// import { TimeSlot } from "@/app/types/booking";
+// import { calculateTotalTime } from "@/app/lib/pricing-config";
 import { DateTimeSelector } from "./DateTimeSelector";
 
 interface BookingFormProps {

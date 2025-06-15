@@ -4,29 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Clock,
-  MapPin,
-  PhoneCall,
-  Sparkles,
-  CheckCircle,
-  MessageSquare,
-  ChevronDown,
-  Star,
-  Menu,
-  X,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { CheckCircle, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { BubblesBackground } from "./components/BubblesBackground";
-import { QuoteForm } from "./components/QuoteForm";
 import Link from "next/link";
 import { CTASection } from "./components/CTASection";
-import { Navbar } from "./components/Navbar";
 
 export default function Home() {
   const [name, setName] = useState("");
