@@ -15,7 +15,7 @@ import { Upload, X, Loader2 } from "lucide-react";
 // import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { v4 as uuidv4 } from "uuid";
-import { db } from "@/lib/firebase";
+import { db } from "@/app/lib/firebase/firebase";
 import { collection, addDoc } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
 

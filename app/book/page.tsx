@@ -9,10 +9,10 @@ import {
   FREQUENCY_DISCOUNTS,
 } from "@/app/lib/pricing-config";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import BookingForm from "../components/BookingForm";
-import { BubblesBackground } from "../components/BubblesBackground";
-import { PricingPanel } from "../components/PricingPanel";
-import { BookingService } from "../lib/firebase/bookingService";
+import BookingForm from "@/app/components/BookingForm";
+import { BubblesBackground } from "@/app/components/BubblesBackground";
+import { PricingPanel } from "@/app/components/PricingPanel";
+import { BookingService } from "@/app/lib/firebase/bookingService";
 import { toast } from "sonner";
 
 export interface FormData {
