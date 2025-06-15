@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sparkles, ChevronDown, Menu, X } from "lucide-react";
@@ -42,7 +42,7 @@ export const Navbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const menuVariants = {
+  const menuVariants: Variants = {
     closed: {
       opacity: 0,
       height: 0,
@@ -55,7 +55,7 @@ export const Navbar = () => {
     },
   };
 
-  const menuItemVariants = {
+  const menuItemVariants: Variants = {
     closed: {
       x: -20,
       opacity: 0,
