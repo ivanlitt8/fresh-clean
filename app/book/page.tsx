@@ -202,27 +202,43 @@ export default function BookingPage() {
             </div>
 
             {/* Indicador de pasos */}
-            <div className="flex justify-center items-center space-x-4">
-              {steps.map((step, index) => (
-                <div key={step.id} className="flex items-center">
+            <div className="flex justify-center items-center">
+              <div className="grid grid-cols-5 gap-2 md:gap-4 w-full max-w-2xl px-4">
+                {steps.map((step, index) => (
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      currentStep >= step.id
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-200 text-gray-600"
-                    }`}
+                    key={step.id}
+                    className="flex items-center justify-center"
                   >
-                    {step.id}
+                    <div className="flex-1 flex items-center">
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          currentStep >= step.id
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-200 text-gray-600"
+                        }`}
+                      >
+                        {step.id}
+                      </div>
+                      {index < steps.length - 1 && (
+                        <div
+                          className={`h-1 w-full mx-1 md:mx-2 ${
+                            currentStep > step.id
+                              ? "bg-blue-600"
+                              : "bg-gray-200"
+                          }`}
+                        />
+                      )}
+                    </div>
                   </div>
-                  {index < steps.length - 1 && (
-                    <div
-                      className={`h-1 w-12 mx-2 ${
-                        currentStep > step.id ? "bg-blue-600" : "bg-gray-200"
-                      }`}
-                    />
-                  )}
-                </div>
-              ))}
+                ))}
+              </div>
+            </div>
+
+            {/* Títulos de los pasos en móvil */}
+            <div className="mt-2 md:hidden">
+              <p className="text-sm text-center text-gray-600">
+                Paso {currentStep}: {steps[currentStep - 1]?.title}
+              </p>
             </div>
           </div>
         </div>
