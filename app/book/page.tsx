@@ -2,7 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { calculatePrice } from "@/app/lib/pricing-config";
+import {
+  calculatePrice,
+  calculateTotalTime,
+  TIME_FACTORS,
+  FREQUENCY_DISCOUNTS,
+} from "@/app/lib/pricing-config";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import BookingForm from "../components/BookingForm";
 import { BubblesBackground } from "../components/BubblesBackground";
@@ -10,6 +15,8 @@ import { PricingPanel } from "../components/PricingPanel";
 import { Button } from "@/components/ui/button";
 import { Receipt } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { BookingService } from "@/app/lib/firebase/bookingService";
+import { toast } from "sonner";
 
 export interface FormData {
   // Paso 1 - Selección de Servicio
@@ -103,6 +110,85 @@ export default function BookingPage() {
     formData.frequency,
   ]);
 
+  // Log para seguimiento de datos del formulario
+  useEffect(() => {
+    console.log("=== FORM DATA UPDATE ===");
+    console.log("Current Step:", currentStep);
+    console.log("Form Data:", {
+      // Paso 1
+      service: formData.service || "No seleccionado",
+      frequency: formData.frequency || "No seleccionado",
+
+      // Paso 2
+      levels: formData.levels || "No seleccionado",
+      bedrooms: formData.bedrooms || "No seleccionado",
+      bathrooms: formData.bathrooms || "No seleccionado",
+      images: formData.images?.length || 0,
+
+      // Paso 3
+      date: formData.date ? formData.date.toISOString() : "No seleccionado",
+      time: formData.time || "No seleccionado",
+      additionalNotes: formData.additionalNotes ? "Tiene notas" : "Sin notas",
+
+      // Paso 4
+      firstName: formData.firstName || "Vacío",
+      lastName: formData.lastName || "Vacío",
+      email: formData.email || "Vacío",
+      phone: formData.phone || "Vacío",
+      address: formData.address || "Vacío",
+      acceptTerms: formData.acceptTerms ? "Aceptado" : "No aceptado",
+    });
+
+    // Log de cálculos de tiempo y precio si hay suficientes datos
+    if (
+      formData.service &&
+      formData.levels &&
+      formData.bedrooms &&
+      formData.bathrooms &&
+      formData.frequency
+    ) {
+      const duration = calculateTotalTime(
+        formData.service as any,
+        formData.levels as any,
+        formData.bedrooms as any,
+        formData.bathrooms as any
+      );
+
+      console.log("=== SERVICE TIME CALCULATION ===");
+      console.log("Desglose de tiempo:", {
+        servicio: formData.service,
+        niveles: `${formData.levels} (${
+          TIME_FACTORS.levels[
+            formData.levels as keyof typeof TIME_FACTORS.levels
+          ]
+        } horas)`,
+        dormitorios: `${formData.bedrooms} (${
+          TIME_FACTORS.bedrooms[
+            formData.bedrooms as keyof typeof TIME_FACTORS.bedrooms
+          ]
+        } horas)`,
+        baños: `${formData.bathrooms} (${
+          TIME_FACTORS.bathrooms[
+            formData.bathrooms as keyof typeof TIME_FACTORS.bathrooms
+          ]
+        } horas)`,
+        tiempoTotal: `${duration} horas`,
+      });
+
+      console.log("=== PRICE CALCULATIONS ===");
+      console.log("Pricing:", {
+        basePrice: `$${pricing.basePrice}`,
+        discount: `$${pricing.discount} (${
+          FREQUENCY_DISCOUNTS[
+            formData.frequency as keyof typeof FREQUENCY_DISCOUNTS
+          ] * 100
+        }%)`,
+        finalPrice: `$${pricing.finalPrice}`,
+        totalTime: `${pricing.totalTime} horas`,
+      });
+    }
+  }, [formData, currentStep, pricing]);
+
   const services = [
     {
       title: "Airbnb Cleaning",
@@ -168,6 +254,69 @@ export default function BookingPage() {
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
   ];
+
+  const handleConfirmBooking = async () => {
+    const bookingService = new BookingService();
+
+    try {
+      // Crear el objeto de reserva
+      const bookingData = {
+        clientInfo: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address,
+        },
+        serviceDetails: {
+          serviceType: formData.service,
+          levels: formData.levels,
+          bedrooms: formData.bedrooms,
+          bathrooms: formData.bathrooms,
+          frequency: formData.frequency,
+          additionalNotes: formData.additionalNotes,
+        },
+        timing: {
+          date: formData.date?.toISOString().split("T")[0] || "",
+          startTime: formData.time,
+          endTime: "", // Se calculará en el servicio
+          duration: calculateTotalTime(
+            formData.service as any,
+            formData.levels as any,
+            formData.bedrooms as any,
+            formData.bathrooms as any
+          ),
+        },
+        pricing: {
+          basePrice: pricing.basePrice,
+          discount: pricing.discount,
+          finalPrice: pricing.finalPrice,
+        },
+        status: "pending" as const,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      // Log de la estructura final antes de enviar
+      console.log("=== BOOKING DATA TO SEND ===");
+      console.log("Final Booking Structure:", bookingData);
+
+      // Crear la reserva
+      const bookingId = await bookingService.createBooking(bookingData);
+
+      // Log del resultado
+      console.log("=== BOOKING CREATED ===");
+      console.log("Booking ID:", bookingId);
+
+      toast.success("¡Reserva creada con éxito!");
+
+      // Aquí podrías redirigir a una página de confirmación
+      // router.push(`/booking/confirmation/${bookingId}`);
+    } catch (error) {
+      console.error("Error creating booking:", error);
+      toast.error("Error al crear la reserva. Por favor, intenta nuevamente.");
+    }
+  };
 
   return (
     <main className="min-h-screen relative">
@@ -266,6 +415,7 @@ export default function BookingPage() {
                   total={pricing.finalPrice}
                   totalTime={pricing.totalTime}
                   onBack={() => setShowPricing(false)}
+                  onConfirm={handleConfirmBooking}
                 />
               )}
             </div>

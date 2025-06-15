@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Sparkles, ChevronDown, Menu, X } from "lucide-react";
 import { useNavigation } from "../context/NavigationContext";
+import Image from "next/image";
 
 export const Navbar = () => {
   const [showLocations, setShowLocations] = useState(false);
@@ -88,9 +89,23 @@ export const Navbar = () => {
     <nav className="fixed w-full bg-white/80 backdrop-blur-md z-50 border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
-            <Sparkles className="h-8 w-8 text-primary" />
-            <span className="ml-2 text-xl font-bold">Fresh & Clean</span>
+          <div
+            className="flex items-center cursor-pointer"
+            onClick={() => router.push("/")}
+          >
+            <Image
+              src="https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images//FreshAndClean.png"
+              alt="Fresh & Clean Logo"
+              width={32}
+              height={32}
+              className="h-8 w-8 object-contain"
+            />
+            <span
+              className="ml-2 text-xl font-bold"
+              style={{ color: "#87b7c1" }}
+            >
+              Fresh & Clean
+            </span>
           </div>
 
           {/* Botón de menú móvil */}

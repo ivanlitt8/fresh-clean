@@ -15,6 +15,7 @@ interface PricingPanelProps {
   total: number;
   totalTime: number;
   onBack: () => void;
+  onConfirm: () => void;
 }
 
 export function PricingPanel({
@@ -28,6 +29,7 @@ export function PricingPanel({
   total,
   totalTime,
   onBack,
+  onConfirm,
 }: PricingPanelProps) {
   const progress = (currentStep / totalSteps) * 100;
 
@@ -118,7 +120,10 @@ export function PricingPanel({
 
       {/* Buttons */}
       <div className="space-y-3">
-        <Button className="w-full bg-blue-600 hover:bg-blue-700">
+        <Button
+          className="w-full bg-blue-600 hover:bg-blue-700"
+          onClick={onConfirm}
+        >
           Confirmar Reserva
         </Button>
         <Button variant="outline" className="w-full" onClick={onBack}>

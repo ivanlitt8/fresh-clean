@@ -23,6 +23,9 @@ config.autoAddCss = false;
 
 export const metadata: Metadata = {
   title: "Fresh & Clean",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({

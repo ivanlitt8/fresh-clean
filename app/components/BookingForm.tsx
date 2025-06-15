@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { FormData } from "../book/page";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +24,10 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { CalendarIcon, Upload, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { BookingService } from "@/app/lib/firebase/bookingService";
+import { TimeSlot } from "@/app/types/booking";
+import { calculateTotalTime } from "@/app/lib/pricing-config";
+import { DateTimeSelector } from "./DateTimeSelector";
 
 interface BookingFormProps {
   currentStep: number;
@@ -226,73 +230,7 @@ export default function BookingForm({
   );
 
   const renderDateAndTime = () => (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <Label>Fecha</Label>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className={cn(
-                "w-full justify-start text-left font-normal",
-                !formData.date && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {formData.date
-                ? format(formData.date, "PPP", { locale: es })
-                : "Selecciona una fecha"}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={formData.date || undefined}
-              onSelect={(date) =>
-                setFormData((prev) => ({ ...prev, date: date || null }))
-              }
-              initialFocus
-              locale={es}
-            />
-          </PopoverContent>
-        </Popover>
-      </div>
-
-      <div className="space-y-2">
-        <Label>Hora</Label>
-        <Select
-          value={formData.time}
-          onValueChange={(value) =>
-            setFormData((prev) => ({ ...prev, time: value }))
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Selecciona hora" />
-          </SelectTrigger>
-          <SelectContent>
-            {timeSlots.map((time) => (
-              <SelectItem key={time} value={time}>
-                {time}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="space-y-2">
-        <Label>Notas Adicionales</Label>
-        <Textarea
-          value={formData.additionalNotes}
-          onChange={(e) =>
-            setFormData((prev) => ({
-              ...prev,
-              additionalNotes: e.target.value,
-            }))
-          }
-          placeholder="Instrucciones especiales, acceso, etc..."
-        />
-      </div>
-    </div>
+    <DateTimeSelector formData={formData} setFormData={setFormData} />
   );
 
   const renderPersonalInfo = () => (
