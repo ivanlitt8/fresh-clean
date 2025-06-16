@@ -5,10 +5,10 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: { unoptimized: true },
-  webpack: (config) => {
-    config.resolve.alias['@'] = path.resolve(__dirname, 'app');
-    return config;
-  },
+  // webpack: (config) => {
+  //   config.resolve.alias['@'] = path.resolve(__dirname, 'app');
+  //   return config;
+  // },
 };
 
 module.exports = nextConfig;
