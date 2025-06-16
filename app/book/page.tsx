@@ -14,6 +14,10 @@ import { BubblesBackground } from "@/app/components/BubblesBackground";
 import { PricingPanel } from "@/app/components/PricingPanel";
 import { BookingService } from "@/app/lib/firebase";
 import { toast } from "sonner";
+import { EmailService } from "@/app/lib/email/emailService";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/app/lib/firebase";
+import { Booking } from "@/app/types/booking";
 
 export interface FormData {
   // Paso 1 - Selección de Servicio
@@ -254,6 +258,7 @@ export default function BookingPage() {
 
   const handleConfirmBooking = async () => {
     const bookingService = new BookingService();
+    const emailService = new EmailService();
 
     // Log de la estructura final antes de enviar
     console.log("=== BOOKING DATA TO SEND ===");
@@ -303,6 +308,27 @@ export default function BookingPage() {
       const bookingIds = await bookingService.createBooking(bookingData);
       console.log("=== BOOKING(S) CREATED ===");
       console.log("Booking IDs:", bookingIds);
+
+      // Obtener las reservas creadas para enviar el email
+      const bookings = await Promise.all(
+        bookingIds.map(async (id) => {
+          const bookingRef = doc(db, "bookings", id);
+          const bookingDoc = await getDoc(bookingRef);
+          return { id, ...bookingDoc.data() } as Booking;
+        })
+      );
+
+      // Enviar email de confirmación
+      try {
+        if (bookings.length > 1) {
+          await emailService.sendRecurringBookingConfirmation(bookings);
+        } else {
+          await emailService.sendBookingConfirmation(bookings[0]);
+        }
+      } catch (emailError) {
+        console.error("Error al enviar el email:", emailError);
+        // No lanzamos el error aquí para no afectar la experiencia del usuario
+      }
 
       // Mensaje de éxito específico según el tipo de reserva
       const isRecurring = formData.frequency !== "Una vez";
