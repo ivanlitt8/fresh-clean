@@ -255,63 +255,66 @@ export default function BookingPage() {
   const handleConfirmBooking = async () => {
     const bookingService = new BookingService();
 
+    // Log de la estructura final antes de enviar
+    console.log("=== BOOKING DATA TO SEND ===");
+
+    // Crear el objeto de reserva
+    const bookingData = {
+      clientInfo: {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+      },
+      serviceDetails: {
+        serviceType: formData.service,
+        levels: formData.levels,
+        bedrooms: formData.bedrooms,
+        bathrooms: formData.bathrooms,
+        frequency: formData.frequency,
+        additionalNotes: formData.additionalNotes,
+      },
+      timing: {
+        date: formData.date?.toISOString().split("T")[0] || "",
+        startTime: formData.time,
+        endTime: "", // Se calculará en el servicio
+        duration: calculateTotalTime(
+          formData.service as any,
+          formData.levels as any,
+          formData.bedrooms as any,
+          formData.bathrooms as any
+        ),
+      },
+      pricing: {
+        basePrice: pricing.basePrice,
+        discount: pricing.discount,
+        finalPrice: pricing.finalPrice,
+      },
+      status: "pending" as const,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    console.log("Final Booking Structure:", bookingData);
+
     try {
-      // Crear el objeto de reserva
-      const bookingData = {
-        clientInfo: {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-          address: formData.address,
-        },
-        serviceDetails: {
-          serviceType: formData.service,
-          levels: formData.levels,
-          bedrooms: formData.bedrooms,
-          bathrooms: formData.bathrooms,
-          frequency: formData.frequency,
-          additionalNotes: formData.additionalNotes,
-        },
-        timing: {
-          date: formData.date?.toISOString().split("T")[0] || "",
-          startTime: formData.time,
-          endTime: "", // Se calculará en el servicio
-          duration: calculateTotalTime(
-            formData.service as any,
-            formData.levels as any,
-            formData.bedrooms as any,
-            formData.bathrooms as any
-          ),
-        },
-        pricing: {
-          basePrice: pricing.basePrice,
-          discount: pricing.discount,
-          finalPrice: pricing.finalPrice,
-        },
-        status: "pending" as const,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+      // Crear la(s) reserva(s)
+      const bookingIds = await bookingService.createBooking(bookingData);
+      console.log("=== BOOKING(S) CREATED ===");
+      console.log("Booking IDs:", bookingIds);
 
-      // Log de la estructura final antes de enviar
-      console.log("=== BOOKING DATA TO SEND ===");
-      console.log("Final Booking Structure:", bookingData);
+      // Mensaje de éxito específico según el tipo de reserva
+      const isRecurring = formData.frequency !== "Una vez";
+      const successMessage = isRecurring
+        ? `¡${bookingIds.length} reservas creadas con éxito!`
+        : "¡Reserva creada con éxito!";
 
-      // Crear la reserva
-      const bookingId = await bookingService.createBooking(bookingData);
-
-      // Log del resultado
-      console.log("=== BOOKING CREATED ===");
-      console.log("Booking ID:", bookingId);
-
-      toast.success("¡Reserva creada con éxito!");
-
-      // Aquí podrías redirigir a una página de confirmación
-      // router.push(`/booking/confirmation/${bookingId}`);
+      toast.success(successMessage);
     } catch (error) {
       console.error("Error creating booking:", error);
       toast.error("Error al crear la reserva. Por favor, intenta nuevamente.");
+      throw error;
     }
   };
 

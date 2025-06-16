@@ -54,6 +54,30 @@ const timeSlots = [
   "17:00",
 ];
 
+// Funciones de validación por paso
+const validateStep1 = (formData: FormData): boolean => {
+  return Boolean(formData.service && formData.frequency);
+};
+
+const validateStep2 = (formData: FormData): boolean => {
+  return Boolean(formData.levels && formData.bedrooms && formData.bathrooms);
+};
+
+const validateStep3 = (formData: FormData): boolean => {
+  return Boolean(formData.date && formData.time);
+};
+
+const validateStep4 = (formData: FormData): boolean => {
+  return Boolean(
+    formData.firstName?.trim() &&
+      formData.lastName?.trim() &&
+      formData.email?.trim() &&
+      formData.phone?.trim() &&
+      formData.address?.trim() &&
+      formData.acceptTerms
+  );
+};
+
 export default function BookingForm({
   currentStep,
   setCurrentStep,
@@ -62,6 +86,24 @@ export default function BookingForm({
   steps,
   onConfirm,
 }: BookingFormProps) {
+  // Función para validar el paso actual
+  const isCurrentStepValid = (): boolean => {
+    switch (currentStep) {
+      case 1:
+        return validateStep1(formData);
+      case 2:
+        return validateStep2(formData);
+      case 3:
+        return validateStep3(formData);
+      case 4:
+        return validateStep4(formData);
+      case 5:
+        return true; // El paso 5 es solo resumen
+      default:
+        return false;
+    }
+  };
+
   const handleNext = () => {
     if (currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
@@ -77,14 +119,16 @@ export default function BookingForm({
   const renderServiceSelection = () => (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label>Tipo de Servicio</Label>
+        <Label>
+          Tipo de Servicio <span className="text-red-500">*</span>
+        </Label>
         <Select
           value={formData.service}
           onValueChange={(value) =>
             setFormData((prev) => ({ ...prev, service: value }))
           }
         >
-          <SelectTrigger>
+          <SelectTrigger className={!formData.service ? "border-red-200" : ""}>
             <SelectValue placeholder="Selecciona un servicio" />
           </SelectTrigger>
           <SelectContent>
@@ -98,14 +142,18 @@ export default function BookingForm({
       </div>
 
       <div className="space-y-2">
-        <Label>Frecuencia</Label>
+        <Label>
+          Frecuencia <span className="text-red-500">*</span>
+        </Label>
         <Select
           value={formData.frequency}
           onValueChange={(value) =>
             setFormData((prev) => ({ ...prev, frequency: value }))
           }
         >
-          <SelectTrigger>
+          <SelectTrigger
+            className={!formData.frequency ? "border-red-200" : ""}
+          >
             <SelectValue placeholder="Selecciona la frecuencia" />
           </SelectTrigger>
           <SelectContent>
@@ -124,14 +172,16 @@ export default function BookingForm({
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="space-y-2">
-          <Label>Niveles</Label>
+          <Label>
+            Niveles <span className="text-red-500">*</span>
+          </Label>
           <Select
             value={formData.levels}
             onValueChange={(value) =>
               setFormData((prev) => ({ ...prev, levels: value }))
             }
           >
-            <SelectTrigger>
+            <SelectTrigger className={!formData.levels ? "border-red-200" : ""}>
               <SelectValue placeholder="Selecciona" />
             </SelectTrigger>
             <SelectContent>
@@ -145,14 +195,18 @@ export default function BookingForm({
         </div>
 
         <div className="space-y-2">
-          <Label>Dormitorios</Label>
+          <Label>
+            Dormitorios <span className="text-red-500">*</span>
+          </Label>
           <Select
             value={formData.bedrooms}
             onValueChange={(value) =>
               setFormData((prev) => ({ ...prev, bedrooms: value }))
             }
           >
-            <SelectTrigger>
+            <SelectTrigger
+              className={!formData.bedrooms ? "border-red-200" : ""}
+            >
               <SelectValue placeholder="Selecciona" />
             </SelectTrigger>
             <SelectContent>
@@ -166,14 +220,18 @@ export default function BookingForm({
         </div>
 
         <div className="space-y-2">
-          <Label>Baños</Label>
+          <Label>
+            Baños <span className="text-red-500">*</span>
+          </Label>
           <Select
             value={formData.bathrooms}
             onValueChange={(value) =>
               setFormData((prev) => ({ ...prev, bathrooms: value }))
             }
           >
-            <SelectTrigger>
+            <SelectTrigger
+              className={!formData.bathrooms ? "border-red-200" : ""}
+            >
               <SelectValue placeholder="Selecciona" />
             </SelectTrigger>
             <SelectContent>
@@ -226,29 +284,37 @@ export default function BookingForm({
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>Nombre</Label>
+          <Label>
+            Nombre <span className="text-red-500">*</span>
+          </Label>
           <Input
             value={formData.firstName}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, firstName: e.target.value }))
             }
             placeholder="Tu nombre"
+            className={!formData.firstName?.trim() ? "border-red-200" : ""}
           />
         </div>
         <div className="space-y-2">
-          <Label>Apellido</Label>
+          <Label>
+            Apellido <span className="text-red-500">*</span>
+          </Label>
           <Input
             value={formData.lastName}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, lastName: e.target.value }))
             }
             placeholder="Tu apellido"
+            className={!formData.lastName?.trim() ? "border-red-200" : ""}
           />
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label>Email</Label>
+        <Label>
+          Email <span className="text-red-500">*</span>
+        </Label>
         <Input
           type="email"
           value={formData.email}
@@ -256,11 +322,14 @@ export default function BookingForm({
             setFormData((prev) => ({ ...prev, email: e.target.value }))
           }
           placeholder="tu@email.com"
+          className={!formData.email?.trim() ? "border-red-200" : ""}
         />
       </div>
 
       <div className="space-y-2">
-        <Label>Teléfono</Label>
+        <Label>
+          Teléfono <span className="text-red-500">*</span>
+        </Label>
         <Input
           type="tel"
           value={formData.phone}
@@ -268,17 +337,21 @@ export default function BookingForm({
             setFormData((prev) => ({ ...prev, phone: e.target.value }))
           }
           placeholder="+1 234 567 8900"
+          className={!formData.phone?.trim() ? "border-red-200" : ""}
         />
       </div>
 
       <div className="space-y-2">
-        <Label>Dirección del Servicio</Label>
+        <Label>
+          Dirección del Servicio <span className="text-red-500">*</span>
+        </Label>
         <Input
           value={formData.address}
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, address: e.target.value }))
           }
           placeholder="Ingresa la dirección completa donde se realizará el servicio"
+          className={!formData.address?.trim() ? "border-red-200" : ""}
         />
       </div>
 
@@ -292,12 +365,16 @@ export default function BookingForm({
               acceptTerms: checked as boolean,
             }))
           }
+          className={!formData.acceptTerms ? "border-red-200" : ""}
         />
         <label
           htmlFor="terms"
-          className="text-sm text-gray-600 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          className={`text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${
+            !formData.acceptTerms ? "text-red-500" : "text-gray-600"
+          }`}
         >
-          Acepto los términos y condiciones
+          Acepto los términos y condiciones{" "}
+          <span className="text-red-500">*</span>
         </label>
       </div>
     </div>
@@ -385,9 +462,17 @@ export default function BookingForm({
           Anterior
         </Button>
         {currentStep === steps.length ? (
-          <Button onClick={onConfirm}>Confirmar Reserva</Button>
+          <Button onClick={onConfirm} disabled={!isCurrentStepValid()}>
+            Confirmar Reserva
+          </Button>
         ) : (
-          <Button onClick={handleNext}>Siguiente</Button>
+          <Button onClick={handleNext} disabled={!isCurrentStepValid()}>
+            {isCurrentStepValid() ? (
+              "Siguiente"
+            ) : (
+              <span className="text-sm">Siguiente</span>
+            )}
+          </Button>
         )}
       </div>
     </div>

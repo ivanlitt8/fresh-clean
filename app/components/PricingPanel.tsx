@@ -3,6 +3,9 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { CheckCircle2, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface PricingPanelProps {
   currentStep: number;
@@ -15,7 +18,7 @@ interface PricingPanelProps {
   total: number;
   totalTime: number;
   onBack: () => void;
-  onConfirm: () => void;
+  onConfirm: () => Promise<void>;
 }
 
 export function PricingPanel({
@@ -31,7 +34,59 @@ export function PricingPanel({
   onBack,
   onConfirm,
 }: PricingPanelProps) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(false);
+
   const progress = (currentStep / totalSteps) * 100;
+
+  const handleConfirm = async () => {
+    setIsLoading(true);
+    try {
+      await onConfirm();
+      setIsConfirmed(true);
+    } catch (error) {
+      console.error("Error al confirmar la reserva:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isConfirmed) {
+    return (
+      <Card className="p-8 space-y-6 text-center bg-white/80 backdrop-blur-sm border-blue-100">
+        <div className="flex flex-col items-center gap-4">
+          <CheckCircle2 className="w-16 h-16 text-green-500" />
+          <h2 className="text-2xl font-semibold text-gray-900">
+            ¡Reserva Confirmada!
+          </h2>
+          <p className="text-gray-600 max-w-md">
+            Gracias por confiar en nuestros servicios. Hemos recibido tu reserva
+            y te enviaremos un correo electrónico con los detalles.
+          </p>
+          <div className="bg-gray-50 p-4 rounded-lg w-full mt-4">
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Servicio:</span>
+                <span className="font-medium">{selectedService}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Duración:</span>
+                <span className="font-medium">{totalTime} horas</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Total:</span>
+                <span className="font-medium">${total.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+          <Button className="w-full mt-6" onClick={() => router.push("/")}>
+            Volver al Inicio
+          </Button>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className="sticky top-24 p-6 space-y-6 bg-white/80 backdrop-blur-sm border-blue-100">
@@ -122,11 +177,24 @@ export function PricingPanel({
       <div className="space-y-3">
         <Button
           className="w-full bg-blue-600 hover:bg-blue-700"
-          onClick={onConfirm}
+          onClick={handleConfirm}
+          disabled={isLoading}
         >
-          Confirmar Reserva
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Confirmando Reserva...
+            </>
+          ) : (
+            "Confirmar Reserva"
+          )}
         </Button>
-        <Button variant="outline" className="w-full" onClick={onBack}>
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={onBack}
+          disabled={isLoading}
+        >
           Volver al Formulario
         </Button>
       </div>

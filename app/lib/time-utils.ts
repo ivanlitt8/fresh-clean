@@ -3,7 +3,7 @@ import { parse, format } from "date-fns";
 
 export const BUSINESS_HOURS = {
     start: "08:00",
-    end: "17:00",
+    end: "18:00",
     bufferMinutes: 30
 };
 
