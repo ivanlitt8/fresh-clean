@@ -5,9 +5,20 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Booking } from '@/app/types/booking';
 
+// Verificar variables de entorno requeridas
+const requiredEnvVars = ['GMAIL_USER', 'GMAIL_APP_PASSWORD', 'ADMIN_EMAIL'];
+for (const envVar of requiredEnvVars) {
+    if (!process.env[envVar]) {
+        console.error(`Variable de entorno ${envVar} no encontrada`);
+    }
+}
+
 const transporter = nodemailer.createTransport({
     service: EMAIL_CONFIG.service,
-    auth: EMAIL_CONFIG.auth
+    auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD
+    }
 });
 
 function formatPrice(price: number): string {
@@ -102,17 +113,30 @@ async function sendEmail(options: nodemailer.SendMailOptions) {
         await transporter.sendMail(options);
         console.log('Email enviado exitosamente a:', options.to);
     } catch (error) {
-        console.error('Error al enviar email a:', options.to, error);
+        console.error('Error detallado al enviar email:', error);
         throw error;
     }
 }
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
+    console.log('API Route /api/email llamada');
+
     try {
-        const body = await request.json();
+        if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD || !process.env.ADMIN_EMAIL) {
+            console.error('Faltan variables de entorno necesarias');
+            return NextResponse.json(
+                { error: 'Error de configuración del servidor' },
+                { status: 500 }
+            );
+        }
+
+        const body = await req.json();
+        console.log('Body recibido:', JSON.stringify(body));
+
         const { bookings } = body as { bookings: Booking[] };
 
         if (!bookings || !bookings.length) {
+            console.error('No se proporcionaron datos de reserva');
             return NextResponse.json(
                 { error: 'No se proporcionaron datos de reserva' },
                 { status: 400 }
@@ -145,32 +169,44 @@ export async function POST(request: Request) {
         }
 
         // Enviar emails en paralelo
-        await Promise.all([
-            // Email al cliente
-            sendEmail({
-                from: EMAIL_CONFIG.from,
-                to: mainBooking.clientInfo.email,
-                subject: isRecurring
-                    ? EMAIL_CONFIG.subjects.recurringBookingConfirmation
-                    : EMAIL_CONFIG.subjects.bookingConfirmation,
-                text: clientEmailContent
-            }),
-            // Email al administrador
-            sendEmail({
-                from: EMAIL_CONFIG.from,
-                to: EMAIL_CONFIG.adminEmail,
-                subject: isRecurring
-                    ? EMAIL_CONFIG.subjects.adminNewRecurringBooking
-                    : EMAIL_CONFIG.subjects.adminNewBooking,
-                text: adminEmailContent
-            })
-        ]);
+        try {
+            await Promise.all([
+                // Email al cliente
+                sendEmail({
+                    from: process.env.GMAIL_USER,
+                    to: mainBooking.clientInfo.email,
+                    subject: isRecurring
+                        ? EMAIL_CONFIG.subjects.recurringBookingConfirmation
+                        : EMAIL_CONFIG.subjects.bookingConfirmation,
+                    text: clientEmailContent
+                }),
+                // Email al administrador
+                sendEmail({
+                    from: process.env.GMAIL_USER,
+                    to: process.env.ADMIN_EMAIL,
+                    subject: isRecurring
+                        ? EMAIL_CONFIG.subjects.adminNewRecurringBooking
+                        : EMAIL_CONFIG.subjects.adminNewBooking,
+                    text: adminEmailContent
+                })
+            ]);
 
-        return NextResponse.json({ success: true });
+            console.log('Emails enviados exitosamente');
+            return NextResponse.json({
+                success: true,
+                message: 'Emails enviados correctamente'
+            });
+        } catch (emailError) {
+            console.error('Error al enviar emails:', emailError);
+            return NextResponse.json(
+                { error: 'Error al enviar los emails', details: emailError },
+                { status: 500 }
+            );
+        }
     } catch (error) {
-        console.error('Error al enviar emails:', error);
+        console.error('Error en el procesamiento de la solicitud:', error);
         return NextResponse.json(
-            { error: 'Error al enviar los emails' },
+            { error: 'Error interno del servidor', details: error },
             { status: 500 }
         );
     }

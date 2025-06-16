@@ -3,7 +3,12 @@ import { Booking } from '@/app/types/booking';
 export class EmailService {
     private async sendEmailViaAPI(bookings: Booking[]) {
         try {
-            const response = await fetch('/api/email', {
+            // Usar la ruta absoluta para la API
+            const apiUrl = '/.netlify/functions/api/email';
+            console.log('Intentando enviar email usando:', apiUrl);
+            console.log('Datos de la reserva:', JSON.stringify(bookings, null, 2));
+
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -11,24 +16,41 @@ export class EmailService {
                 body: JSON.stringify({ bookings }),
             });
 
+            console.log('Estado de la respuesta:', response.status);
+            console.log('Headers de la respuesta:', Object.fromEntries(response.headers.entries()));
+
             if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.message || 'Error al enviar el email');
+                let errorMessage = `Error HTTP: ${response.status}`;
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.error || errorMessage;
+                    console.error('Datos del error:', errorData);
+                } catch (e) {
+                    console.error('No se pudo parsear la respuesta de error');
+                }
+                throw new Error(errorMessage);
             }
 
-            return await response.json();
+            const result = await response.json();
+            console.log('Respuesta exitosa:', result);
+            return result;
         } catch (error) {
-            console.error('Error al enviar email:', error);
+            console.error('Error completo al enviar email:', error);
             throw new Error('No se pudo enviar el email de confirmación');
         }
     }
 
     async sendBookingConfirmation(booking: Booking) {
+        console.log('Iniciando envío de confirmación de reserva única');
         return this.sendEmailViaAPI([booking]);
     }
 
     async sendRecurringBookingConfirmation(bookings: Booking[]) {
-        if (!bookings.length) return;
+        if (!bookings.length) {
+            console.log('No hay reservas para enviar');
+            return;
+        }
+        console.log('Iniciando envío de confirmación de reservas recurrentes');
         return this.sendEmailViaAPI(bookings);
     }
 } 
