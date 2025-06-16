@@ -4,6 +4,7 @@ package = "@netlify/plugin-nextjs"
 [build]
 command = "npm run build"
 publish = ".next"
+functions = "netlify/functions"
 
 [[redirects]]
   from = "/api/*"
@@ -11,5 +12,5 @@ publish = ".next"
   status = 200
 
 [functions]
-  external_node_modules = ["@prisma/client"]
-  node_bundler = "esbuild" 
+node_bundler = "esbuild"
+external_node_modules = ["date-fns", "nodemailer"] 

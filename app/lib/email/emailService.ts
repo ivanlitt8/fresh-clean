@@ -3,8 +3,8 @@ import { Booking } from '@/app/types/booking';
 export class EmailService {
     private async sendEmailViaAPI(bookings: Booking[]) {
         try {
-            // Usar la ruta absoluta para la API
-            const apiUrl = '/.netlify/functions/api/email';
+            // Usar la ruta de la función de Netlify
+            const apiUrl = '/.netlify/functions/email';
             console.log('Intentando enviar email usando:', apiUrl);
             console.log('Datos de la reserva:', JSON.stringify(bookings, null, 2));
 
