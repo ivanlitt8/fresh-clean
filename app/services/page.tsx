@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import { CTASection } from "../components/CTASection";
-import { BubblesBackground } from "../components/BubblesBackground";
+import { CTASection } from "@/app/components/CTASection";
+import { BubblesBackground } from "@/app/components/BubblesBackground";
 
 export default function Home() {
   const [showLocations, setShowLocations] = useState(false);

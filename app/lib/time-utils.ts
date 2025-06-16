@@ -1,6 +1,5 @@
-import { TimeSlot, AvailabilityCheck } from "../types/booking";
+import { TimeSlot, AvailabilityCheck } from "@/app/types/booking";
 import { parse, format } from "date-fns";
-// import { es } from "date-fns/locale";
 
 export const BUSINESS_HOURS = {
     start: "08:00",

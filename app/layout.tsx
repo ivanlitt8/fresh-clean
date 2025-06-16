@@ -1,9 +1,9 @@
 import "@/app/globals.css";
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
-import { NavigationProvider } from "./context/NavigationContext";
-import { Navbar } from "./components/Navbar";
-import { Footer } from "./components/Footer";
+import { NavigationProvider } from "@/app/context/NavigationContext";
+import { Navbar } from "@/app/components/Navbar";
+import { Footer } from "@/app/components/Footer";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 

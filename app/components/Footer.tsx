@@ -6,7 +6,7 @@ import {
   Sparkles,
   MessageSquare,
 } from "lucide-react";
-import { useNavigation } from "../context/NavigationContext";
+import { useNavigation } from "@/app/context/NavigationContext";
 
 export const Footer = () => {
   const { navigateToSection } = useNavigation();

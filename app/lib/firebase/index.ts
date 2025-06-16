@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import { firebaseConfig } from './firebaseConfig';
-import { BookingService } from './bookingService';
+import { firebaseConfig } from '@/app/lib/firebase/firebaseConfig';
+import { BookingService } from '@/app/lib/firebase/bookingService';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

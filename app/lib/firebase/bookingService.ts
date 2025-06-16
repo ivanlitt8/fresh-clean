@@ -1,4 +1,4 @@
-import { db } from './index';
+import { db } from '@/app/lib/firebase/index';
 import {
     collection,
     addDoc,
@@ -11,7 +11,7 @@ import {
     orderBy
 } from 'firebase/firestore';
 import { Booking, TimeSlot } from '@/app/types/booking';
-import { findAvailableTimeSlots, isTimeSlotAvailable } from '../time-utils';
+import { findAvailableTimeSlots, isTimeSlotAvailable } from '@/app/lib/time-utils';
 
 export class BookingService {
     private readonly COLLECTION_NAME = 'bookings';

@@ -9,9 +9,9 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import { BubblesBackground } from "./components/BubblesBackground";
+import { BubblesBackground } from "@/app/components/BubblesBackground";
 import Link from "next/link";
-import { CTASection } from "./components/CTASection";
+import { CTASection } from "@/app/components/CTASection";
 
 export default function Home() {
   const [name, setName] = useState("");
