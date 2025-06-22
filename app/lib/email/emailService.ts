@@ -1,10 +1,22 @@
 import { Booking } from '@/app/types/booking';
 
 export class EmailService {
+    private getApiUrl() {
+        // En desarrollo local con Netlify CLI
+        if (process.env.NEXT_PUBLIC_NETLIFY_DEV) {
+            return 'http://localhost:8888/.netlify/functions/email';
+        }
+        // En desarrollo local sin Netlify CLI
+        if (process.env.NODE_ENV === 'development') {
+            return 'http://localhost:9999/.netlify/functions/email';
+        }
+        // En producción
+        return '/.netlify/functions/email';
+    }
+
     private async sendEmailViaAPI(bookings: Booking[]) {
         try {
-            // Usar la ruta de la función de Netlify
-            const apiUrl = '/.netlify/functions/email';
+            const apiUrl = this.getApiUrl();
             console.log('Intentando enviar email usando:', apiUrl);
             console.log('Datos de la reserva:', JSON.stringify(bookings, null, 2));
 
