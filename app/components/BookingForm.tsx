@@ -14,9 +14,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import { Upload } from "lucide-react";
 import { DateTimeSelector } from "@/app/components/DateTimeSelector";
+import { calculateTotalRooms } from "@/app/lib/pricing-config";
 
 interface BookingFormProps {
   currentStep: number;
@@ -28,31 +29,20 @@ interface BookingFormProps {
 }
 
 const services = [
+  "Airbnb Cleaning",
+  "Builders/Construction", 
+  "End of Lease Cleaning",
   "Deep Cleaning",
-  "Regular Cleaning",
-  "Move In/Out Cleaning",
-  "Post Construction Cleaning",
+  "Carpet Cleaning",
+  "Commercial Cleaning",
   "Office Cleaning",
+  "Residential Cleaning",
+  "Strata Cleaning",
 ];
 
-const frequencies = ["Una vez", "Semanal", "Quincenal", "Mensual"];
+const frequencies = ["One time", "Weekly", "Bi-weekly", "Monthly"];
 
-const levels = ["1", "2", "3", "4", "5+"];
-const bedrooms = ["1", "2", "3", "4", "5+"];
-const bathrooms = ["1", "2", "3", "4", "5+"];
-
-const timeSlots = [
-  "08:00",
-  "09:00",
-  "10:00",
-  "11:00",
-  "12:00",
-  "13:00",
-  "14:00",
-  "15:00",
-  "16:00",
-  "17:00",
-];
+const roomCounts = ["0", "1", "2", "3", "4", "5+"];
 
 // Funciones de validación por paso
 const validateStep1 = (formData: FormData): boolean => {
@@ -60,7 +50,15 @@ const validateStep1 = (formData: FormData): boolean => {
 };
 
 const validateStep2 = (formData: FormData): boolean => {
-  return Boolean(formData.levels && formData.bedrooms && formData.bathrooms);
+  // Al menos debe tener un ambiente seleccionado (mayor a 0)
+  const hasRooms = (
+    parseInt(formData.bedrooms) > 0 ||
+    parseInt(formData.bathrooms) > 0 ||
+    parseInt(formData.kitchens) > 0 ||
+    parseInt(formData.livingRooms) > 0 ||
+    parseInt(formData.otherSpaces) > 0
+  );
+  return hasRooms;
 };
 
 const validateStep3 = (formData: FormData): boolean => {
@@ -74,6 +72,7 @@ const validateStep4 = (formData: FormData): boolean => {
       formData.email?.trim() &&
       formData.phone?.trim() &&
       formData.address?.trim() &&
+      formData.postalCode?.trim() &&
       formData.acceptTerms
   );
 };
@@ -120,7 +119,7 @@ export default function BookingForm({
     <div className="space-y-4">
       <div className="space-y-2">
         <Label>
-          Tipo de Servicio <span className="text-red-500">*</span>
+          Service Type <span className="text-red-500">*</span>
         </Label>
         <Select
           value={formData.service}
@@ -129,7 +128,7 @@ export default function BookingForm({
           }
         >
           <SelectTrigger className={!formData.service ? "border-red-200" : ""}>
-            <SelectValue placeholder="Selecciona un servicio" />
+            <SelectValue placeholder="Select a service" />
           </SelectTrigger>
           <SelectContent>
             {services.map((service) => (
@@ -143,7 +142,7 @@ export default function BookingForm({
 
       <div className="space-y-2">
         <Label>
-          Frecuencia <span className="text-red-500">*</span>
+          Frequency <span className="text-red-500">*</span>
         </Label>
         <Select
           value={formData.frequency}
@@ -154,7 +153,7 @@ export default function BookingForm({
           <SelectTrigger
             className={!formData.frequency ? "border-red-200" : ""}
           >
-            <SelectValue placeholder="Selecciona la frecuencia" />
+            <SelectValue placeholder="Select frequency" />
           </SelectTrigger>
           <SelectContent>
             {frequencies.map((frequency) => (
@@ -168,113 +167,174 @@ export default function BookingForm({
     </div>
   );
 
-  const renderPropertyDetails = () => (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="space-y-2">
-          <Label>
-            Niveles <span className="text-red-500">*</span>
-          </Label>
-          <Select
-            value={formData.levels}
-            onValueChange={(value) =>
-              setFormData((prev) => ({ ...prev, levels: value }))
-            }
-          >
-            <SelectTrigger className={!formData.levels ? "border-red-200" : ""}>
-              <SelectValue placeholder="Selecciona" />
-            </SelectTrigger>
-            <SelectContent>
-              {levels.map((level) => (
-                <SelectItem key={level} value={level}>
-                  {level}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+  const renderPropertyDetails = () => {
+    const totalRooms = calculateTotalRooms(
+      formData.bedrooms,
+      formData.bathrooms,
+      formData.kitchens,
+      formData.livingRooms,
+      formData.otherSpaces
+    );
+
+    return (
+      <div className="space-y-4">
+        <div className="mb-4 p-3 bg-blue-50 rounded-lg">
+          <p className="text-sm text-blue-700">
+            <strong>Total rooms:</strong> {totalRooms} rooms
+          </p>
+          <p className="text-xs text-blue-600 mt-1">
+            Select the quantity of each room type. At least one must be greater than 0.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="space-y-2">
+            <Label>
+              Bedrooms
+            </Label>
+            <Select
+              value={formData.bedrooms}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, bedrooms: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {roomCounts.map((room) => (
+                  <SelectItem key={room} value={room}>
+                    {room}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>
+              Bathrooms
+            </Label>
+            <Select
+              value={formData.bathrooms}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, bathrooms: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {roomCounts.map((room) => (
+                  <SelectItem key={room} value={room}>
+                    {room}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>
+              Kitchens
+            </Label>
+            <Select
+              value={formData.kitchens}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, kitchens: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {roomCounts.map((room) => (
+                  <SelectItem key={room} value={room}>
+                    {room}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>
+              Living Rooms
+            </Label>
+            <Select
+              value={formData.livingRooms}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, livingRooms: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {roomCounts.map((room) => (
+                  <SelectItem key={room} value={room}>
+                    {room}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>
+              Other Spaces
+            </Label>
+            <Select
+              value={formData.otherSpaces}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, otherSpaces: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select" />
+              </SelectTrigger>
+              <SelectContent>
+                {roomCounts.map((room) => (
+                  <SelectItem key={room} value={room}>
+                    {room}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         <div className="space-y-2">
-          <Label>
-            Dormitorios <span className="text-red-500">*</span>
-          </Label>
-          <Select
-            value={formData.bedrooms}
-            onValueChange={(value) =>
-              setFormData((prev) => ({ ...prev, bedrooms: value }))
-            }
-          >
-            <SelectTrigger
-              className={!formData.bedrooms ? "border-red-200" : ""}
+          <Label>Images (Optional)</Label>
+          <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={(e) => {
+                const files = Array.from(e.target.files || []);
+                setFormData((prev) => ({ ...prev, images: files }));
+              }}
+              className="hidden"
+              id="image-upload"
+            />
+            <label
+              htmlFor="image-upload"
+              className="cursor-pointer flex flex-col items-center"
             >
-              <SelectValue placeholder="Selecciona" />
-            </SelectTrigger>
-            <SelectContent>
-              {bedrooms.map((bedroom) => (
-                <SelectItem key={bedroom} value={bedroom}>
-                  {bedroom}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label>
-            Baños <span className="text-red-500">*</span>
-          </Label>
-          <Select
-            value={formData.bathrooms}
-            onValueChange={(value) =>
-              setFormData((prev) => ({ ...prev, bathrooms: value }))
-            }
-          >
-            <SelectTrigger
-              className={!formData.bathrooms ? "border-red-200" : ""}
-            >
-              <SelectValue placeholder="Selecciona" />
-            </SelectTrigger>
-            <SelectContent>
-              {bathrooms.map((bathroom) => (
-                <SelectItem key={bathroom} value={bathroom}>
-                  {bathroom}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+              <Upload className="h-8 w-8 text-gray-400 mb-1" />
+              <span className="text-gray-600 text-sm">
+                Drag your images here or click to upload
+              </span>
+              <span className="text-xs text-gray-500 mt-0.5">
+                Maximum size: 5MB
+              </span>
+            </label>
+          </div>
         </div>
       </div>
-
-      <div className="space-y-2">
-        <Label>Imágenes (Opcional)</Label>
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={(e) => {
-              const files = Array.from(e.target.files || []);
-              setFormData((prev) => ({ ...prev, images: files }));
-            }}
-            className="hidden"
-            id="image-upload"
-          />
-          <label
-            htmlFor="image-upload"
-            className="cursor-pointer flex flex-col items-center"
-          >
-            <Upload className="h-8 w-8 text-gray-400 mb-1" />
-            <span className="text-gray-600 text-sm">
-              Arrastra tus imágenes aquí o haz clic para subir
-            </span>
-            <span className="text-xs text-gray-500 mt-0.5">
-              Tamaño máximo: 5MB
-            </span>
-          </label>
-        </div>
-      </div>
-    </div>
-  );
+    );
+  };
 
   const renderDateAndTime = () => (
     <DateTimeSelector formData={formData} setFormData={setFormData} />
@@ -285,27 +345,27 @@ export default function BookingForm({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label>
-            Nombre <span className="text-red-500">*</span>
+            First Name <span className="text-red-500">*</span>
           </Label>
           <Input
             value={formData.firstName}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, firstName: e.target.value }))
             }
-            placeholder="Tu nombre"
+            placeholder="Your first name"
             className={!formData.firstName?.trim() ? "border-red-200" : ""}
           />
         </div>
         <div className="space-y-2">
           <Label>
-            Apellido <span className="text-red-500">*</span>
+            Last Name <span className="text-red-500">*</span>
           </Label>
           <Input
             value={formData.lastName}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, lastName: e.target.value }))
             }
-            placeholder="Tu apellido"
+            placeholder="Your last name"
             className={!formData.lastName?.trim() ? "border-red-200" : ""}
           />
         </div>
@@ -321,14 +381,14 @@ export default function BookingForm({
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, email: e.target.value }))
           }
-          placeholder="tu@email.com"
+          placeholder="your@email.com"
           className={!formData.email?.trim() ? "border-red-200" : ""}
         />
       </div>
 
       <div className="space-y-2">
         <Label>
-          Teléfono <span className="text-red-500">*</span>
+          Phone <span className="text-red-500">*</span>
         </Label>
         <Input
           type="tel"
@@ -341,18 +401,34 @@ export default function BookingForm({
         />
       </div>
 
-      <div className="space-y-2">
-        <Label>
-          Dirección del Servicio <span className="text-red-500">*</span>
-        </Label>
-        <Input
-          value={formData.address}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, address: e.target.value }))
-          }
-          placeholder="Ingresa la dirección completa donde se realizará el servicio"
-          className={!formData.address?.trim() ? "border-red-200" : ""}
-        />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="space-y-2 md:col-span-2">
+          <Label>
+            Service Address <span className="text-red-500">*</span>
+          </Label>
+          <Input
+            value={formData.address}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, address: e.target.value }))
+            }
+            placeholder="Enter the complete address where the service will be performed"
+            className={!formData.address?.trim() ? "border-red-200" : ""}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label>
+            Postal Code <span className="text-red-500">*</span>
+          </Label>
+          <Input
+            value={formData.postalCode}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, postalCode: e.target.value }))
+            }
+            placeholder="12345"
+            className={!formData.postalCode?.trim() ? "border-red-200" : ""}
+          />
+        </div>
       </div>
 
       <div className="flex items-center space-x-2">
@@ -373,64 +449,88 @@ export default function BookingForm({
             !formData.acceptTerms ? "text-red-500" : "text-gray-600"
           }`}
         >
-          Acepto los términos y condiciones{" "}
+          I accept the terms and conditions{" "}
           <span className="text-red-500">*</span>
         </label>
       </div>
     </div>
   );
 
-  const renderSummary = () => (
-    <div className="space-y-6">
-      <div className="bg-gray-50 p-6 rounded-lg space-y-4">
-        <h3 className="font-semibold text-lg">Resumen de la Reserva</h3>
+  const renderSummary = () => {
+    const totalRooms = calculateTotalRooms(
+      formData.bedrooms,
+      formData.bathrooms,
+      formData.kitchens,
+      formData.livingRooms,
+      formData.otherSpaces
+    );
 
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <span className="text-gray-600">Servicio:</span>
-            <p className="font-medium">{formData.service}</p>
+    return (
+      <div className="space-y-6">
+        <div className="bg-gray-50 p-6 rounded-lg space-y-4">
+          <h3 className="font-semibold text-lg">Booking Summary</h3>
+
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-gray-600">Service:</span>
+              <p className="font-medium">{formData.service}</p>
+            </div>
+            <div>
+              <span className="text-gray-600">Frequency:</span>
+              <p className="font-medium">{formData.frequency}</p>
+            </div>
+            <div>
+              <span className="text-gray-600">Total Rooms:</span>
+              <p className="font-medium">{totalRooms} rooms</p>
+            </div>
+            <div>
+              <span className="text-gray-600">Breakdown:</span>
+              <p className="font-medium text-xs">
+                {formData.bedrooms}B • {formData.bathrooms}Ba • {formData.kitchens}K • {formData.livingRooms}L • {formData.otherSpaces}O
+              </p>
+            </div>
+            <div>
+              <span className="text-gray-600">Date:</span>
+              <p className="font-medium">
+                {formData.date && format(formData.date, "PPP", { locale: enUS })}
+              </p>
+            </div>
+            <div>
+              <span className="text-gray-600">Time:</span>
+              <p className="font-medium">{formData.time}</p>
+            </div>
+            <div>
+              <span className="text-gray-600">Name:</span>
+              <p className="font-medium">{`${formData.firstName} ${formData.lastName}`}</p>
+            </div>
+            <div>
+              <span className="text-gray-600">Email:</span>
+              <p className="font-medium">{formData.email}</p>
+            </div>
+            <div>
+              <span className="text-gray-600">Phone:</span>
+              <p className="font-medium">{formData.phone}</p>
+            </div>
+            <div>
+              <span className="text-gray-600">Postal Code:</span>
+              <p className="font-medium">{formData.postalCode}</p>
+            </div>
+            <div className="col-span-2">
+              <span className="text-gray-600">Address:</span>
+              <p className="font-medium">{formData.address}</p>
+            </div>
           </div>
-          <div>
-            <span className="text-gray-600">Frecuencia:</span>
-            <p className="font-medium">{formData.frequency}</p>
-          </div>
-          <div>
-            <span className="text-gray-600">Fecha:</span>
-            <p className="font-medium">
-              {formData.date && format(formData.date, "PPP", { locale: es })}
-            </p>
-          </div>
-          <div>
-            <span className="text-gray-600">Hora:</span>
-            <p className="font-medium">{formData.time}</p>
-          </div>
-          <div>
-            <span className="text-gray-600">Nombre:</span>
-            <p className="font-medium">{`${formData.firstName} ${formData.lastName}`}</p>
-          </div>
-          <div>
-            <span className="text-gray-600">Email:</span>
-            <p className="font-medium">{formData.email}</p>
-          </div>
-          <div>
-            <span className="text-gray-600">Teléfono:</span>
-            <p className="font-medium">{formData.phone}</p>
-          </div>
-          <div className="col-span-2">
-            <span className="text-gray-600">Dirección:</span>
-            <p className="font-medium">{formData.address}</p>
-          </div>
+
+          {formData.additionalNotes && (
+            <div className="col-span-2">
+              <span className="text-gray-600">Additional Notes:</span>
+              <p className="font-medium">{formData.additionalNotes}</p>
+            </div>
+          )}
         </div>
-
-        {formData.additionalNotes && (
-          <div className="col-span-2">
-            <span className="text-gray-600">Notas Adicionales:</span>
-            <p className="font-medium">{formData.additionalNotes}</p>
-          </div>
-        )}
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderStepContent = () => {
     switch (currentStep) {
@@ -459,18 +559,18 @@ export default function BookingForm({
           onClick={handleBack}
           disabled={currentStep === 1}
         >
-          Anterior
+          Previous
         </Button>
         {currentStep === steps.length ? (
-          <Button onClick={onConfirm} disabled={!isCurrentStepValid()}>
-            Confirmar Reserva
+          <Button className="bg-blue-500 text-white hover:bg-blue-600" onClick={onConfirm} disabled={!isCurrentStepValid()}>
+            Confirm Booking
           </Button>
         ) : (
-          <Button onClick={handleNext} disabled={!isCurrentStepValid()}>
+          <Button className="bg-blue-500 text-white hover:bg-blue-600" onClick={handleNext} disabled={!isCurrentStepValid()}>
             {isCurrentStepValid() ? (
-              "Siguiente"
+              "Next"
             ) : (
-              <span className="text-sm">Siguiente</span>
+              <span className="text-sm">Next</span>
             )}
           </Button>
         )}

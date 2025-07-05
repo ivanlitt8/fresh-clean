@@ -6,12 +6,15 @@ export interface Booking {
         email: string;
         phone: string;
         address: string;
+        postalCode: string;
     };
     serviceDetails: {
         serviceType: string;
-        levels: string;
         bedrooms: string;
         bathrooms: string;
+        kitchens: string;
+        livingRooms: string;
+        otherSpaces: string;
         frequency: string;
         additionalNotes: string;
     };

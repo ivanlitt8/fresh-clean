@@ -1,87 +1,99 @@
-// Configuración de servicios base
+// Configuración de servicios base - NUEVA ESTRUCTURA DE PRECIOS
 export const SERVICES_CONFIG = {
+    "Airbnb Cleaning": {
+        timePerRoom: 0.5, // 30 minutos por ambiente
+        pricePerHour: 60, // USD
+        description: "Limpieza especializada para propiedades Airbnb",
+    },
+    "Builders/Construction": {
+        timePerRoom: 1, // 1 hora por ambiente
+        pricePerHour: 70, // USD
+        description: "Limpieza post construcción especializada",
+    },
+    "End of Lease Cleaning": {
+        timePerRoom: 1, // 1 hora por ambiente
+        pricePerHour: 70, // USD
+        description: "Limpieza completa de fin de arrendamiento",
+    },
     "Deep Cleaning": {
-        baseTime: 3, // horas
-        pricePerHour: 35, // USD
+        timePerRoom: 0.75, // 45 minutos por ambiente
+        pricePerHour: 60, // USD
         description: "Limpieza profunda de todas las áreas",
     },
-    "Regular Cleaning": {
-        baseTime: 2,
-        pricePerHour: 30,
-        description: "Limpieza regular de mantenimiento",
+    "Carpet Cleaning": {
+        timePerRoom: 1.75, // 1.5-2 horas por ambiente (casos especiales)
+        pricePerHour: 60, // USD
+        description: "Limpieza especializada de alfombras y tapetes",
     },
-    "Move In/Out Cleaning": {
-        baseTime: 4,
-        pricePerHour: 40,
-        description: "Limpieza completa para mudanzas",
-    },
-    "Post Construction Cleaning": {
-        baseTime: 5,
-        pricePerHour: 45,
-        description: "Limpieza especializada post construcción",
+    "Commercial Cleaning": {
+        timePerRoom: 0.5, // 30 minutos por ambiente
+        pricePerHour: 60, // USD
+        description: "Limpieza comercial para negocios",
     },
     "Office Cleaning": {
-        baseTime: 3,
-        pricePerHour: 35,
-        description: "Limpieza de oficinas y espacios comerciales",
+        timePerRoom: 0.33, // 20 minutos por ambiente
+        pricePerHour: 60, // USD
+        description: "Limpieza de oficinas y espacios de trabajo",
     },
-} as const;
-
-// Factores adicionales de tiempo
-export const TIME_FACTORS = {
-    levels: {
-        "1": 0,      // No añade tiempo extra
-        "2": 0.5,    // Añade 30 minutos
-        "3": 1,      // Añade 1 hora
-        "4": 1.5,    // Añade 1 hora y 30 minutos
-        "5+": 2,     // Añade 2 horas
+    "Residential Cleaning": {
+        timePerRoom: 0.5, // 30 minutos por ambiente
+        pricePerHour: 60, // USD
+        description: "Limpieza residencial regular",
     },
-    bedrooms: {
-        "1": 0.5,    // Añade 30 minutos
-        "2": 1,      // Añade 1 hora
-        "3": 1.5,    // Añade 1 hora y 30 minutos
-        "4": 2,      // Añade 2 horas
-        "5+": 2.5,   // Añade 2 horas y 30 minutos
-    },
-    bathrooms: {
-        "1": 0.5,    // Añade 30 minutos
-        "2": 1,      // Añade 1 hora
-        "3": 1.5,    // Añade 1 hora y 30 minutos
-        "4": 2,      // Añade 2 horas
-        "5+": 2.5,   // Añade 2 horas y 30 minutos
+    "Strata Cleaning": {
+        timePerRoom: 0.5, // 30 minutos por ambiente
+        pricePerHour: 60, // USD
+        description: "Limpieza de áreas comunes de estratos",
     },
 } as const;
 
 // Descuentos por frecuencia
 export const FREQUENCY_DISCOUNTS = {
-    "Una vez": 0,          // Sin descuento
-    "Semanal": 0.15,      // 15% de descuento
-    "Quincenal": 0.10,    // 10% de descuento
-    "Mensual": 0.05,      // 5% de descuento
+    "One time": 0,          // Sin descuento
+    "Weekly": 0.15,      // 15% de descuento
+    "Bi-weekly": 0.10,    // 10% de descuento
+    "Monthly": 0.05,      // 5% de descuento
 } as const;
+
+// Función para calcular el total de ambientes
+export function calculateTotalRooms(
+    bedrooms: string,
+    bathrooms: string,
+    kitchens: string,
+    livingRooms: string,
+    otherSpaces: string
+): number {
+    const bedroomCount = parseInt(bedrooms.replace('+', '')) || 0;
+    const bathroomCount = parseInt(bathrooms.replace('+', '')) || 0;
+    const kitchenCount = parseInt(kitchens.replace('+', '')) || 0;
+    const livingRoomCount = parseInt(livingRooms.replace('+', '')) || 0;
+    const otherSpaceCount = parseInt(otherSpaces.replace('+', '')) || 0;
+    
+    return bedroomCount + bathroomCount + kitchenCount + livingRoomCount + otherSpaceCount;
+}
 
 // Función para calcular el tiempo total del servicio
 export function calculateTotalTime(
     service: keyof typeof SERVICES_CONFIG,
-    levels: keyof typeof TIME_FACTORS.levels,
-    bedrooms: keyof typeof TIME_FACTORS.bedrooms,
-    bathrooms: keyof typeof TIME_FACTORS.bathrooms,
+    bedrooms: string,
+    bathrooms: string,
+    kitchens: string,
+    livingRooms: string,
+    otherSpaces: string
 ): number {
-    const baseTime = SERVICES_CONFIG[service].baseTime;
-    const additionalTime =
-        TIME_FACTORS.levels[levels] +
-        TIME_FACTORS.bedrooms[bedrooms] +
-        TIME_FACTORS.bathrooms[bathrooms];
-
-    return baseTime + additionalTime;
+    const totalRooms = calculateTotalRooms(bedrooms, bathrooms, kitchens, livingRooms, otherSpaces);
+    const timePerRoom = SERVICES_CONFIG[service].timePerRoom;
+    return timePerRoom * totalRooms;
 }
 
 // Función para calcular el precio total
 export function calculatePrice(
     service: keyof typeof SERVICES_CONFIG,
-    levels: keyof typeof TIME_FACTORS.levels,
-    bedrooms: keyof typeof TIME_FACTORS.bedrooms,
-    bathrooms: keyof typeof TIME_FACTORS.bathrooms,
+    bedrooms: string,
+    bathrooms: string,
+    kitchens: string,
+    livingRooms: string,
+    otherSpaces: string,
     frequency: keyof typeof FREQUENCY_DISCOUNTS,
 ): {
     totalTime: number;
@@ -89,7 +101,7 @@ export function calculatePrice(
     discount: number;
     finalPrice: number;
 } {
-    const totalTime = calculateTotalTime(service, levels, bedrooms, bathrooms);
+    const totalTime = calculateTotalTime(service, bedrooms, bathrooms, kitchens, livingRooms, otherSpaces);
     const pricePerHour = SERVICES_CONFIG[service].pricePerHour;
     const basePrice = totalTime * pricePerHour;
     const discountRate = FREQUENCY_DISCOUNTS[frequency];

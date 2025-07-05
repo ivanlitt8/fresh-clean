@@ -1,7 +1,7 @@
 import { Handler } from '@netlify/functions';
 import nodemailer from 'nodemailer';
 import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import { Booking } from '@/app/types/booking';
 import fs from 'fs';
 import path from 'path';
@@ -15,7 +15,7 @@ const ADMIN_EMAIL_TEMPLATE = `<!DOCTYPE html
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Nueva reserva recibida vía web</title>
+    <title>New booking received via web</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body style="margin: 0; padding: 0;">
@@ -45,7 +45,7 @@ const ADMIN_EMAIL_TEMPLATE = `<!DOCTYPE html
                                 </tr>
                                 <tr>
                                     <td align="center" style="font-family: Arial, sans-serif; font-size: 24px; font-weight: normal; color: #333333; padding-bottom: 10px;">
-                                        Nueva reserva recibida vía web
+                                        New booking received via web
                                     </td>
                                 </tr>
                                 <tr>
@@ -56,7 +56,7 @@ const ADMIN_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                                         <tr>
                                                             <td style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.4; color: #666666;">
-                                                                <p>Por favor revisa la siguiente reserva y asigna el personal necesario:</p>
+                                                                <p>Please review the following booking and assign the necessary staff:</p>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -64,17 +64,17 @@ const ADMIN_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border: 1px solid #e0e0e0; border-collapse: collapse;">
                                                                     <tr>
                                                                         <td width="60%" style="padding: 10px; border-right: 1px solid #e0e0e0; vertical-align: top; font-size: 14px;">
-                                                                            <strong>Información del cliente:</strong><br>
-                                                                            Nombre Completo: $USER_FULL_NAME<br>
+                                                                            <strong>Client information:</strong><br>
+                                                                            Full Name: $USER_FULL_NAME<br>
                                                                             Email: $USER_EMAIL<br>
-                                                                            Teléfono: $USER_PHONE<br>
-                                                                            Dirección: $USER_ADDRESS
+                                                                            Phone: $USER_PHONE<br>
+                                                                            Address: $USER_ADDRESS
                                                                         </td>
                                                                         <td width="40%" style="padding: 10px; vertical-align: top;">
-                                                                            <strong>Detalles:</strong><br>
-                                                                            Niveles: $LEVELS<br>
-                                                                            Dormitorios: $BEDROOMS<br>
-                                                                            Baños: $BATHROOMS
+                                                                            <strong>Room details:</strong><br>
+                                                                            Total Rooms: $TOTAL_ROOMS<br>
+                                                                            Bedrooms: $BEDROOMS<br>
+                                                                            Bathrooms: $BATHROOMS
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -85,11 +85,11 @@ const ADMIN_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border: 1px solid #e0e0e0; border-collapse: collapse;">
                                                                     <tr>
                                                                         <td width="100%" style="padding: 10px; border-right: 1px solid #e0e0e0; vertical-align: top; font-size: 14px;">
-                                                                            <strong>Detalles del servicio:</strong><br>
-                                                                            Servicio: $SERVICE_TYPE<br>
-                                                                            Fecha: $DATE<br>
-                                                                            Hora: $TIME<br>
-                                                                            Tiempo estimado: $ESTIMATED_TIME
+                                                                            <strong>Service details:</strong><br>
+                                                                            Service: $SERVICE_TYPE<br>
+                                                                            Date: $DATE<br>
+                                                                            Time: $TIME<br>
+                                                                            Estimated time: $ESTIMATED_TIME
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -99,10 +99,10 @@ const ADMIN_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                             <td style="padding: 20px 0;">
                                                                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
                                                                     <tr style="background-color: #f0f0f0;">
-                                                                        <th align="left" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Descripción</th>
-                                                                        <th align="center" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Horas</th>
-                                                                        <th align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Precio</th>
-                                                                        <th align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">IVA</th>
+                                                                        <th align="left" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Description</th>
+                                                                        <th align="center" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Hours</th>
+                                                                        <th align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Price</th>
+                                                                        <th align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Tax</th>
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">$SERVICE_NAME</td>
@@ -122,14 +122,14 @@ const ADMIN_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                                     <tr>
                                                                         <td colspan="2" style="padding: 6px 10px;"></td>
                                                                         <td align="right" style="padding: 6px 10px; white-space: nowrap;">
-                                                                            <strong>Impuestos:</strong>
+                                                                            <strong>Taxes:</strong>
                                                                         </td>
                                                                         <td align="right" style="padding: 6px 10px;">$TOTAL_FEES</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td colspan="2" style="padding: 6px 10px;"></td>
                                                                         <td align="right" style="padding: 6px 10px; white-space: nowrap;">
-                                                                            <strong>Monto Total:</strong>
+                                                                            <strong>Total Amount:</strong>
                                                                         </td>
                                                                         <td align="right" style="padding: 6px 10px;">
                                                                             <strong>$TOTAL_AMOUNT</strong>
@@ -140,7 +140,7 @@ const ADMIN_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                         </tr>
                                                         <tr>
                                                             <td style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.6; color: #666666; padding-top: 20px;">
-                                                                <p>En caso de que haya algún conflicto con la disponibilidad o se requiera ajustar algo, contactá al cliente para coordinar directamente.</p>
+                                                                <p>In case there is any conflict with availability or adjustments are needed, contact the client to coordinate directly.</p>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -175,7 +175,7 @@ const CLIENT_EMAIL_TEMPLATE = `<!DOCTYPE html
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Confirmación de tu reserva de limpieza</title>
+    <title>Cleaning booking confirmation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 <body style="margin: 0; padding: 0;">
@@ -205,7 +205,7 @@ const CLIENT_EMAIL_TEMPLATE = `<!DOCTYPE html
                                 </tr>
                                 <tr>
                                     <td align="center" style="font-family: Arial, sans-serif; font-size: 24px; font-weight: normal; color: #333333; padding-bottom: 10px;">
-                                        Confirmación de tu reserva de limpieza
+                                        Cleaning booking confirmation
                                     </td>
                                 </tr>
                                 <tr>
@@ -216,8 +216,8 @@ const CLIENT_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                                         <tr>
                                                             <td style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.4; color: #666666;">
-                                                                <p>Hola $USER_FULL_NAME, <br>
-                                                                    Tu reserva ha sido confirmada con éxito. Aquí están los detalles:</p>
+                                                                <p>Hello $USER_FULL_NAME, <br>
+                                                                    Your booking has been successfully confirmed. Here are the details:</p>
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -225,16 +225,16 @@ const CLIENT_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border: 1px solid #e0e0e0; border-collapse: collapse;">
                                                                     <tr>
                                                                         <td width="60%" style="padding: 10px; border-right: 1px solid #e0e0e0; vertical-align: top; font-size: 14px;">
-                                                                            <strong>Detalles del servicio:</strong><br>
-                                                                            Fecha: $DATE<br>
-                                                                            Hora: $TIME<br>
-                                                                            Duración estimada: $ESTIMATED_TIME
+                                                                            <strong>Service details:</strong><br>
+                                                                            Date: $DATE<br>
+                                                                            Time: $TIME<br>
+                                                                            Estimated duration: $ESTIMATED_TIME
                                                                         </td>
                                                                         <td width="40%" style="padding: 10px; vertical-align: top;">
-                                                                            <strong>Detalles:</strong><br>
-                                                                            Niveles: $LEVELS<br>
-                                                                            Dormitorios: $BEDROOMS<br>
-                                                                            Baños: $BATHROOMS
+                                                                            <strong>Room details:</strong><br>
+                                                                            Total Rooms: $TOTAL_ROOMS<br>
+                                                                            Bedrooms: $BEDROOMS<br>
+                                                                            Bathrooms: $BATHROOMS
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -244,10 +244,10 @@ const CLIENT_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                             <td style="padding: 20px 0;">
                                                                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
                                                                     <tr style="background-color: #f0f0f0;">
-                                                                        <th align="left" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Descripción</th>
-                                                                        <th align="center" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Horas</th>
-                                                                        <th align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Precio</th>
-                                                                        <th align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">IVA</th>
+                                                                        <th align="left" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Description</th>
+                                                                        <th align="center" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Hours</th>
+                                                                        <th align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Price</th>
+                                                                        <th align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Tax</th>
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">$SERVICE_NAME</td>
@@ -265,14 +265,14 @@ const CLIENT_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                                     <tr>
                                                                         <td colspan="2" style="padding: 6px 10px;"></td>
                                                                         <td align="right" style="padding: 6px 10px; white-space: nowrap;">
-                                                                            <strong>Impuestos:</strong>
+                                                                            <strong>Taxes:</strong>
                                                                         </td>
                                                                         <td align="right" style="padding: 6px 10px;">$TOTAL_FEES</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td colspan="2" style="padding: 6px 10px;"></td>
                                                                         <td align="right" style="padding: 6px 10px; white-space: nowrap;">
-                                                                            <strong>Monto Total:</strong>
+                                                                            <strong>Total Amount:</strong>
                                                                         </td>
                                                                         <td align="right" style="padding: 6px 10px;">
                                                                             <strong>$TOTAL_AMOUNT</strong>
@@ -283,9 +283,9 @@ const CLIENT_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                         </tr>
                                                         <tr>
                                                             <td style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.6; color: #666666; padding-top: 20px;">
-                                                                <p>El valor es estimado y puede ajustarse según condiciones no previstas en el lugar.</p>
-                                                                <p>Si necesitas modificar o cancelar tu reserva, por favor contáctanos respondiendo este email o escribiendo.</p>
-                                                                <p style="text-align: center;">¡Gracias por confiar en nuestros servicios!</p>
+                                                                <p>The value is estimated and may be adjusted based on unforeseen conditions on site.</p>
+                                                                <p>If you need to modify or cancel your booking, please contact us by replying to this email or writing to us.</p>
+                                                                <p style="text-align: center;">Thank you for trusting our services!</p>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -298,18 +298,18 @@ const CLIENT_EMAIL_TEMPLATE = `<!DOCTYPE html
                             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding-top: 20px;">
                                 <tr>
                                     <td style="font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; color: #333333; padding-bottom: 10px; text-align: center;">
-                                        ¿Necesitas ayuda? Contactanos
+                                        Need help? Contact us
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="font-family: Arial, sans-serif; font-size: 14px; color: #666666; padding-bottom: 15px; text-align: center;">
-                                        Si en algún momento necesitas ayuda, nuestro equipo está disponible para asistirte. Podes contactarnos aquí.
+                                        If you need help at any time, our team is available to assist you. You can contact us here.
                                     </td>
                                 </tr>
                                 <tr>
                                     <td align="center" style="text-align: center;">
                                         <a href="https://wa.me/1234567890" style="display: inline-block; background-color: #25D366; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; text-decoration: none; padding: 10px 20px; border-radius: 20px;">
-                                            Contactate con nosotros
+                                            Contact us
                                         </a>
                                     </td>
                                 </tr>
@@ -338,7 +338,7 @@ const CLIENT_EMAIL_TEMPLATE = `<!DOCTYPE html
                 </tr>
                 <tr>
                     <td align="center" style="font-family: Arial, sans-serif; font-size: 12px; color: #999999; padding-top: 5px;">
-                        Copyright © 2024 Todos los derechos reservados
+                        Copyright © 2024 All rights reserved
                     </td>
                 </tr>
             </table>
@@ -372,23 +372,34 @@ function replaceTemplateVariables(template: string, variables: Record<string, st
 
 async function generateAdminEmailHtml(booking: Booking): Promise<string> {
     try {
-        const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: es });
+        const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: enUS });
 
         // Calcular impuestos como la diferencia entre el precio final y (precio base - descuento)
         const calculatedTax = booking.pricing.finalPrice - (booking.pricing.basePrice - booking.pricing.discount);
+
+        // Calcular total de ambientes
+        const totalRooms = (parseInt(booking.serviceDetails.bedrooms) || 0) +
+                          (parseInt(booking.serviceDetails.bathrooms) || 0) +
+                          (parseInt(booking.serviceDetails.kitchens) || 0) +
+                          (parseInt(booking.serviceDetails.livingRooms) || 0) +
+                          (parseInt(booking.serviceDetails.otherSpaces) || 0);
 
         const variables = {
             USER_FULL_NAME: `${booking.clientInfo.firstName} ${booking.clientInfo.lastName}`,
             USER_EMAIL: booking.clientInfo.email,
             USER_PHONE: booking.clientInfo.phone,
             USER_ADDRESS: booking.clientInfo.address,
-            LEVELS: booking.serviceDetails.levels,
+            POSTAL_CODE: booking.clientInfo.postalCode,
+            TOTAL_ROOMS: totalRooms.toString(),
             BEDROOMS: booking.serviceDetails.bedrooms,
             BATHROOMS: booking.serviceDetails.bathrooms,
+            KITCHENS: booking.serviceDetails.kitchens,
+            LIVING_ROOMS: booking.serviceDetails.livingRooms,
+            OTHER_SPACES: booking.serviceDetails.otherSpaces,
             SERVICE_TYPE: booking.serviceDetails.serviceType,
             DATE: formattedDate,
             TIME: `${booking.timing.startTime} - ${booking.timing.endTime}`,
-            ESTIMATED_TIME: `${booking.timing.duration} horas`,
+            ESTIMATED_TIME: `${booking.timing.duration} hours`,
             SERVICE_NAME: booking.serviceDetails.serviceType,
             SERVICE_PRICE: formatPrice(booking.pricing.basePrice),
             SERVICE_FEE: formatPrice(booking.pricing.discount),
@@ -406,19 +417,34 @@ async function generateAdminEmailHtml(booking: Booking): Promise<string> {
 
 async function generateClientEmailHtml(booking: Booking): Promise<string> {
     try {
-        const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: es });
+        const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: enUS });
 
         // Calcular impuestos como la diferencia entre el precio final y (precio base - descuento)
         const calculatedTax = booking.pricing.finalPrice - (booking.pricing.basePrice - booking.pricing.discount);
 
+        // Calcular total de ambientes
+        const totalRooms = (parseInt(booking.serviceDetails.bedrooms) || 0) +
+                          (parseInt(booking.serviceDetails.bathrooms) || 0) +
+                          (parseInt(booking.serviceDetails.kitchens) || 0) +
+                          (parseInt(booking.serviceDetails.livingRooms) || 0) +
+                          (parseInt(booking.serviceDetails.otherSpaces) || 0);
+
         const variables = {
             USER_FULL_NAME: `${booking.clientInfo.firstName} ${booking.clientInfo.lastName}`,
-            LEVELS: booking.serviceDetails.levels,
+            USER_EMAIL: booking.clientInfo.email,
+            USER_PHONE: booking.clientInfo.phone,
+            USER_ADDRESS: booking.clientInfo.address,
+            POSTAL_CODE: booking.clientInfo.postalCode,
+            TOTAL_ROOMS: totalRooms.toString(),
             BEDROOMS: booking.serviceDetails.bedrooms,
             BATHROOMS: booking.serviceDetails.bathrooms,
+            KITCHENS: booking.serviceDetails.kitchens,
+            LIVING_ROOMS: booking.serviceDetails.livingRooms,
+            OTHER_SPACES: booking.serviceDetails.otherSpaces,
+            SERVICE_TYPE: booking.serviceDetails.serviceType,
             DATE: formattedDate,
             TIME: `${booking.timing.startTime} - ${booking.timing.endTime}`,
-            ESTIMATED_TIME: `${booking.timing.duration} horas`,
+            ESTIMATED_TIME: `${booking.timing.duration} hours`,
             SERVICE_NAME: booking.serviceDetails.serviceType,
             SERVICE_PRICE: formatPrice(booking.pricing.basePrice),
             SERVICE_FEE: formatPrice(booking.pricing.discount),
@@ -435,82 +461,89 @@ async function generateClientEmailHtml(booking: Booking): Promise<string> {
 }
 
 function generateClientEmailContent(booking: Booking): string {
-    const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: es });
+    const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: enUS });
 
     return `
-¡Hola ${booking.clientInfo.firstName}!
+Hello ${booking.clientInfo.firstName}!
 
-Tu reserva ha sido confirmada con éxito. Aquí están los detalles:
+Your booking has been successfully confirmed. Here are the details:
 
-DETALLES DEL SERVICIO
---------------------
-Tipo de servicio: ${booking.serviceDetails.serviceType}
-Fecha: ${formattedDate}
-Hora: ${booking.timing.startTime} - ${booking.timing.endTime}
-Duración estimada: ${booking.timing.duration} horas
+SERVICE DETAILS
+--------------
+Service type: ${booking.serviceDetails.serviceType}
+Date: ${formattedDate}
+Time: ${booking.timing.startTime} - ${booking.timing.endTime}
+Estimated duration: ${booking.timing.duration} hours
 
-DETALLES DE LA PROPIEDAD
------------------------
-Niveles: ${booking.serviceDetails.levels}
-Dormitorios: ${booking.serviceDetails.bedrooms}
-Baños: ${booking.serviceDetails.bathrooms}
-Dirección: ${booking.clientInfo.address}
+ROOM DETAILS
+-----------
+Total rooms: ${(parseInt(booking.serviceDetails.bedrooms) || 0) + (parseInt(booking.serviceDetails.bathrooms) || 0) + (parseInt(booking.serviceDetails.kitchens) || 0) + (parseInt(booking.serviceDetails.livingRooms) || 0) + (parseInt(booking.serviceDetails.otherSpaces) || 0)}
+Bedrooms: ${booking.serviceDetails.bedrooms}
+Bathrooms: ${booking.serviceDetails.bathrooms}
+Kitchens: ${booking.serviceDetails.kitchens}
+Living rooms: ${booking.serviceDetails.livingRooms}
+Other spaces: ${booking.serviceDetails.otherSpaces}
+Address: ${booking.clientInfo.address}
+Postal code: ${booking.clientInfo.postalCode}
 
-PRECIO
-------
-Precio base: ${formatPrice(booking.pricing.basePrice)}
-Descuento: ${formatPrice(booking.pricing.discount)}
-Precio final: ${formatPrice(booking.pricing.finalPrice)}
+PRICING
+-------
+Base price: ${formatPrice(booking.pricing.basePrice)}
+Discount: ${formatPrice(booking.pricing.discount)}
+Final price: ${formatPrice(booking.pricing.finalPrice)}
 
-${booking.serviceDetails.additionalNotes ? `\nNotas adicionales: ${booking.serviceDetails.additionalNotes}\n` : ''}
+${booking.serviceDetails.additionalNotes ? `\nAdditional notes: ${booking.serviceDetails.additionalNotes}\n` : ''}
 
-Si necesitas modificar o cancelar tu reserva, por favor contáctanos respondiendo este email o llamando al número de atención al cliente.
+If you need to modify or cancel your booking, please contact us by replying to this email or calling our customer service number.
 
-¡Gracias por confiar en nuestros servicios!
+Thank you for trusting our services!
 
-Saludos,
-El equipo de limpieza
+Best regards,
+The cleaning team
 `;
 }
 
 function generateAdminEmailContent(booking: Booking): string {
-    const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: es });
+    const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: enUS });
 
     return `
-NUEVA RESERVA RECIBIDA
-=====================
+NEW BOOKING RECEIVED
+===================
 
-INFORMACIÓN DEL CLIENTE
----------------------
-Nombre completo: ${booking.clientInfo.firstName} ${booking.clientInfo.lastName}
+CLIENT INFORMATION
+-----------------
+Full name: ${booking.clientInfo.firstName} ${booking.clientInfo.lastName}
 Email: ${booking.clientInfo.email}
-Teléfono: ${booking.clientInfo.phone}
-Dirección: ${booking.clientInfo.address}
+Phone: ${booking.clientInfo.phone}
+Address: ${booking.clientInfo.address}
 
-DETALLES DEL SERVICIO
---------------------
-Tipo de servicio: ${booking.serviceDetails.serviceType}
-Fecha: ${formattedDate}
-Hora: ${booking.timing.startTime} - ${booking.timing.endTime}
-Duración estimada: ${booking.timing.duration} horas
+SERVICE DETAILS
+--------------
+Service type: ${booking.serviceDetails.serviceType}
+Date: ${formattedDate}
+Time: ${booking.timing.startTime} - ${booking.timing.endTime}
+Estimated duration: ${booking.timing.duration} hours
 
-DETALLES DE LA PROPIEDAD
------------------------
-Niveles: ${booking.serviceDetails.levels}
-Dormitorios: ${booking.serviceDetails.bedrooms}
-Baños: ${booking.serviceDetails.bathrooms}
+ROOM DETAILS
+-----------
+Total rooms: ${(parseInt(booking.serviceDetails.bedrooms) || 0) + (parseInt(booking.serviceDetails.bathrooms) || 0) + (parseInt(booking.serviceDetails.kitchens) || 0) + (parseInt(booking.serviceDetails.livingRooms) || 0) + (parseInt(booking.serviceDetails.otherSpaces) || 0)}
+Bedrooms: ${booking.serviceDetails.bedrooms}
+Bathrooms: ${booking.serviceDetails.bathrooms}
+Kitchens: ${booking.serviceDetails.kitchens}
+Living rooms: ${booking.serviceDetails.livingRooms}
+Other spaces: ${booking.serviceDetails.otherSpaces}
 
-PRECIO
-------
-Precio base: ${formatPrice(booking.pricing.basePrice)}
-Descuento: ${formatPrice(booking.pricing.discount)}
-Precio final: ${formatPrice(booking.pricing.finalPrice)}
+PRICING
+-------
+Base price: ${formatPrice(booking.pricing.basePrice)}
+Discount: ${formatPrice(booking.pricing.discount)}
+Final price: ${formatPrice(booking.pricing.finalPrice)}
 
-${booking.serviceDetails.additionalNotes ? `\nNOTAS ADICIONALES DEL CLIENTE\n${booking.serviceDetails.additionalNotes}\n` : ''}
+${booking.serviceDetails.additionalNotes ? `\nADDITIONAL CLIENT NOTES\n${booking.serviceDetails.additionalNotes}\n` : ''}
 
-ESTADO DE LA RESERVA: ${booking.status.toUpperCase()}
+BOOKING STATUS: ${booking.status.toUpperCase()}
 
-Por favor, revisa esta reserva y asigna el personal necesario.
+Please review this booking and assign the necessary staff.
 `;
 }
 
@@ -519,28 +552,28 @@ export const handler: Handler = async (event) => {
     if (event.httpMethod !== 'POST') {
         return {
             statusCode: 405,
-            body: JSON.stringify({ error: 'Método no permitido' })
+            body: JSON.stringify({ error: 'Method not allowed' })
         };
     }
 
     try {
         // Verificar variables de entorno
         if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD || !process.env.ADMIN_EMAIL) {
-            console.error('Faltan variables de entorno necesarias');
+            console.error('Missing required environment variables');
             return {
                 statusCode: 500,
-                body: JSON.stringify({ error: 'Error de configuración del servidor' })
+                body: JSON.stringify({ error: 'Server configuration error' })
             };
         }
 
         // Parsear el cuerpo de la solicitud
         const { bookings } = JSON.parse(event.body || '{}');
-        console.log('Datos recibidos:', JSON.stringify(bookings, null, 2));
+        console.log('Data received:', JSON.stringify(bookings, null, 2));
 
         if (!bookings || !bookings.length) {
             return {
                 statusCode: 400,
-                body: JSON.stringify({ error: 'No se proporcionaron datos de reserva' })
+                body: JSON.stringify({ error: 'No booking data provided' })
             };
         }
 
@@ -565,13 +598,13 @@ export const handler: Handler = async (event) => {
         // Agregar información de reservas recurrentes si existen
         if (isRecurring) {
             const recurringDates = bookings.slice(1).map((booking: Booking) => {
-                const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: es });
+                const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: enUS });
                 return `${formattedDate}: ${booking.timing.startTime} - ${booking.timing.endTime}`;
             }).join('\n');
 
-            const recurringSection = `\nPRÓXIMAS FECHAS PROGRAMADAS\n-------------------------\n${recurringDates}\n`;
+            const recurringSection = `\nUPCOMING SCHEDULED DATES\n------------------------\n${recurringDates}\n`;
             clientEmailContent += recurringSection;
-            adminEmailContent += `\nRESERVAS RECURRENTES PROGRAMADAS\n------------------------------\n${recurringDates}\n`;
+            adminEmailContent += `\nSCHEDULED RECURRING BOOKINGS\n----------------------------\n${recurringDates}\n`;
         }
 
         // Enviar emails
@@ -580,7 +613,7 @@ export const handler: Handler = async (event) => {
             transporter.sendMail({
                 from: process.env.GMAIL_USER,
                 to: mainBooking.clientInfo.email,
-                subject: isRecurring ? 'Confirmación de tus reservas recurrentes de limpieza' : 'Confirmación de tu reserva de limpieza',
+                subject: isRecurring ? 'Recurring cleaning bookings confirmation' : 'Cleaning booking confirmation',
                 html: clientEmailHtml || undefined,
                 text: clientEmailContent // Fallback si falla el HTML
             }),
@@ -588,7 +621,7 @@ export const handler: Handler = async (event) => {
             transporter.sendMail({
                 from: process.env.GMAIL_USER,
                 to: process.env.ADMIN_EMAIL,
-                subject: isRecurring ? 'Nueva reserva recurrente recibida' : 'Nueva reserva recibida',
+                subject: isRecurring ? 'New recurring booking received' : 'New booking received',
                 html: adminEmailHtml || undefined,
                 text: adminEmailContent // Fallback si falla el HTML
             })
@@ -598,16 +631,16 @@ export const handler: Handler = async (event) => {
             statusCode: 200,
             body: JSON.stringify({
                 success: true,
-                message: 'Emails enviados correctamente'
+                message: 'Emails sent successfully'
             })
         };
     } catch (error) {
-        console.error('Error en el servidor:', error);
+        console.error('Server error:', error);
         return {
             statusCode: 500,
             body: JSON.stringify({
-                error: 'Error al procesar la solicitud',
-                details: error instanceof Error ? error.message : 'Error desconocido'
+                error: 'Error processing request',
+                details: error instanceof Error ? error.message : 'Unknown error'
             })
         };
     }

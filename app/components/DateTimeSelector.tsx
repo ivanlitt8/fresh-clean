@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -37,22 +37,33 @@ export const DateTimeSelector = ({
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
   const bookingService = new BookingService();
 
+  // Función para deshabilitar fechas pasadas y la fecha actual
+  const disablePastDates = (date: Date): boolean => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+  };
+
   useEffect(() => {
     const fetchAvailableSlots = async () => {
       if (
         formData.date &&
         formData.service &&
-        formData.levels &&
         formData.bedrooms &&
-        formData.bathrooms
+        formData.bathrooms &&
+        formData.kitchens &&
+        formData.livingRooms &&
+        formData.otherSpaces
       ) {
         setIsLoadingSlots(true);
         try {
           const duration = calculateTotalTime(
             formData.service as any,
-            formData.levels as any,
-            formData.bedrooms as any,
-            formData.bathrooms as any
+            formData.bedrooms,
+            formData.bathrooms,
+            formData.kitchens,
+            formData.livingRooms,
+            formData.otherSpaces
           );
 
           const slots = await bookingService.checkAvailability(
@@ -72,15 +83,17 @@ export const DateTimeSelector = ({
   }, [
     formData.date,
     formData.service,
-    formData.levels,
     formData.bedrooms,
     formData.bathrooms,
+    formData.kitchens,
+    formData.livingRooms,
+    formData.otherSpaces,
   ]);
 
   return (
     <div className="space-y-4">
       <div className="space-y-2">
-        <Label>Fecha</Label>
+        <Label>Date</Label>
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -92,8 +105,8 @@ export const DateTimeSelector = ({
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {formData.date
-                ? format(formData.date, "PPP", { locale: es })
-                : "Selecciona una fecha"}
+                ? format(formData.date, "PPP", { locale: enUS })
+                : "Select a date"}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
@@ -103,19 +116,20 @@ export const DateTimeSelector = ({
               onSelect={(date) =>
                 setFormData({ ...formData, date: date || null })
               }
+              disabled={disablePastDates}
               initialFocus
-              locale={es}
+              locale={enUS}
             />
           </PopoverContent>
         </Popover>
       </div>
 
       <div className="space-y-2">
-        <Label>Hora</Label>
+        <Label>Time</Label>
         {isLoadingSlots ? (
           <div className="text-center py-4">
             <span className="text-sm text-gray-500">
-              Cargando horarios disponibles...
+              Loading available times...
             </span>
           </div>
         ) : availableSlots.length > 0 ? (
@@ -124,7 +138,7 @@ export const DateTimeSelector = ({
             onValueChange={(value) => setFormData({ ...formData, time: value })}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Selecciona hora" />
+              <SelectValue placeholder="Select time" />
             </SelectTrigger>
             <SelectContent>
               {availableSlots.map((slot) => (
@@ -137,20 +151,20 @@ export const DateTimeSelector = ({
         ) : (
           <div className="text-center py-4">
             <span className="text-sm text-red-500">
-              No hay horarios disponibles para esta fecha
+              No available times for this date
             </span>
           </div>
         )}
       </div>
 
       <div className="space-y-2">
-        <Label>Notas Adicionales</Label>
+        <Label>Additional Notes</Label>
         <Textarea
           value={formData.additionalNotes}
           onChange={(e) =>
             setFormData({ ...formData, additionalNotes: e.target.value })
           }
-          placeholder="Instrucciones especiales, acceso, etc..."
+          placeholder="Special instructions, access, etc..."
         />
       </div>
     </div>

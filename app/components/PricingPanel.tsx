@@ -46,7 +46,7 @@ export function PricingPanel({
       await onConfirm();
       setIsConfirmed(true);
     } catch (error) {
-      console.error("Error al confirmar la reserva:", error);
+      console.error("Error confirming booking:", error);
     } finally {
       setIsLoading(false);
     }
@@ -58,21 +58,21 @@ export function PricingPanel({
         <div className="flex flex-col items-center gap-4">
           <CheckCircle2 className="w-16 h-16 text-green-500" />
           <h2 className="text-2xl font-semibold text-gray-900">
-            ¡Reserva Confirmada!
+            Booking Confirmed!
           </h2>
           <p className="text-gray-600 max-w-md">
-            Gracias por confiar en nuestros servicios. Hemos recibido tu reserva
-            y te enviaremos un correo electrónico con los detalles.
+            Thank you for trusting our services. We have received your booking
+            and will send you an email with the details.
           </p>
           <div className="bg-gray-50 p-4 rounded-lg w-full mt-4">
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Servicio:</span>
+                <span className="text-gray-600">Service:</span>
                 <span className="font-medium">{selectedService}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Duración:</span>
-                <span className="font-medium">{totalTime} horas</span>
+                <span className="text-gray-600">Duration:</span>
+                <span className="font-medium">{totalTime} hours</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Total:</span>
@@ -81,7 +81,7 @@ export function PricingPanel({
             </div>
           </div>
           <Button className="w-full mt-6" onClick={() => router.push("/")}>
-            Volver al Inicio
+            Back to Home
           </Button>
         </div>
       </Card>
@@ -92,31 +92,20 @@ export function PricingPanel({
     <Card className="sticky top-24 p-6 space-y-6 bg-white/80 backdrop-blur-sm border-blue-100">
       {/* Header */}
       <div className="space-y-2">
-        <h3 className="text-lg font-semibold">Resumen de Reserva</h3>
-        <div className="space-y-1">
-          <div className="flex justify-between text-sm text-gray-600">
-            <span>
-              Paso {currentStep} de {totalSteps}
-            </span>
-            <span>{Math.round(progress)}%</span>
-          </div>
-          <Progress value={progress} className="h-2" />
-        </div>
+        <h3 className="text-lg font-semibold">Booking Summary</h3>
       </div>
-
-      <Separator />
 
       {/* Selected Services */}
       <div className="space-y-4">
-        <h4 className="font-medium">Servicios Seleccionados</h4>
+        <h4 className="font-medium">Selected Services</h4>
         {selectedService ? (
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-sm">{selectedService}</span>
-              <Badge variant="secondary">Servicio Base</Badge>
+              <Badge variant="secondary">Base Service</Badge>
             </div>
             <div className="text-sm text-gray-600">
-              Tiempo estimado: {totalTime} horas
+              Estimated time: {totalTime} hours
             </div>
             {extras.map((extra, index) => (
               <div key={index} className="flex justify-between items-center">
@@ -127,7 +116,7 @@ export function PricingPanel({
           </div>
         ) : (
           <p className="text-sm text-gray-500 italic">
-            Selecciona un servicio para comenzar
+            Select a service to begin
           </p>
         )}
       </div>
@@ -138,15 +127,15 @@ export function PricingPanel({
       {frequency && (
         <>
           <div className="space-y-2">
-            <h4 className="font-medium">Frecuencia</h4>
+            <h4 className="font-medium">Frequency</h4>
             <div className="flex justify-between items-center">
               <span className="text-sm">{frequency}</span>
-              {frequency !== "Una vez" && (
+              {frequency !== "One time" && (
                 <Badge
                   variant="outline"
                   className="text-green-600 border-green-200 bg-green-50"
                 >
-                  Descuento aplicado
+                  Discount applied
                 </Badge>
               )}
             </div>
@@ -163,12 +152,12 @@ export function PricingPanel({
         </div>
         {discount > 0 && (
           <div className="flex justify-between items-center text-green-600">
-            <span className="text-sm">Descuento</span>
+            <span className="text-sm">Discount</span>
             <span className="font-medium">-${discount.toFixed(2)}</span>
           </div>
         )}
         <div className="flex justify-between items-center pt-2">
-          <span className="font-semibold">Total Estimado</span>
+          <span className="font-semibold">Estimated Total</span>
           <span className="text-lg font-bold">${total.toFixed(2)}</span>
         </div>
       </div>
@@ -183,10 +172,10 @@ export function PricingPanel({
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Confirmando Reserva...
+              Confirming Booking...
             </>
           ) : (
-            "Confirmar Reserva"
+            "Confirm Booking"
           )}
         </Button>
         <Button
@@ -195,13 +184,13 @@ export function PricingPanel({
           onClick={onBack}
           disabled={isLoading}
         >
-          Volver al Formulario
+          Back to Form
         </Button>
       </div>
 
       {/* Footer Info */}
       <p className="text-xs text-gray-500 text-center">
-        Los precios pueden variar según requerimientos específicos
+        Prices may vary based on specific requirements
       </p>
     </Card>
   );

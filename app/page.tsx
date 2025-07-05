@@ -626,7 +626,7 @@ export default function Home() {
       </section>
 
       {/* Contact Form */}
-      <section id="contact" className="py-20 px-4 bg-gray-50">
+      {/* <section id="contact" className="py-20 px-4 bg-gray-50">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-12">Get in Touch</h2>
           <Card className="p-6">
@@ -657,7 +657,7 @@ export default function Home() {
             </form>
           </Card>
         </div>
-      </section>
+      </section> */}
 
       <CTASection onButtonClick={() => scrollToSection("contact")} />
     </main>

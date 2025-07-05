@@ -12,10 +12,10 @@ export const EMAIL_CONFIG = {
     // Asuntos de los emails
     subjects: {
         // Para clientes
-        bookingConfirmation: 'Confirmación de tu reserva de limpieza',
-        recurringBookingConfirmation: 'Confirmación de tus reservas recurrentes de limpieza',
+        bookingConfirmation: 'Cleaning booking confirmation',
+        recurringBookingConfirmation: 'Recurring cleaning bookings confirmation',
         // Para administrador
-        adminNewBooking: 'Nueva reserva recibida',
-        adminNewRecurringBooking: 'Nueva reserva recurrente recibida'
+        adminNewBooking: 'New booking received',
+        adminNewRecurringBooking: 'New recurring booking received'
     }
 }; 

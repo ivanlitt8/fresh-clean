@@ -5,8 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   calculatePrice,
   calculateTotalTime,
-  TIME_FACTORS,
+  calculateTotalRooms,
   FREQUENCY_DISCOUNTS,
+  SERVICES_CONFIG,
 } from "@/app/lib/pricing-config";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import BookingForm from "@/app/components/BookingForm";
@@ -24,10 +25,12 @@ export interface FormData {
   service: string;
   frequency: string;
 
-  // Paso 2 - Detalles de la Propiedad
-  levels: string;
+  // Paso 2 - Detalles de Ambientes
   bedrooms: string;
   bathrooms: string;
+  kitchens: string;
+  livingRooms: string;
+  otherSpaces: string;
   images: File[];
 
   // Paso 3 - Fecha y Hora
@@ -41,6 +44,7 @@ export interface FormData {
   phone: string;
   email: string;
   address: string;
+  postalCode: string;
   acceptTerms: boolean;
 }
 
@@ -50,9 +54,11 @@ export default function BookingPage() {
   const [formData, setFormData] = useState<FormData>({
     service: "",
     frequency: "",
-    levels: "",
-    bedrooms: "",
-    bathrooms: "",
+    bedrooms: "0",
+    bathrooms: "0",
+    kitchens: "0",
+    livingRooms: "0",
+    otherSpaces: "0",
     images: [],
     date: null,
     time: "",
@@ -62,15 +68,16 @@ export default function BookingPage() {
     phone: "",
     email: "",
     address: "",
+    postalCode: "",
     acceptTerms: false,
   });
 
   const steps = [
-    { id: 1, title: "Selección de Servicio" },
-    { id: 2, title: "Detalles de la Propiedad" },
-    { id: 3, title: "Fecha y Hora" },
-    { id: 4, title: "Información Personal" },
-    { id: 5, title: "Resumen y Confirmación" },
+    { id: 1, title: "Service Selection" },
+    { id: 2, title: "Property Details" },
+    { id: 3, title: "Date and Time" },
+    { id: 4, title: "Personal Information" },
+    { id: 5, title: "Summary and Confirmation" },
   ];
 
   const [pricing, setPricing] = useState({
@@ -85,17 +92,21 @@ export default function BookingPage() {
   useEffect(() => {
     if (
       formData.service &&
-      formData.levels &&
-      formData.bedrooms &&
-      formData.bathrooms &&
-      formData.frequency
+      formData.frequency &&
+      (parseInt(formData.bedrooms) > 0 ||
+        parseInt(formData.bathrooms) > 0 ||
+        parseInt(formData.kitchens) > 0 ||
+        parseInt(formData.livingRooms) > 0 ||
+        parseInt(formData.otherSpaces) > 0)
     ) {
       try {
         const calculatedPricing = calculatePrice(
           formData.service as any, // Temporal fix para el tipo
-          formData.levels as any,
-          formData.bedrooms as any,
-          formData.bathrooms as any,
+          formData.bedrooms,
+          formData.bathrooms,
+          formData.kitchens,
+          formData.livingRooms,
+          formData.otherSpaces,
           formData.frequency as any
         );
         setPricing(calculatedPricing);
@@ -105,9 +116,11 @@ export default function BookingPage() {
     }
   }, [
     formData.service,
-    formData.levels,
     formData.bedrooms,
     formData.bathrooms,
+    formData.kitchens,
+    formData.livingRooms,
+    formData.otherSpaces,
     formData.frequency,
   ]);
 
@@ -121,9 +134,11 @@ export default function BookingPage() {
       frequency: formData.frequency || "No seleccionado",
 
       // Paso 2
-      levels: formData.levels || "No seleccionado",
       bedrooms: formData.bedrooms || "No seleccionado",
       bathrooms: formData.bathrooms || "No seleccionado",
+      kitchens: formData.kitchens || "No seleccionado",
+      livingRooms: formData.livingRooms || "No seleccionado",
+      otherSpaces: formData.otherSpaces || "No seleccionado",
       images: formData.images?.length || 0,
 
       // Paso 3
@@ -137,42 +152,46 @@ export default function BookingPage() {
       email: formData.email || "Vacío",
       phone: formData.phone || "Vacío",
       address: formData.address || "Vacío",
+      postalCode: formData.postalCode || "Vacío",
       acceptTerms: formData.acceptTerms ? "Aceptado" : "No aceptado",
     });
 
     // Log de cálculos de tiempo y precio si hay suficientes datos
     if (
       formData.service &&
-      formData.levels &&
-      formData.bedrooms &&
-      formData.bathrooms &&
-      formData.frequency
+      formData.frequency &&
+      (parseInt(formData.bedrooms) > 0 ||
+        parseInt(formData.bathrooms) > 0 ||
+        parseInt(formData.kitchens) > 0 ||
+        parseInt(formData.livingRooms) > 0 ||
+        parseInt(formData.otherSpaces) > 0)
     ) {
+      const totalRooms = calculateTotalRooms(
+        formData.bedrooms,
+        formData.bathrooms,
+        formData.kitchens,
+        formData.livingRooms,
+        formData.otherSpaces
+      );
+
       const duration = calculateTotalTime(
         formData.service as any,
-        formData.levels as any,
-        formData.bedrooms as any,
-        formData.bathrooms as any
+        formData.bedrooms,
+        formData.bathrooms,
+        formData.kitchens,
+        formData.livingRooms,
+        formData.otherSpaces
       );
 
       console.log("=== SERVICE TIME CALCULATION ===");
-      console.log("Desglose de tiempo:", {
+      console.log("Desglose de ambientes:", {
         servicio: formData.service,
-        niveles: `${formData.levels} (${
-          TIME_FACTORS.levels[
-            formData.levels as keyof typeof TIME_FACTORS.levels
-          ]
-        } horas)`,
-        dormitorios: `${formData.bedrooms} (${
-          TIME_FACTORS.bedrooms[
-            formData.bedrooms as keyof typeof TIME_FACTORS.bedrooms
-          ]
-        } horas)`,
-        baños: `${formData.bathrooms} (${
-          TIME_FACTORS.bathrooms[
-            formData.bathrooms as keyof typeof TIME_FACTORS.bathrooms
-          ]
-        } horas)`,
+        dormitorios: `${formData.bedrooms}`,
+        baños: `${formData.bathrooms}`,
+        cocinas: `${formData.kitchens}`,
+        salas: `${formData.livingRooms}`,
+        otros: `${formData.otherSpaces}`,
+        totalAmbientes: `${totalRooms} ambientes`,
         tiempoTotal: `${duration} horas`,
       });
 
@@ -190,72 +209,6 @@ export default function BookingPage() {
     }
   }, [formData, currentStep, pricing]);
 
-  const services = [
-    {
-      title: "Airbnb Cleaning",
-      description:
-        "Airbnb cleaning services are professional services specifically designed to clean Airbnb properties.",
-      image:
-        "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3",
-    },
-    {
-      title: "After Construction Cleaning",
-      description:
-        "Do you need professional and reliable after-construction cleaning services in Sydney? Look no further",
-      image:
-        "https://images.unsplash.com/photo-1558317374-067fb5f30001?ixlib=rb-4.0.3",
-    },
-    {
-      title: "End of Lease Cleaning",
-      description:
-        "No Sweat Cleaning is a professional cleaning company that specialises in end-of-lease cleaning.",
-      image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
-    },
-    {
-      title: "Residential Cleaning",
-      description:
-        "Do you ever feel like you're constantly cleaning your house, but it never seems clean enough?",
-      image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
-    },
-    {
-      title: "Deep Cleaning",
-      description:
-        "Are you looking for a professional cleaning service that specialises in deep cleaning?",
-      image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
-    },
-    {
-      title: "Carpet Cleaning",
-      description:
-        "Let us delve into the world of carpet cleaning and discover how No Sweat Cleaning can transform your space.",
-      image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
-    },
-    {
-      title: "Commercial Cleaning",
-      description:
-        "When it comes to maintaining a clean and sanitary work environment, businesses in Sydney's Northern Beaches turn to No Sweat Cleaning.",
-      image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
-    },
-    {
-      title: "Office Cleaning",
-      description:
-        "A clean office creates a positive impression on visitors and employees alike. It shows that the company is organised, professional, and cares about its employees.",
-      image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
-    },
-    {
-      title: "Strata Cleaning",
-      description:
-        "In properties with strata titles, such as apartment buildings, condominiums, or business complexes, common areas are cleaned and maintained as part of the strata cleaning service.",
-      image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
-    },
-  ];
-
   const handleConfirmBooking = async () => {
     const bookingService = new BookingService();
     const emailService = new EmailService();
@@ -271,12 +224,15 @@ export default function BookingPage() {
         email: formData.email,
         phone: formData.phone,
         address: formData.address,
+        postalCode: formData.postalCode,
       },
       serviceDetails: {
         serviceType: formData.service,
-        levels: formData.levels,
         bedrooms: formData.bedrooms,
         bathrooms: formData.bathrooms,
+        kitchens: formData.kitchens,
+        livingRooms: formData.livingRooms,
+        otherSpaces: formData.otherSpaces,
         frequency: formData.frequency,
         additionalNotes: formData.additionalNotes,
       },
@@ -286,9 +242,11 @@ export default function BookingPage() {
         endTime: "", // Se calculará en el servicio
         duration: calculateTotalTime(
           formData.service as any,
-          formData.levels as any,
-          formData.bedrooms as any,
-          formData.bathrooms as any
+          formData.bedrooms,
+          formData.bathrooms,
+          formData.kitchens,
+          formData.livingRooms,
+          formData.otherSpaces
         ),
       },
       pricing: {
@@ -331,15 +289,15 @@ export default function BookingPage() {
       }
 
       // Mensaje de éxito específico según el tipo de reserva
-      const isRecurring = formData.frequency !== "Una vez";
+      const isRecurring = formData.frequency !== "One time";
       const successMessage = isRecurring
-        ? `¡${bookingIds.length} reservas creadas con éxito!`
-        : "¡Reserva creada con éxito!";
+        ? `${bookingIds.length} bookings created successfully!`
+        : "Booking created successfully!";
 
       toast.success(successMessage);
     } catch (error) {
       console.error("Error creating booking:", error);
-      toast.error("Error al crear la reserva. Por favor, intenta nuevamente.");
+      toast.error("Error creating booking. Please try again.");
       throw error;
     }
   };
@@ -413,7 +371,7 @@ export default function BookingPage() {
               {/* Títulos de los pasos en móvil */}
               <div className="mt-2 md:hidden">
                 <p className="text-sm text-center text-gray-600">
-                  Paso {currentStep}: {steps[currentStep - 1]?.title}
+                  Step {currentStep}: {steps[currentStep - 1]?.title}
                 </p>
               </div>
             </div>

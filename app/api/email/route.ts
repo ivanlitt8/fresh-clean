@@ -2,14 +2,14 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { EMAIL_CONFIG } from '@/app/lib/email-config';
 import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import { Booking } from '@/app/types/booking';
 
 // Verificar variables de entorno requeridas
 const requiredEnvVars = ['GMAIL_USER', 'GMAIL_APP_PASSWORD', 'ADMIN_EMAIL'];
 for (const envVar of requiredEnvVars) {
     if (!process.env[envVar]) {
-        console.error(`Variable de entorno ${envVar} no encontrada`);
+        console.error(`Environment variable ${envVar} not found`);
     }
 }
 
@@ -29,116 +29,138 @@ function formatPrice(price: number): string {
 }
 
 function generateClientEmailContent(booking: Booking): string {
-    const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: es });
+    const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: enUS });
+
+    // Calcular total de ambientes
+    const totalRooms = (parseInt(booking.serviceDetails.bedrooms) || 0) +
+                      (parseInt(booking.serviceDetails.bathrooms) || 0) +
+                      (parseInt(booking.serviceDetails.kitchens) || 0) +
+                      (parseInt(booking.serviceDetails.livingRooms) || 0) +
+                      (parseInt(booking.serviceDetails.otherSpaces) || 0);
 
     return `
-¡Hola ${booking.clientInfo.firstName}!
+Hello ${booking.clientInfo.firstName}!
 
-Tu reserva ha sido confirmada con éxito. Aquí están los detalles:
+Your booking has been successfully confirmed. Here are the details:
 
-DETALLES DEL SERVICIO
---------------------
-Tipo de servicio: ${booking.serviceDetails.serviceType}
-Fecha: ${formattedDate}
-Hora: ${booking.timing.startTime} - ${booking.timing.endTime}
-Duración estimada: ${booking.timing.duration} horas
+SERVICE DETAILS
+--------------
+Service type: ${booking.serviceDetails.serviceType}
+Date: ${formattedDate}
+Time: ${booking.timing.startTime} - ${booking.timing.endTime}
+Estimated duration: ${booking.timing.duration} hours
 
-DETALLES DE LA PROPIEDAD
------------------------
-Niveles: ${booking.serviceDetails.levels}
-Dormitorios: ${booking.serviceDetails.bedrooms}
-Baños: ${booking.serviceDetails.bathrooms}
-Dirección: ${booking.clientInfo.address}
+ROOM DETAILS
+-----------
+Total rooms: ${totalRooms}
+Bedrooms: ${booking.serviceDetails.bedrooms}
+Bathrooms: ${booking.serviceDetails.bathrooms}
+Kitchens: ${booking.serviceDetails.kitchens}
+Living rooms: ${booking.serviceDetails.livingRooms}
+Other spaces: ${booking.serviceDetails.otherSpaces}
+Address: ${booking.clientInfo.address}
+Postal code: ${booking.clientInfo.postalCode}
 
-PRECIO
-------
-Precio base: ${formatPrice(booking.pricing.basePrice)}
-Descuento: ${formatPrice(booking.pricing.discount)}
-Precio final: ${formatPrice(booking.pricing.finalPrice)}
+PRICING
+-------
+Base price: ${formatPrice(booking.pricing.basePrice)}
+Discount: ${formatPrice(booking.pricing.discount)}
+Final price: ${formatPrice(booking.pricing.finalPrice)}
 
-${booking.serviceDetails.additionalNotes ? `\nNotas adicionales: ${booking.serviceDetails.additionalNotes}\n` : ''}
+${booking.serviceDetails.additionalNotes ? `\nAdditional notes: ${booking.serviceDetails.additionalNotes}\n` : ''}
 
-Si necesitas modificar o cancelar tu reserva, por favor contáctanos respondiendo este email o llamando al número de atención al cliente.
+If you need to modify or cancel your booking, please contact us by replying to this email or calling our customer service number.
 
-¡Gracias por confiar en nuestros servicios!
+Thank you for trusting our services!
 
-Saludos,
-El equipo de limpieza
+Best regards,
+The cleaning team
 `;
 }
 
 function generateAdminEmailContent(booking: Booking): string {
-    const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: es });
+    const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: enUS });
+
+    // Calcular total de ambientes
+    const totalRooms = (parseInt(booking.serviceDetails.bedrooms) || 0) +
+                      (parseInt(booking.serviceDetails.bathrooms) || 0) +
+                      (parseInt(booking.serviceDetails.kitchens) || 0) +
+                      (parseInt(booking.serviceDetails.livingRooms) || 0) +
+                      (parseInt(booking.serviceDetails.otherSpaces) || 0);
 
     return `
-NUEVA RESERVA RECIBIDA
-=====================
+NEW BOOKING RECEIVED
+===================
 
-INFORMACIÓN DEL CLIENTE
----------------------
-Nombre completo: ${booking.clientInfo.firstName} ${booking.clientInfo.lastName}
+CLIENT INFORMATION
+-----------------
+Full name: ${booking.clientInfo.firstName} ${booking.clientInfo.lastName}
 Email: ${booking.clientInfo.email}
-Teléfono: ${booking.clientInfo.phone}
-Dirección: ${booking.clientInfo.address}
+Phone: ${booking.clientInfo.phone}
+Address: ${booking.clientInfo.address}
+Postal code: ${booking.clientInfo.postalCode}
 
-DETALLES DEL SERVICIO
---------------------
-Tipo de servicio: ${booking.serviceDetails.serviceType}
-Fecha: ${formattedDate}
-Hora: ${booking.timing.startTime} - ${booking.timing.endTime}
-Duración estimada: ${booking.timing.duration} horas
+SERVICE DETAILS
+--------------
+Service type: ${booking.serviceDetails.serviceType}
+Date: ${formattedDate}
+Time: ${booking.timing.startTime} - ${booking.timing.endTime}
+Estimated duration: ${booking.timing.duration} hours
 
-DETALLES DE LA PROPIEDAD
------------------------
-Niveles: ${booking.serviceDetails.levels}
-Dormitorios: ${booking.serviceDetails.bedrooms}
-Baños: ${booking.serviceDetails.bathrooms}
+ROOM DETAILS
+-----------
+Total rooms: ${totalRooms}
+Bedrooms: ${booking.serviceDetails.bedrooms}
+Bathrooms: ${booking.serviceDetails.bathrooms}
+Kitchens: ${booking.serviceDetails.kitchens}
+Living rooms: ${booking.serviceDetails.livingRooms}
+Other spaces: ${booking.serviceDetails.otherSpaces}
 
-PRECIO
-------
-Precio base: ${formatPrice(booking.pricing.basePrice)}
-Descuento: ${formatPrice(booking.pricing.discount)}
-Precio final: ${formatPrice(booking.pricing.finalPrice)}
+PRICING
+-------
+Base price: ${formatPrice(booking.pricing.basePrice)}
+Discount: ${formatPrice(booking.pricing.discount)}
+Final price: ${formatPrice(booking.pricing.finalPrice)}
 
-${booking.serviceDetails.additionalNotes ? `\nNOTAS ADICIONALES DEL CLIENTE\n${booking.serviceDetails.additionalNotes}\n` : ''}
+${booking.serviceDetails.additionalNotes ? `\nADDITIONAL CLIENT NOTES\n${booking.serviceDetails.additionalNotes}\n` : ''}
 
-ESTADO DE LA RESERVA: ${booking.status.toUpperCase()}
+BOOKING STATUS: ${booking.status.toUpperCase()}
 
-Por favor, revisa esta reserva y asigna el personal necesario.
+Please review this booking and assign the necessary staff.
 `;
 }
 
 async function sendEmail(options: nodemailer.SendMailOptions) {
     try {
         await transporter.sendMail(options);
-        console.log('Email enviado exitosamente a:', options.to);
+        console.log('Email sent successfully to:', options.to);
     } catch (error) {
-        console.error('Error detallado al enviar email:', error);
+        console.error('Detailed error sending email:', error);
         throw error;
     }
 }
 
 export async function POST(req: Request) {
-    console.log('API Route /api/email llamada');
+    console.log('API Route /api/email called');
 
     try {
         if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD || !process.env.ADMIN_EMAIL) {
-            console.error('Faltan variables de entorno necesarias');
+            console.error('Missing required environment variables');
             return NextResponse.json(
-                { error: 'Error de configuración del servidor' },
+                { error: 'Server configuration error' },
                 { status: 500 }
             );
         }
 
         const body = await req.json();
-        console.log('Body recibido:', JSON.stringify(body));
+        console.log('Body received:', JSON.stringify(body));
 
         const { bookings } = body as { bookings: Booking[] };
 
         if (!bookings || !bookings.length) {
-            console.error('No se proporcionaron datos de reserva');
+            console.error('No booking data provided');
             return NextResponse.json(
-                { error: 'No se proporcionaron datos de reserva' },
+                { error: 'No booking data provided' },
                 { status: 400 }
             );
         }
@@ -149,10 +171,10 @@ export async function POST(req: Request) {
         // Preparar contenido del email para el cliente
         let clientEmailContent = generateClientEmailContent(mainBooking);
         if (isRecurring) {
-            clientEmailContent += '\nPRÓXIMAS FECHAS PROGRAMADAS\n';
-            clientEmailContent += '-------------------------\n';
+            clientEmailContent += '\nUPCOMING SCHEDULED DATES\n';
+            clientEmailContent += '------------------------\n';
             bookings.slice(1).forEach(booking => {
-                const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: es });
+                const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: enUS });
                 clientEmailContent += `${formattedDate}: ${booking.timing.startTime} - ${booking.timing.endTime}\n`;
             });
         }
@@ -160,10 +182,10 @@ export async function POST(req: Request) {
         // Preparar contenido del email para el administrador
         let adminEmailContent = generateAdminEmailContent(mainBooking);
         if (isRecurring) {
-            adminEmailContent += '\nRESERVAS RECURRENTES PROGRAMADAS\n';
-            adminEmailContent += '------------------------------\n';
+            adminEmailContent += '\nSCHEDULED RECURRING BOOKINGS\n';
+            adminEmailContent += '----------------------------\n';
             bookings.slice(1).forEach(booking => {
-                const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: es });
+                const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: enUS });
                 adminEmailContent += `${formattedDate}: ${booking.timing.startTime} - ${booking.timing.endTime}\n`;
             });
         }
@@ -191,22 +213,22 @@ export async function POST(req: Request) {
                 })
             ]);
 
-            console.log('Emails enviados exitosamente');
+            console.log('Emails sent successfully');
             return NextResponse.json({
                 success: true,
-                message: 'Emails enviados correctamente'
+                message: 'Emails sent successfully'
             });
         } catch (emailError) {
-            console.error('Error al enviar emails:', emailError);
+            console.error('Error sending emails:', emailError);
             return NextResponse.json(
-                { error: 'Error al enviar los emails', details: emailError },
+                { error: 'Error sending emails', details: emailError },
                 { status: 500 }
             );
         }
     } catch (error) {
-        console.error('Error en el procesamiento de la solicitud:', error);
+        console.error('Error processing request:', error);
         return NextResponse.json(
-            { error: 'Error interno del servidor', details: error },
+            { error: 'Internal server error', details: error },
             { status: 500 }
         );
     }
