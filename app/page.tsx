@@ -88,23 +88,23 @@ export default function Home() {
   const features = [
     {
       text: "We treat your home like our own",
-      icon: <Star className="h-5 w-5 text-yellow-400" />,
+      icon: <Star className="h-5 w-5 text-[#D8F3A3]" />,
     },
     {
       text: "Always on time, focused, and reliable",
-      icon: <Star className="h-5 w-5 text-yellow-400" />,
+      icon: <Star className="h-5 w-5 text-[#D8F3A3]" />,
     },
     {
       text: "Transparent, respectful, and trustworthy team",
-      icon: <Star className="h-5 w-5 text-yellow-400" />,
+      icon: <Star className="h-5 w-5 text-[#D8F3A3]" />,
     },
     {
       text: "We clean every corner — details matter",
-      icon: <Star className="h-5 w-5 text-yellow-400" />,
+      icon: <Star className="h-5 w-5 text-[#D8F3A3]" />,
     },
     {
       text: "Passionate professionals who love what they do",
-      icon: <Star className="h-5 w-5 text-yellow-400" />,
+      icon: <Star className="h-5 w-5 text-[#D8F3A3]" />,
     },
   ];
 
@@ -182,12 +182,12 @@ export default function Home() {
         <FontAwesomeIcon icon={faWhatsapp} size="2x" color="#ffffff" />
       </a>
 
-      <section className="relative min-h-[80vh] pt-32 pb-20 px-4 bg-gradient-to-b from-blue-50/50 to-white/50 overflow-hidden">
+      <section className="relative min-h-[80vh] pt-32 pb-20 px-4 bg-gradient-to-b from-[#E6F4F1] to-white overflow-hidden">
         <div className="absolute inset-0 bg-white/30"></div>
         <BubblesBackground />
         <div className="max-w-7xl mx-auto text-center relative z-10">
           <motion.h1
-            className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 font-heading"
+            className="text-5xl md:text-6xl font-bold text-[#264E46] mb-6 font-heading"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -195,7 +195,7 @@ export default function Home() {
             Professional Cleaning Services for Your Home & Office
           </motion.h1>
           <motion.p
-            className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto"
+            className="text-xl text-[#264E46] mb-8 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -211,14 +211,14 @@ export default function Home() {
           >
             <Button
               size="lg"
-              className="bg-[#00AEEF] hover:bg-[#0098d1] text-white"
+              className="bg-[#4BA585] hover:bg-[#3d8a70] text-white shadow-lg hover:shadow-xl transition-all duration-300"
             >
               Book Now
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="border-[#00AEEF] text-[#00AEEF] hover:bg-[#00AEEF] hover:text-white"
+              className="border-[#4BA585] text-[#4BA585] hover:bg-[#4BA585] hover:text-white transition-all duration-300"
             >
               Learn More
             </Button>
@@ -226,11 +226,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-20 bg-[#0B1C2C] text-white">
+      <section className="py-20 bg-[#264E46] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-2xl font-semibold text-blue-400 mb-4 font-heading">
+              <h2 className="text-2xl font-semibold text-[#4BA585] mb-4 font-heading">
                 Because cleaning is just the beginning
               </h2>
               <h3 className="text-4xl font-bold mb-8 font-heading">
@@ -246,7 +246,7 @@ export default function Home() {
               </div>
               <Button
                 size="lg"
-                className="mt-8 bg-blue-500 hover:bg-blue-600 text-white"
+                className="mt-8 bg-[#4BA585] hover:bg-[#3d8a70] text-white shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 GET INSTANT QUOTE
               </Button>
@@ -263,14 +263,14 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 px-4">
+      <section id="about" className="py-20 px-4 bg-[#E6F4F1]">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-4xl font-bold mb-6 font-heading">
+              <h2 className="text-4xl font-bold mb-6 font-heading text-[#264E46]">
                 About Fresh & Clean
               </h2>
-              <p className="text-gray-600 mb-6">
+              <p className="text-[#264E46] mb-6 opacity-90">
                 At Fresh & Clean, we combine international experience with a
                 human, personalized approach. Our diverse and professional team
                 has worked in homes and businesses across different countries,
@@ -287,20 +287,20 @@ export default function Home() {
               </p>
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-primary mr-2" />
-                  <span>Experienced Team</span>
+                  <CheckCircle className="h-5 w-5 text-[#4BA585] mr-2" />
+                  <span className="text-[#264E46]">Experienced Team</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-primary mr-2" />
-                  <span>Eco-friendly Products</span>
+                  <CheckCircle className="h-5 w-5 text-[#4BA585] mr-2" />
+                  <span className="text-[#264E46]">Eco-friendly Products</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-primary mr-2" />
-                  <span>100% Satisfaction</span>
+                  <CheckCircle className="h-5 w-5 text-[#4BA585] mr-2" />
+                  <span className="text-[#264E46]">100% Satisfaction</span>
                 </div>
                 <div className="flex items-center">
-                  <CheckCircle className="h-5 w-5 text-primary mr-2" />
-                  <span>Flexible Scheduling</span>
+                  <CheckCircle className="h-5 w-5 text-[#4BA585] mr-2" />
+                  <span className="text-[#264E46]">Flexible Scheduling</span>
                 </div>
               </div>
             </div>
@@ -308,7 +308,7 @@ export default function Home() {
               <img
                 src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3"
                 alt="Cleaning professional at work"
-                className="rounded-lg object-cover w-full h-full"
+                className="rounded-lg object-cover w-full h-full shadow-lg"
               />
             </div>
           </div>
@@ -316,16 +316,16 @@ export default function Home() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 px-4">
+      <section id="services" className="py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-12">
-            <h2 className="text-4xl font-bold font-heading">
+            <h2 className="text-4xl font-bold font-heading text-[#264E46]">
               Our Cleaning Services
             </h2>
             <Button
               variant="outline"
               size="lg"
-              className="border-[#00AEEF] text-[#00AEEF] hover:bg-[#00AEEF] hover:text-white"
+              className="border-[#4BA585] text-[#4BA585] hover:bg-[#4BA585] hover:text-white transition-all duration-300"
               asChild
             >
               <Link href="/services">ALL SERVICES</Link>
@@ -358,7 +358,7 @@ export default function Home() {
                       )
                       .map((service, index) => (
                         <div key={index} className="flex-1">
-                          <div className="group relative overflow-hidden rounded-lg h-full bg-white">
+                          <div className="group relative overflow-hidden rounded-lg h-full bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
                             <div className="relative h-[300px] overflow-hidden">
                               <img
                                 src={service.image}
@@ -367,13 +367,13 @@ export default function Home() {
                               />
                             </div>
                             <div className="p-6">
-                              <h3 className="text-2xl font-semibold mb-3 font-heading">
+                              <h3 className="text-2xl font-semibold mb-3 font-heading text-[#264E46]">
                                 {service.title}
                               </h3>
-                              <p className="text-gray-600 mb-4">
+                              <p className="text-[#264E46] mb-4 opacity-80">
                                 {service.description}
                               </p>
-                              <Button className="w-full bg-blue-100 text-blue-600 hover:bg-blue-200">
+                              <Button className="w-full bg-[#E6F4F1] text-[#4BA585] hover:bg-[#4BA585] hover:text-white transition-all duration-300 border border-[#4BA585]">
                                 BOOK NOW
                               </Button>
                             </div>
@@ -387,24 +387,24 @@ export default function Home() {
 
             {/* Botones de navegación */}
             <button
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full shadow p-3 z-10 hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg p-3 z-10 hover:bg-[#E6F4F1] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={() => {
                 setCarouselIndex((prev) => Math.max(prev - 1, 0));
                 setIsAutoPlaying(false);
               }}
               disabled={carouselIndex === 0}
             >
-              <ChevronLeft className="h-6 w-6" />
+              <ChevronLeft className="h-6 w-6 text-[#4BA585]" />
             </button>
             <button
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full shadow p-3 z-10 hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg p-3 z-10 hover:bg-[#E6F4F1] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={() => {
                 setCarouselIndex((prev) => Math.min(prev + 1, totalPages - 1));
                 setIsAutoPlaying(false);
               }}
               disabled={carouselIndex === totalPages - 1}
             >
-              <ChevronRight className="h-6 w-6" />
+              <ChevronRight className="h-6 w-6 text-[#4BA585]" />
             </button>
 
             {/* Indicadores de página */}
@@ -413,8 +413,8 @@ export default function Home() {
                 <button
                   key={idx}
                   className={`w-3 h-3 rounded-full transition-colors ${
-                    carouselIndex === idx ? "bg-blue-600" : "bg-gray-300"
-                  } hover:bg-blue-400`}
+                    carouselIndex === idx ? "bg-[#4BA585]" : "bg-[#CBD5D1]"
+                  } hover:bg-[#D8F3A3]`}
                   onClick={() => {
                     setCarouselIndex(idx);
                     setIsAutoPlaying(false);
@@ -428,7 +428,7 @@ export default function Home() {
       </section>
 
       {/* Our Process Section */}
-      <section className="py-20 px-4 bg-white">
+      <section className="py-20 px-4 bg-[#E6F4F1]">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-start">
             {/* Columna Izquierda - Imagen */}
@@ -443,10 +443,10 @@ export default function Home() {
             {/* Columna Derecha - Proceso */}
             <div className="space-y-8 flex-1 max-w-2xl">
               <div>
-                <p className="text-blue-600 font-medium uppercase tracking-wide mb-2 font-heading">
+                <p className="text-[#4BA585] font-medium uppercase tracking-wide mb-2 font-heading">
                   Simple, clear and designed around your needs.
                 </p>
-                <h2 className="text-3xl md:text-4xl font-bold font-heading">
+                <h2 className="text-3xl md:text-4xl font-bold font-heading text-[#264E46]">
                   How it works
                 </h2>
               </div>
@@ -486,20 +486,20 @@ export default function Home() {
               ].map((step, index) => (
                 <div key={step.number} className="relative">
                   <div className="flex gap-6 md:gap-6">
-                    <div className="text-[50px] md:text-[60px] font-bold leading-none text-[#e1ebf7] select-none min-w-[60px] md:min-w-[80px]">
+                    <div className="text-[50px] md:text-[60px] font-bold leading-none text-[#CBD5D1] select-none min-w-[60px] md:min-w-[80px]">
                       {step.number}
                     </div>
                     <div className="pt-1 md:pt-2 flex-1">
-                      <h3 className="text-md font-bold mb-3 font-heading">
+                      <h3 className="text-md font-bold mb-3 font-heading text-[#264E46]">
                         {step.title}
                       </h3>
-                      <p className="text-gray-600 text-sm leading-relaxed">
+                      <p className="text-[#264E46] text-sm leading-relaxed opacity-80">
                         {step.description}
                       </p>
                     </div>
                   </div>
                   {index < 4 && (
-                    <div className="h-px bg-gray-200 mt-4 ml-[66px] md:ml-[90px]"></div>
+                    <div className="h-px bg-[#CBD5D1] mt-4 ml-[66px] md:ml-[90px]"></div>
                   )}
                 </div>
               ))}
@@ -508,7 +508,7 @@ export default function Home() {
               <div className="flex justify-center md:justify-start pt-4">
                 <Button
                   size="lg"
-                  className="bg-[#00AEEF] hover:bg-[#0098d1] text-white font-semibold px-8"
+                  className="bg-[#4BA585] hover:bg-[#3d8a70] text-white font-semibold px-8 shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   BOOK NOW
                 </Button>
@@ -519,16 +519,16 @@ export default function Home() {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-20 px-4 bg-gray-50">
+      <section className="py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-start">
             {/* Columna Izquierda - Contenido */}
             <div className="flex flex-col gap-8 order-2 md:order-1">
               <div>
-                <h2 className="text-3xl md:text-4xl font-bold mb-4 font-heading">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 font-heading text-[#264E46]">
                   Why Choose No Sweat Cleaning?
                 </h2>
-                <p className="text-gray-600 text-lg">
+                <p className="text-[#264E46] text-lg opacity-80">
                   Because cleaning is more than just a chore — it&apos;s about
                   trust, care, and transformation.
                 </p>
@@ -538,71 +538,71 @@ export default function Home() {
                 {/* Beneficio 1 */}
                 <div>
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#00AEEF] flex items-center justify-center mt-1">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#4BA585] flex items-center justify-center mt-1">
                       <CheckCircle className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-2 font-heading">
+                      <h3 className="text-xl font-semibold mb-2 font-heading text-[#264E46]">
                         International Standards
                       </h3>
-                      <p className="text-gray-600">
+                      <p className="text-[#264E46] opacity-80">
                         We bring global experience and attention to detail to
                         every home or business we serve.
                       </p>
                     </div>
                   </div>
-                  <hr className="my-6 border-gray-200" />
+                  <hr className="my-6 border-[#CBD5D1]" />
                 </div>
 
                 {/* Beneficio 2 */}
                 <div>
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#00AEEF] flex items-center justify-center mt-1">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#4BA585] flex items-center justify-center mt-1">
                       <CheckCircle className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-2 font-heading">
+                      <h3 className="text-xl font-semibold mb-2 font-heading text-[#264E46]">
                         Reliable & On Time
                       </h3>
-                      <p className="text-gray-600">
+                      <p className="text-[#264E46] opacity-80">
                         Punctual, efficient and consistent — we show up when we
                         say we will and finish on schedule.
                       </p>
                     </div>
                   </div>
-                  <hr className="my-6 border-gray-200" />
+                  <hr className="my-6 border-[#CBD5D1]" />
                 </div>
 
                 {/* Beneficio 3 */}
                 <div>
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#00AEEF] flex items-center justify-center mt-1">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#4BA585] flex items-center justify-center mt-1">
                       <CheckCircle className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-2 font-heading">
+                      <h3 className="text-xl font-semibold mb-2 font-heading text-[#264E46]">
                         People You Can Trust
                       </h3>
-                      <p className="text-gray-600">
+                      <p className="text-[#264E46] opacity-80">
                         Our team is respectful, discreet and committed to
                         quality. We build trust through real results.
                       </p>
                     </div>
                   </div>
-                  <hr className="my-6 border-gray-200" />
+                  <hr className="my-6 border-[#CBD5D1]" />
                 </div>
 
                 {/* Beneficio 4 */}
                 <div>
                   <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#00AEEF] flex items-center justify-center mt-1">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#4BA585] flex items-center justify-center mt-1">
                       <CheckCircle className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-2 font-heading">
+                      <h3 className="text-xl font-semibold mb-2 font-heading text-[#264E46]">
                         Trusted for Results
                       </h3>
-                      <p className="text-gray-600">
+                      <p className="text-[#264E46] opacity-80">
                         Over 90% of our clients recommend us — because we
                         deliver consistent, visible results that make a real
                         difference.
@@ -626,7 +626,7 @@ export default function Home() {
       </section>
 
       {/* Contact Form */}
-      {/* <section id="contact" className="py-20 px-4 bg-gray-50">
+      <section id="contact" className="py-20 px-4 bg-gray-50">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-4xl font-bold text-center mb-12">Get in Touch</h2>
           <Card className="p-6">
@@ -657,7 +657,7 @@ export default function Home() {
             </form>
           </Card>
         </div>
-      </section> */}
+      </section>
 
       <CTASection onButtonClick={() => scrollToSection("contact")} />
     </main>

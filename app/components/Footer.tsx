@@ -12,7 +12,7 @@ export const Footer = () => {
   const { navigateToSection } = useNavigation();
 
   return (
-    <footer className="bg-gray-900 text-white py-12">
+    <footer className="bg-[#264E46] text-white py-12">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8">
           <div>
@@ -20,7 +20,7 @@ export const Footer = () => {
               <Sparkles className="h-6 w-6" />
               <span className="ml-2 text-lg font-bold">Fresh & Clean</span>
             </div>
-            <p className="text-gray-400">
+            <p className="text-[#E6F4F1] opacity-80">
               Professional cleaning services for homes and businesses.
             </p>
           </div>
@@ -47,7 +47,7 @@ export const Footer = () => {
               <li>
                 <button
                   onClick={() => navigateToSection("/", "about")}
-                  className="hover:text-primary"
+                  className="hover:text-[#D8F3A3] text-[#E6F4F1] transition-colors duration-300"
                 >
                   About Us
                 </button>
@@ -55,7 +55,7 @@ export const Footer = () => {
               <li>
                 <button
                   onClick={() => navigateToSection("/", "services")}
-                  className="hover:text-primary"
+                  className="hover:text-[#D8F3A3] text-[#E6F4F1] transition-colors duration-300"
                 >
                   Services
                 </button>
@@ -63,7 +63,7 @@ export const Footer = () => {
               <li>
                 <button
                   onClick={() => navigateToSection("/", "contact")}
-                  className="hover:text-primary"
+                  className="hover:text-[#D8F3A3] text-[#E6F4F1] transition-colors duration-300"
                 >
                   Contact
                 </button>
@@ -88,7 +88,7 @@ export const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <div className="border-t border-[#4BA585] mt-8 pt-8 text-center text-[#E6F4F1]">
           <p>
             &copy; {new Date().getFullYear()} Fresh & Clean. All rights
             reserved.

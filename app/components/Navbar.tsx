@@ -15,13 +15,13 @@ export const Navbar = () => {
   const { navigateToSection } = useNavigation();
   const router = useRouter();
 
-  const locations = [
-    "Downtown",
-    "North Side",
-    "South Side",
-    "East Side",
-    "West Side",
-  ];
+  // const locations = [
+  //   "Downtown",
+  //   "North Side",
+  //   "South Side",
+  //   "East Side",
+  //   "West Side",
+  // ];
 
   const servicesList = [
     "House Cleaning",
@@ -73,7 +73,7 @@ export const Navbar = () => {
     // Cerrar menús
     setIsMenuOpen(false);
     setShowServices(false);
-    setShowLocations(false);
+    // setShowLocations(false);
     // Navegar a la sección
     navigateToSection("/", sectionId);
   };
@@ -81,7 +81,7 @@ export const Navbar = () => {
   const handleBookNow = () => {
     setIsMenuOpen(false);
     setShowServices(false);
-    setShowLocations(false);
+    // setShowLocations(false);
     router.push("/book");
   };
 
@@ -177,7 +177,7 @@ export const Navbar = () => {
             </div>
 
             {/* Locations Dropdown */}
-            <div
+            {/* <div
               className="relative"
               onMouseEnter={() => setShowLocations(true)}
               onMouseLeave={() => setShowLocations(false)}
@@ -213,7 +213,7 @@ export const Navbar = () => {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div>
+            </div> */}
 
             <motion.button
               onClick={() => handleNavigation("contact")}
@@ -227,8 +227,8 @@ export const Navbar = () => {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button
                 onClick={handleBookNow}
-                className="bg-[#00AEEF] hover:bg-[#0098d1] text-white"
-              >
+                className="bg-[#4BA585] hover:bg-[#3d8a70] text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                >
                 Book Now
               </Button>
             </motion.div>
@@ -296,7 +296,7 @@ export const Navbar = () => {
                 </div>
 
                 {/* Locations en móvil */}
-                <div className="px-4">
+                {/* <div className="px-4">
                   <motion.button
                     variants={menuItemVariants}
                     custom={2}
@@ -329,7 +329,7 @@ export const Navbar = () => {
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </div>
+                </div> */}
 
                 <motion.button
                   variants={menuItemVariants}

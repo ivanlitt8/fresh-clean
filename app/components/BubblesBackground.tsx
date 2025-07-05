@@ -109,7 +109,7 @@ export const BubblesBackground = () => {
           },
           stroke: {
             color: {
-              value: ["rgba(255, 255, 255, 0.3)"],
+              value: ["rgba(75, 165, 133, 0.3)"],
             },
             width: 2,
           },
@@ -150,7 +150,7 @@ export const BubblesBackground = () => {
               frequency: 0.05,
               opacity: 0.5,
               color: {
-                value: ["rgba(255, 255, 255, 0.4)"],
+                value: ["rgba(216, 243, 163, 0.4)"],
               },
             },
             particles: {

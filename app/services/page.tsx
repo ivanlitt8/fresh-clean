@@ -18,65 +18,58 @@ export default function Home() {
 
   const services = [
     {
-      title: "Airbnb Cleaning",
-      description:
-        "Airbnb cleaning services are professional services specifically designed to clean Airbnb properties.",
+      title: "After Construction Cleaning",
+      description: "Post-renovation dust and debris? We handle it. Our team transforms newly built or refurbished spaces into clean, move-in-ready environments with care and precision.",
       image:
         "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3",
     },
     {
-      title: "After Construction Cleaning",
-      description:
-        "Do you need professional and reliable after-construction cleaning services in Sydney? Look no further",
+      title: "End of Lease Cleaning",
+      description:"Moving out? We take care of the full cleaning so you can focus on what's next. Detailed, bond-ready results trusted by tenants and property managers alike.",
       image:
         "https://images.unsplash.com/photo-1558317374-067fb5f30001?ixlib=rb-4.0.3",
     },
     {
-      title: "End of Lease Cleaning",
-      description:
-        "No Sweat Cleaning is a professional cleaning company that specialises in end-of-lease cleaning.",
-      image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
-    },
-    {
       title: "Residential Cleaning",
-      description:
-        "Do you ever feel like you're constantly cleaning your house, but it never seems clean enough?",
+      description: "Need help staying on top of the mess? We offer regular or one-off home cleaning services tailored to your lifestyle, with respect and attention to every detail.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Deep Cleaning",
-      description:
-        "Are you looking for a professional cleaning service that specialises in deep cleaning?",
+      description: "Perfect for spring resets, special occasions or when things need more than a surface clean. We go deeper to revive your space and make it feel brand new.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Carpet Cleaning",
-      description:
-        "Let us delve into the world of carpet cleaning and discover how No Sweat Cleaning can transform your space.",
+      description: "Bring life back to your carpets. We remove dirt, stains and allergens using fabric-safe methods — for fresher, softer and healthier floors.",
+      image:
+        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+    },
+    {
+      title: "Airbnb Cleaning",
+      description: "We help you keep your short-term rental spotless between bookings. Flexible scheduling, reliable service, and detailed cleaning that impresses every guest — every time.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Commercial Cleaning",
-      description:
-        "When it comes to maintaining a clean and sanitary work environment, businesses in Sydney's Northern Beaches turn to No Sweat Cleaning.",
+      description: "Clean spaces create trust. Our tailored cleaning services for shops, clinics and studios keep your business welcoming, professional and spotless.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Office Cleaning",
       description:
-        "A clean office creates a positive impression on visitors and employees alike. It shows that the company is organised, professional, and cares about its employees.",
+        "A clean office means sharper focus and better morale. We clean outside working hours, respecting your team's space and time.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Strata Cleaning",
       description:
-        "In properties with strata titles, such as apartment buildings, condominiums, or business complexes, common areas are cleaned and maintained as part of the strata cleaning service.",
+        "We maintain shared areas in buildings or complexes — keeping lobbies, stairs and hallways clean, safe and ready for everyday use.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
@@ -176,7 +169,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 font-heading"
+            className="text-4xl md:text-6xl font-bold text-[#264E46] mb-6 font-heading"
           >
             Expert Cleaning Services
             <br />
@@ -187,7 +180,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto mb-8"
+            className="text-lg md:text-xl text-[#264E46] max-w-3xl mx-auto mb-8"
           >
             Specialized in residential, commercial, and end-of-lease cleaning.
             Fresh results, every time.
@@ -201,7 +194,7 @@ export default function Home() {
           >
             <Button
               size="lg"
-              className="bg-[#00AEEF] hover:bg-[#0098d1] text-white"
+              className="bg-[#4BA585] hover:bg-[#3d8a70] text-white shadow-lg hover:shadow-xl transition-all duration-300"
               onClick={() => scrollToSection("contact")}
             >
               Get Free Quote
@@ -209,7 +202,7 @@ export default function Home() {
             <Button
               size="lg"
               variant="outline"
-              className="border-[#00AEEF] text-[#00AEEF] hover:bg-[#00AEEF] hover:text-white"
+              className="border-[#4BA585] text-[#4BA585] hover:bg-[#4BA585] hover:text-white transition-all duration-300"
               onClick={() => scrollToSection("all-services")}
             >
               See Services
@@ -218,12 +211,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="all-services" className="py-20 px-4 bg-gray-50">
+      <section id="all-services" className="py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12 font-heading">
+          <h2 className="text-4xl font-bold text-center mb-12 font-heading text-[#264E46]">
             Our Services
           </h2>
-          <p className="text-center text-gray-600 mb-12 text-lg">
+          <p className="text-center text-[#264E46] mb-12 text-lg opacity-80">
             Choose the type of cleaning that best suits your needs. Reliable,
             timely services with impeccable results.
           </p>
@@ -234,7 +227,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-xl shadow-lg overflow-hidden"
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full"
               >
                 <div className="relative h-48">
                   <img
@@ -243,13 +236,13 @@ export default function Home() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2">
+                <div className="p-6 flex flex-col flex-grow">
+                  <h3 className="text-xl font-semibold mb-2 text-[#264E46]">
                     {service.title}
                   </h3>
-                  <p className="text-gray-600">{service.description}</p>
+                  <p className="text-[#264E46] mb-4 opacity-80 flex-grow">{service.description}</p>
                   <Button
-                    className="w-full bg-blue-100 mt-2 text-blue-600 hover:bg-blue-200"
+                    className="w-full bg-[#E6F4F1] text-[#4BA585] hover:bg-[#4BA585] hover:text-white transition-all duration-300 border border-[#4BA585] mt-auto"
                     onClick={() => scrollToSection("contact")}
                   >
                     BOOK NOW
