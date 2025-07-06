@@ -16,7 +16,11 @@ import { CTASection } from "@/app/components/CTASection";
 export default function Home() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
   const [message, setMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [formStatus, setFormStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [showLocations, setShowLocations] = useState(false);
   const [showServices, setShowServices] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,58 +30,58 @@ export default function Home() {
 
   const services = [
     {
-      title: "Airbnb Cleaning",
-      description:
-        "Airbnb cleaning services are professional services specifically designed to clean Airbnb properties.",
+      title: "After Construction Cleaning",
+      description: "Post-renovation dust and debris? We handle it. Our team transforms newly built or refurbished spaces into clean, move-in-ready environments with care and precision.",
       image:
         "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3",
     },
     {
-      title: "After Construction Cleaning",
-      description:
-        "Do you need professional and reliable after-construction cleaning services in Sydney? Look no further",
+      title: "End of Lease Cleaning",
+      description:"Moving out? We take care of the full cleaning so you can focus on what's next. Detailed, bond-ready results trusted by tenants and property managers alike.",
       image:
         "https://images.unsplash.com/photo-1558317374-067fb5f30001?ixlib=rb-4.0.3",
     },
     {
-      title: "End of Lease Cleaning",
-      description:
-        "No Sweat Cleaning is a professional cleaning company that specialises in end-of-lease cleaning.",
-      image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
-    },
-    {
       title: "Residential Cleaning",
-      description:
-        "Do you ever feel like you're constantly cleaning your house, but it never seems clean enough?",
+      description: "Need help staying on top of the mess? We offer regular or one-off home cleaning services tailored to your lifestyle, with respect and attention to every detail.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Deep Cleaning",
-      description:
-        "Are you looking for a professional cleaning service that specialises in deep cleaning?",
+      description: "Perfect for spring resets, special occasions or when things need more than a surface clean. We go deeper to revive your space and make it feel brand new.",
+      image:
+        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+    },
+    {
+      title: "Carpet Cleaning",
+      description: "Bring life back to your carpets. We remove dirt, stains and allergens using fabric-safe methods — for fresher, softer and healthier floors.",
+      image:
+        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+    },
+    {
+      title: "Airbnb Cleaning",
+      description: "We help you keep your short-term rental spotless between bookings. Flexible scheduling, reliable service, and detailed cleaning that impresses every guest — every time.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Commercial Cleaning",
-      description:
-        "When it comes to maintaining a clean and sanitary work environment, businesses in Sydney's Northern Beaches turn to No Sweat Cleaning.",
+      description: "Clean spaces create trust. Our tailored cleaning services for shops, clinics and studios keep your business welcoming, professional and spotless.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Office Cleaning",
       description:
-        "A clean office creates a positive impression on visitors and employees alike. It shows that the company is organised, professional, and cares about its employees.",
+        "A clean office means sharper focus and better morale. We clean outside working hours, respecting your team's space and time.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Strata Cleaning",
       description:
-        "In properties with strata titles, such as apartment buildings, condominiums, or business complexes, common areas are cleaned and maintained as part of the strata cleaning service.",
+        "We maintain shared areas in buildings or complexes — keeping lobbies, stairs and hallways clean, safe and ready for everyday use.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
@@ -212,13 +216,15 @@ export default function Home() {
             <Button
               size="lg"
               className="bg-[#4BA585] hover:bg-[#3d8a70] text-white shadow-lg hover:shadow-xl transition-all duration-300"
+              asChild
             >
-              Book Now
+              <Link href="/book">Book Now</Link>
             </Button>
             <Button
               size="lg"
               variant="outline"
               className="border-[#4BA585] text-[#4BA585] hover:bg-[#4BA585] hover:text-white transition-all duration-300"
+              onClick={() => scrollToSection('how-it-works')}
             >
               Learn More
             </Button>
@@ -358,7 +364,7 @@ export default function Home() {
                       )
                       .map((service, index) => (
                         <div key={index} className="flex-1">
-                          <div className="group relative overflow-hidden rounded-lg h-full bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+                          <div className="group relative overflow-hidden rounded-lg h-full bg-white shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
                             <div className="relative h-[300px] overflow-hidden">
                               <img
                                 src={service.image}
@@ -366,15 +372,15 @@ export default function Home() {
                                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                               />
                             </div>
-                            <div className="p-6">
+                            <div className="p-6 flex flex-col flex-grow">
                               <h3 className="text-2xl font-semibold mb-3 font-heading text-[#264E46]">
                                 {service.title}
                               </h3>
-                              <p className="text-[#264E46] mb-4 opacity-80">
+                              <p className="text-[#264E46] mb-4 opacity-80 flex-grow">
                                 {service.description}
                               </p>
-                              <Button className="w-full bg-[#E6F4F1] text-[#4BA585] hover:bg-[#4BA585] hover:text-white transition-all duration-300 border border-[#4BA585]">
-                                BOOK NOW
+                              <Button className="w-full bg-[#E6F4F1] text-[#4BA585] hover:bg-[#4BA585] hover:text-white transition-all duration-300 border border-[#4BA585] mt-auto" asChild>
+                                <Link href="/book">BOOK NOW</Link>
                               </Button>
                             </div>
                           </div>
@@ -428,7 +434,7 @@ export default function Home() {
       </section>
 
       {/* Our Process Section */}
-      <section className="py-20 px-4 bg-[#E6F4F1]">
+      <section className="py-20 px-4 bg-[#E6F4F1]" id="how-it-works">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-start">
             {/* Columna Izquierda - Imagen */}
@@ -510,7 +516,7 @@ export default function Home() {
                   size="lg"
                   className="bg-[#4BA585] hover:bg-[#3d8a70] text-white font-semibold px-8 shadow-lg hover:shadow-xl transition-all duration-300"
                 >
-                  BOOK NOW
+                  <Link href="/book">BOOK NOW</Link>
                 </Button>
               </div>
             </div>
@@ -626,34 +632,133 @@ export default function Home() {
       </section>
 
       {/* Contact Form */}
-      <section id="contact" className="py-20 px-4 bg-gray-50">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">Get in Touch</h2>
-          <Card className="p-6">
-            <form className="space-y-6">
-              <div>
-                <Input
-                  placeholder="Your Name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
+      <section id="contact" className="py-20 px-4 bg-[#E6F4F1]">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-[#264E46] mb-4 font-heading">
+              Have a Question?
+            </h2>
+            <p className="text-xl text-[#264E46] mb-2">
+              We're here to help
+            </p>
+            <p className="text-[#264E46] opacity-80">
+              Write to us and we'll get back to you as soon as possible.
+            </p>
+          </div>
+
+          {/* Form */}
+          <Card className="p-8 shadow-xl bg-white border-0">
+            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+              {/* Status Messages */}
+              {formStatus === 'success' && (
+                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <p className="text-green-800 font-medium">
+                    ¡Gracias por tu mensaje! Te responderemos pronto.
+                  </p>
+                </div>
+              )}
+              
+              {formStatus === 'error' && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-red-800 font-medium">
+                    Hubo un problema al enviar tu mensaje. Por favor intentá de nuevo.
+                  </p>
+                </div>
+              )}
+
+              {/* Name and Email Fields Row */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Name Field */}
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-[#264E46] mb-2">
+                    Full Name *
+                  </label>
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="Your full name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    className="border-[#CBD5D1] focus:border-[#4BA585] focus:ring-[#4BA585] text-[#264E46] h-12"
+                  />
+                </div>
+
+                {/* Email Field */}
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-[#264E46] mb-2">
+                    Email Address *
+                  </label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="your.email@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="border-[#CBD5D1] focus:border-[#4BA585] focus:ring-[#4BA585] text-[#264E46] h-12"
+                  />
+                </div>
               </div>
-              <div>
-                <Input
-                  type="email"
-                  placeholder="Your Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+
+              {/* Phone and Address Fields Row */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Phone Field */}
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-[#264E46] mb-2">
+                    Phone Number
+                  </label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder="Your phone number"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="border-[#CBD5D1] focus:border-[#4BA585] focus:ring-[#4BA585] text-[#264E46] h-12"
+                  />
+                </div>
+
+                {/* Address Field */}
+                <div>
+                  <label htmlFor="address" className="block text-sm font-medium text-[#264E46] mb-2">
+                    Address or Area
+                  </label>
+                  <Input
+                    id="address"
+                    type="text"
+                    placeholder="Your address or area (e.g., Northern Beaches)"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className="border-[#CBD5D1] focus:border-[#4BA585] focus:ring-[#4BA585] text-[#264E46] h-12"
+                  />
+                </div>
               </div>
+
+              {/* Message Field */}
               <div>
+                <label htmlFor="message" className="block text-sm font-medium text-[#264E46] mb-2">
+                  Message *
+                </label>
                 <Textarea
-                  placeholder="Your Message"
+                  id="message"
+                  placeholder="Tell us about your cleaning needs..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
+                  required
+                  rows={5}
+                  className="border-[#CBD5D1] focus:border-[#4BA585] focus:ring-[#4BA585] text-[#264E46] resize-none"
                 />
               </div>
-              <Button className="w-full">Send Message</Button>
+
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full bg-[#4BA585] hover:bg-[#3d8a70] text-white font-semibold py-3 h-12 shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                {isLoading ? 'Sending...' : 'Send Message'}
+              </Button>
             </form>
           </Card>
         </div>

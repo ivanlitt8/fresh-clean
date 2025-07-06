@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { CTASection } from "@/app/components/CTASection";
 import { BubblesBackground } from "@/app/components/BubblesBackground";
+import Link from "next/link";
 
 export default function Home() {
   const [showLocations, setShowLocations] = useState(false);
@@ -243,9 +244,9 @@ export default function Home() {
                   <p className="text-[#264E46] mb-4 opacity-80 flex-grow">{service.description}</p>
                   <Button
                     className="w-full bg-[#E6F4F1] text-[#4BA585] hover:bg-[#4BA585] hover:text-white transition-all duration-300 border border-[#4BA585] mt-auto"
-                    onClick={() => scrollToSection("contact")}
+                    asChild
                   >
-                    BOOK NOW
+                    <Link href="/book">BOOK NOW</Link>
                   </Button>
                 </div>
               </motion.div>
