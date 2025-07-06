@@ -5,5 +5,13 @@ service cloud.firestore {
     match /quotes/{document=**} {
       allow read, write: if true; // Temporalmente permitimos todas las operaciones para pruebas
     }
+    
+    match /bookings/{document=**} {
+      allow read, write: if true; // Temporalmente permitimos todas las operaciones para pruebas
+    }
+    
+    match /contacts/{document=**} {
+      allow read, write: if true; // Temporalmente permitimos todas las operaciones para pruebas
+    }
   }
 } 

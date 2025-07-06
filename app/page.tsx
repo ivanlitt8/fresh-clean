@@ -12,6 +12,10 @@ import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { BubblesBackground } from "@/app/components/BubblesBackground";
 import Link from "next/link";
 import { CTASection } from "@/app/components/CTASection";
+import { ContactService } from "@/app/lib/firebase";
+import { ContactEmailService } from "@/app/lib/email/contactEmailService";
+import { Contact } from "@/app/types/contact";
+import { toast } from "sonner";
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -128,6 +132,103 @@ export default function Home() {
           block: "start",
         });
       }, 300);
+    }
+  };
+
+  // Función para limpiar el formulario
+  const resetForm = () => {
+    setName("");
+    setEmail("");
+    setPhone("");
+    setAddress("");
+    setMessage("");
+  };
+
+  // Función para validar email
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Función para manejar el envío del formulario
+  const handleSubmitContact = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validar campos obligatorios
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      setFormStatus('error');
+      toast.error('Por favor, completa todos los campos obligatorios.');
+      return;
+    }
+
+    // Validar formato del email
+    if (!isValidEmail(email.trim())) {
+      setFormStatus('error');
+      toast.error('Por favor, ingresa un email válido.');
+      return;
+    }
+
+    setIsLoading(true);
+    setFormStatus('idle');
+
+    const contactService = new ContactService();
+    const contactEmailService = new ContactEmailService();
+
+    try {
+      // Crear objeto de contacto
+      const contactData: Omit<Contact, 'id'> = {
+        name: name.trim(),
+        email: email.trim(),
+        phone: phone.trim() || undefined,
+        address: address.trim() || undefined,
+        message: message.trim(),
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      console.log('Enviando formulario de contacto:', contactData);
+
+      // Guardar en Firebase
+      const contactId = await contactService.createContact(contactData);
+      console.log('Contacto guardado en Firebase con ID:', contactId);
+
+      // Crear objeto completo con ID para enviar por email
+      const contactWithId: Contact = {
+        id: contactId,
+        ...contactData,
+      };
+
+      // Enviar emails
+      try {
+        await contactEmailService.sendContactNotification(contactWithId);
+        console.log('Emails enviados exitosamente');
+      } catch (emailError) {
+        console.error('Error enviando emails:', emailError);
+        // No lanzamos error aquí para no afectar la experiencia del usuario
+      }
+
+      // Mostrar mensaje de éxito
+      setFormStatus('success');
+      resetForm();
+      toast.success('¡Gracias por tu mensaje! Te responderemos pronto.');
+      
+      // Ocultar mensaje después de 5 segundos
+      setTimeout(() => {
+        setFormStatus('idle');
+      }, 5000);
+      
+    } catch (error) {
+      console.error('Error enviando formulario de contacto:', error);
+      setFormStatus('error');
+      toast.error('Hubo un problema al enviar tu mensaje. Por favor intentá de nuevo.');
+      
+      // Ocultar mensaje después de 5 segundos
+      setTimeout(() => {
+        setFormStatus('idle');
+      }, 5000);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -649,7 +750,7 @@ export default function Home() {
 
           {/* Form */}
           <Card className="p-8 shadow-xl bg-white border-0">
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-6" onSubmit={handleSubmitContact}>
               {/* Status Messages */}
               {formStatus === 'success' && (
                 <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
