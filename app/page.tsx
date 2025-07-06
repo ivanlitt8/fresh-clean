@@ -732,6 +732,108 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <section className="py-20 px-4 bg-[#264E46]">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 font-heading">
+              What Our Clients Say
+            </h2>
+            <p className="text-xl text-[#D8F3A3] opacity-90">
+              Real feedback from real people
+            </p>
+          </div>
+
+          {/* Testimonials Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Testimonial 1 */}
+            <div className="bg-[#4BA585] rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+              <div className="flex justify-center mb-6">
+                <svg
+                  className="w-12 h-12 text-white opacity-80"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z" />
+                </svg>
+              </div>
+              <blockquote className="text-white text-lg leading-relaxed mb-6 text-center">
+                "The Fresh & Clean team saved our routine. They're fast, meticulous, and always leave everything better than we imagined."
+              </blockquote>
+              <div className="text-center">
+                <p className="text-white font-semibold font-heading text-xl">
+                  — Tiffany, Avalon
+                </p>
+              </div>
+            </div>
+
+            {/* Testimonial 2 */}
+            <div className="bg-[#4BA585] rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+              <div className="flex justify-center mb-6">
+                <svg
+                  className="w-12 h-12 text-white opacity-80"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z" />
+                </svg>
+              </div>
+              <blockquote className="text-white text-lg leading-relaxed mb-6 text-center">
+                "I tried several companies in Palm Beach, but they're the only ones who stick to the schedule, communicate well, and do a deep clean. I'm happy."
+              </blockquote>
+              <div className="text-center">
+                <p className="text-white font-semibold font-heading text-xl">
+                  — Mónica, Palm Beach
+                </p>
+              </div>
+            </div>
+
+            {/* Testimonial 3 */}
+            <div className="bg-[#4BA585] rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+              <div className="flex justify-center mb-6">
+                <svg
+                  className="w-12 h-12 text-white opacity-80"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z" />
+                </svg>
+              </div>
+              <blockquote className="text-white text-lg leading-relaxed mb-6 text-center">
+                "I felt at home the moment I walked in. They don't just clean — they transform the energy of the place. Highly recommended!"
+              </blockquote>
+              <div className="text-center">
+                <p className="text-white font-semibold font-heading text-xl">
+                  — Jess, Newport
+                </p>
+              </div>
+            </div>
+
+            {/* Testimonial 4 */}
+            <div className="bg-[#4BA585] rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+              <div className="flex justify-center mb-6">
+                <svg
+                  className="w-12 h-12 text-white opacity-80"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M14,17H17L19,13V7H13V13H16M6,17H9L11,13V7H5V13H8L6,17Z" />
+                </svg>
+              </div>
+              <blockquote className="text-white text-lg leading-relaxed mb-6 text-center">
+                "Reliable, kind, effective. I love the way they work, and the results are excellent."
+              </blockquote>
+              <div className="text-center">
+                <p className="text-white font-semibold font-heading text-xl">
+                  — Mel, Bilgola
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Contact Form */}
       <section id="contact" className="py-20 px-4 bg-[#E6F4F1]">
         <div className="max-w-4xl mx-auto">
