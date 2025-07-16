@@ -855,17 +855,17 @@ export default function Home() {
             <form className="space-y-6" onSubmit={handleSubmitContact}>
               {/* Status Messages */}
               {formStatus === 'success' && (
-                <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-center">
                   <p className="text-green-800 font-medium">
-                    ¡Gracias por tu mensaje! Te responderemos pronto.
+                    Thank you for your message! We'll get back to you soon.
                   </p>
                 </div>
               )}
               
               {formStatus === 'error' && (
-                <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-center">
                   <p className="text-red-800 font-medium">
-                    Hubo un problema al enviar tu mensaje. Por favor intentá de nuevo.
+                    There was a problem sending your message. Please try again.
                   </p>
                 </div>
               )}
@@ -900,8 +900,12 @@ export default function Home() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="border-[#CBD5D1] focus:border-[#4BA585] focus:ring-[#4BA585] text-[#264E46] h-12"
+                    className={`border-[#CBD5D1] focus:border-[#4BA585] focus:ring-[#4BA585] text-[#264E46] h-12 ${email && !isValidEmail(email) ? 'border-red-500 focus:border-red-500' : ''}`}
+                    aria-invalid={email && !isValidEmail(email) ? 'true' : 'false'}
                   />
+                  {email && !isValidEmail(email) && (
+                    <span className="text-red-600 text-xs mt-1 block">Please enter a valid email address.</span>
+                  )}
                 </div>
               </div>
 
