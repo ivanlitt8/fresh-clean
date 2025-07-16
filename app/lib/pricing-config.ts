@@ -50,9 +50,9 @@ export const SERVICES_CONFIG = {
 // Descuentos por frecuencia
 export const FREQUENCY_DISCOUNTS = {
     "One time": 0,          // Sin descuento
-    "Weekly": 0.15,      // 15% de descuento
-    "Bi-weekly": 0.10,    // 10% de descuento
-    "Monthly": 0.05,      // 5% de descuento
+    "Weekly": 0.10,         // 10% de descuento
+    "Bi-weekly": 0,         // Sin descuento
+    "Monthly": 0,           // Sin descuento
 } as const;
 
 // Función para calcular el total de ambientes
