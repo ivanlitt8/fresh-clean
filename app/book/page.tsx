@@ -80,12 +80,19 @@ export default function BookingPage() {
     { id: 5, title: "Summary and Confirmation" },
   ];
 
-  const [pricing, setPricing] = useState({
+  const [pricing, setPricing] = useState<{
+    totalTime: number;
+    basePrice: number;
+    discount: number;
+    finalPrice: number;
+    firstTimeDiscount?: number;
+    totalDiscountRate: number;
+  }>({
     totalTime: 0,
     basePrice: 0,
     discount: 0,
     finalPrice: 0,
-    firstTimeDiscount: 0,
+    // firstTimeDiscount solo se asigna si corresponde
     totalDiscountRate: 0,
   });
   const [isFirstTime, setIsFirstTime] = useState<boolean | null>(null);
@@ -131,7 +138,7 @@ export default function BookingPage() {
           setPricing({
             ...calculatedPricing,
             discount,
-            firstTimeDiscount,
+            firstTimeDiscount: firstTimeDiscount > 0 ? firstTimeDiscount : undefined,
             finalPrice,
             totalDiscountRate,
           });
@@ -282,7 +289,7 @@ export default function BookingPage() {
         basePrice: pricing.basePrice,
         discount: pricing.discount,
         finalPrice: pricing.finalPrice,
-        firstTimeDiscount: pricing.firstTimeDiscount,
+        firstTimeDiscount: typeof pricing.firstTimeDiscount === "number" ? pricing.firstTimeDiscount : 0,
         totalDiscountRate: pricing.totalDiscountRate,
       },
       status: "pending" as const,
