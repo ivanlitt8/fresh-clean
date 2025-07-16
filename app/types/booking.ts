@@ -35,6 +35,8 @@ export interface Booking {
     pricing: {
         basePrice: number;
         discount: number;
+        firstTimeDiscount?: number;
+        totalDiscountRate?: number;
         finalPrice: number;
     };
     createdAt: string;

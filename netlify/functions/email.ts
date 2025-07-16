@@ -108,7 +108,7 @@ const ADMIN_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                                         <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">$SERVICE_NAME</td>
                                                                         <td align="center" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">x $ESTIMATED_TIME</td>
                                                                         <td align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">$SERVICE_PRICE</td>
-                                                                        <td align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">$SERVICE_FEE</td>
+                                                                        <td align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">$TOTAL_DISCOUNT</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td colspan="2" style="padding: 12px 10px 6px 10px;"></td>
@@ -253,7 +253,7 @@ const CLIENT_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                                         <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">$SERVICE_NAME</td>
                                                                         <td align="center" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">x $ESTIMATED_TIME</td>
                                                                         <td align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">$SERVICE_PRICE</td>
-                                                                        <td align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">$SERVICE_FEE</td>
+                                                                        <td align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">$TOTAL_DISCOUNT</td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td colspan="2" style="padding: 12px 10px 6px 10px;"></td>
@@ -374,8 +374,13 @@ async function generateAdminEmailHtml(booking: Booking): Promise<string> {
     try {
         const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: enUS });
 
-        // Calcular impuestos como la diferencia entre el precio final y (precio base - descuento)
-        const calculatedTax = booking.pricing.finalPrice - (booking.pricing.basePrice - booking.pricing.discount);
+        // Calcular descuentos por separado
+        const frequencyDiscount = booking.pricing.discount || 0;
+        const firstTimeDiscount = booking.pricing.firstTimeDiscount || 0;
+        const totalDiscount = frequencyDiscount + firstTimeDiscount;
+        // Calcular subtotal y total
+        const subtotal = booking.pricing.basePrice;
+        const totalAmount = booking.pricing.finalPrice;
 
         // Calcular total de ambientes
         const totalRooms = (parseInt(booking.serviceDetails.bedrooms) || 0) +
@@ -401,11 +406,11 @@ async function generateAdminEmailHtml(booking: Booking): Promise<string> {
             TIME: `${booking.timing.startTime} - ${booking.timing.endTime}`,
             ESTIMATED_TIME: `${booking.timing.duration} hours`,
             SERVICE_NAME: booking.serviceDetails.serviceType,
-            SERVICE_PRICE: formatPrice(booking.pricing.basePrice),
-            SERVICE_FEE: formatPrice(booking.pricing.discount),
-            SUBTOTAL: formatPrice(booking.pricing.basePrice - booking.pricing.discount),
-            TOTAL_FEES: formatPrice(calculatedTax),
-            TOTAL_AMOUNT: formatPrice(booking.pricing.finalPrice)
+            SERVICE_PRICE: formatPrice(subtotal),
+            TOTAL_DISCOUNT: formatPrice(totalDiscount),
+            SUBTOTAL: formatPrice(subtotal),
+            TOTAL_FEES: formatPrice(totalDiscount),
+            TOTAL_AMOUNT: formatPrice(totalAmount)
         };
 
         return replaceTemplateVariables(ADMIN_EMAIL_TEMPLATE, variables);
@@ -419,8 +424,13 @@ async function generateClientEmailHtml(booking: Booking): Promise<string> {
     try {
         const formattedDate = format(new Date(booking.timing.date), "PPP", { locale: enUS });
 
-        // Calcular impuestos como la diferencia entre el precio final y (precio base - descuento)
-        const calculatedTax = booking.pricing.finalPrice - (booking.pricing.basePrice - booking.pricing.discount);
+        // Calcular descuentos por separado
+        const frequencyDiscount = booking.pricing.discount || 0;
+        const firstTimeDiscount = booking.pricing.firstTimeDiscount || 0;
+        const totalDiscount = frequencyDiscount + firstTimeDiscount;
+        // Calcular subtotal y total
+        const subtotal = booking.pricing.basePrice;
+        const totalAmount = booking.pricing.finalPrice;
 
         // Calcular total de ambientes
         const totalRooms = (parseInt(booking.serviceDetails.bedrooms) || 0) +
@@ -446,11 +456,11 @@ async function generateClientEmailHtml(booking: Booking): Promise<string> {
             TIME: `${booking.timing.startTime} - ${booking.timing.endTime}`,
             ESTIMATED_TIME: `${booking.timing.duration} hours`,
             SERVICE_NAME: booking.serviceDetails.serviceType,
-            SERVICE_PRICE: formatPrice(booking.pricing.basePrice),
-            SERVICE_FEE: formatPrice(booking.pricing.discount),
-            SUBTOTAL: formatPrice(booking.pricing.basePrice - booking.pricing.discount),
-            TOTAL_FEES: formatPrice(calculatedTax),
-            TOTAL_AMOUNT: formatPrice(booking.pricing.finalPrice)
+            SERVICE_PRICE: formatPrice(subtotal),
+            TOTAL_DISCOUNT: formatPrice(totalDiscount),
+            SUBTOTAL: formatPrice(subtotal),
+            TOTAL_FEES: formatPrice(totalDiscount),
+            TOTAL_AMOUNT: formatPrice(totalAmount)
         };
 
         return replaceTemplateVariables(CLIENT_EMAIL_TEMPLATE, variables);
