@@ -95,6 +95,7 @@ export function calculatePrice(
     livingRooms: string,
     otherSpaces: string,
     frequency: keyof typeof FREQUENCY_DISCOUNTS,
+    totalDiscountRate: number = FREQUENCY_DISCOUNTS[frequency]
 ): {
     totalTime: number;
     basePrice: number;
@@ -104,8 +105,7 @@ export function calculatePrice(
     const totalTime = calculateTotalTime(service, bedrooms, bathrooms, kitchens, livingRooms, otherSpaces);
     const pricePerHour = SERVICES_CONFIG[service].pricePerHour;
     const basePrice = totalTime * pricePerHour;
-    const discountRate = FREQUENCY_DISCOUNTS[frequency];
-    const discount = basePrice * discountRate;
+    const discount = basePrice * totalDiscountRate;
     const finalPrice = basePrice - discount;
 
     return {
@@ -114,4 +114,4 @@ export function calculatePrice(
         discount,
         finalPrice,
     };
-} 
+}

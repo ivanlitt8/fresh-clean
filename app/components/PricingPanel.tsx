@@ -33,7 +33,9 @@ export function PricingPanel({
   totalTime,
   onBack,
   onConfirm,
-}: PricingPanelProps) {
+  firstTimeDiscount,
+  totalDiscountRate,
+}: PricingPanelProps & { firstTimeDiscount?: number; totalDiscountRate?: number }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
@@ -152,8 +154,14 @@ export function PricingPanel({
         </div>
         {discount > 0 && (
           <div className="flex justify-between items-center text-green-600">
-            <span className="text-sm">Discount</span>
+            <span className="text-sm">Frequency Discount</span>
             <span className="font-medium">-${discount.toFixed(2)}</span>
+          </div>
+        )}
+        {firstTimeDiscount && firstTimeDiscount > 0 && (
+          <div className="flex justify-between items-center text-green-600">
+            <span className="text-sm">First-Time Discount</span>
+            <span className="font-medium">-${firstTimeDiscount.toFixed(2)}</span>
           </div>
         )}
         <div className="flex justify-between items-center pt-2">

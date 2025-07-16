@@ -102,7 +102,7 @@ const ADMIN_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                                         <th align="left" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Description</th>
                                                                         <th align="center" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Hours</th>
                                                                         <th align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Price</th>
-                                                                        <th align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Tax</th>
+                                                                        <th align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Discount</th>
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">$SERVICE_NAME</td>
@@ -122,7 +122,7 @@ const ADMIN_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                                     <tr>
                                                                         <td colspan="2" style="padding: 6px 10px;"></td>
                                                                         <td align="right" style="padding: 6px 10px; white-space: nowrap;">
-                                                                            <strong>Taxes:</strong>
+                                                                            <strong>Discount:</strong>
                                                                         </td>
                                                                         <td align="right" style="padding: 6px 10px;">$TOTAL_FEES</td>
                                                                     </tr>
@@ -247,7 +247,7 @@ const CLIENT_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                                         <th align="left" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Description</th>
                                                                         <th align="center" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Hours</th>
                                                                         <th align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Price</th>
-                                                                        <th align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Tax</th>
+                                                                        <th align="right" style="padding: 10px; border-bottom: 1px solid #e0e0e0;">Discount</th>
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="padding: 10px; border-bottom: 1px solid #e0e0e0;">$SERVICE_NAME</td>
@@ -265,7 +265,7 @@ const CLIENT_EMAIL_TEMPLATE = `<!DOCTYPE html
                                                                     <tr>
                                                                         <td colspan="2" style="padding: 6px 10px;"></td>
                                                                         <td align="right" style="padding: 6px 10px; white-space: nowrap;">
-                                                                            <strong>Taxes:</strong>
+                                                                            <strong>Discount:</strong>
                                                                         </td>
                                                                         <td align="right" style="padding: 6px 10px;">$TOTAL_FEES</td>
                                                                     </tr>

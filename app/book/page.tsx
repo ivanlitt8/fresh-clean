@@ -85,35 +85,62 @@ export default function BookingPage() {
     basePrice: 0,
     discount: 0,
     finalPrice: 0,
+    firstTimeDiscount: 0,
+    totalDiscountRate: 0,
   });
+  const [isFirstTime, setIsFirstTime] = useState<boolean | null>(null);
   const [extras, setExtras] = useState<string[]>([]);
 
-  // Efecto para calcular precios cuando cambian los datos relevantes
+  // Efecto para verificar si el email es primera vez y calcular precios
   useEffect(() => {
-    if (
-      formData.service &&
-      formData.frequency &&
-      (parseInt(formData.bedrooms) > 0 ||
-        parseInt(formData.bathrooms) > 0 ||
-        parseInt(formData.kitchens) > 0 ||
-        parseInt(formData.livingRooms) > 0 ||
-        parseInt(formData.otherSpaces) > 0)
-    ) {
-      try {
-        const calculatedPricing = calculatePrice(
-          formData.service as any, // Temporal fix para el tipo
-          formData.bedrooms,
-          formData.bathrooms,
-          formData.kitchens,
-          formData.livingRooms,
-          formData.otherSpaces,
-          formData.frequency as any
-        );
-        setPricing(calculatedPricing);
-      } catch (error) {
-        console.error("Error calculating price:", error);
+    const checkFirstTimeAndCalculate = async () => {
+      if (
+        formData.service &&
+        formData.frequency &&
+        formData.email &&
+        (parseInt(formData.bedrooms) > 0 ||
+          parseInt(formData.bathrooms) > 0 ||
+          parseInt(formData.kitchens) > 0 ||
+          parseInt(formData.livingRooms) > 0 ||
+          parseInt(formData.otherSpaces) > 0)
+      ) {
+        try {
+          const bookingService = new BookingService();
+          // Verificar si el email ya tiene booking
+          const emailExists = await bookingService.emailHasBooking?.(formData.email);
+          setIsFirstTime(emailExists === false);
+          const FIRST_TIME_DISCOUNT = 0.10;
+          const frequencyDiscount = FREQUENCY_DISCOUNTS[formData.frequency as keyof typeof FREQUENCY_DISCOUNTS] || 0;
+          const firstTimeDiscountRate = emailExists === false ? FIRST_TIME_DISCOUNT : 0;
+          const totalDiscountRate = frequencyDiscount + firstTimeDiscountRate;
+          // Calcula el precio base
+          const calculatedPricing = calculatePrice(
+            formData.service as any,
+            formData.bedrooms,
+            formData.bathrooms,
+            formData.kitchens,
+            formData.livingRooms,
+            formData.otherSpaces,
+            formData.frequency as any,
+            0 // No aplicar descuento aquí, lo calculamos abajo
+          );
+          // Calcula los descuentos por separado
+          const discount = calculatedPricing.basePrice * frequencyDiscount;
+          const firstTimeDiscount = calculatedPricing.basePrice * firstTimeDiscountRate;
+          const finalPrice = calculatedPricing.basePrice - discount - firstTimeDiscount;
+          setPricing({
+            ...calculatedPricing,
+            discount,
+            firstTimeDiscount,
+            finalPrice,
+            totalDiscountRate,
+          });
+        } catch (error) {
+          console.error("Error calculating price:", error);
+        }
       }
-    }
+    };
+    checkFirstTimeAndCalculate();
   }, [
     formData.service,
     formData.bedrooms,
@@ -122,6 +149,7 @@ export default function BookingPage() {
     formData.livingRooms,
     formData.otherSpaces,
     formData.frequency,
+    formData.email,
   ]);
 
   // Log para seguimiento de datos del formulario
@@ -235,6 +263,7 @@ export default function BookingPage() {
         otherSpaces: formData.otherSpaces,
         frequency: formData.frequency,
         additionalNotes: formData.additionalNotes,
+        firstTimeDiscountApplied: isFirstTime === true,
       },
       timing: {
         date: formData.date?.toISOString().split("T")[0] || "",
@@ -253,6 +282,8 @@ export default function BookingPage() {
         basePrice: pricing.basePrice,
         discount: pricing.discount,
         finalPrice: pricing.finalPrice,
+        firstTimeDiscount: pricing.firstTimeDiscount,
+        totalDiscountRate: pricing.totalDiscountRate,
       },
       status: "pending" as const,
       createdAt: new Date().toISOString(),
@@ -398,6 +429,8 @@ export default function BookingPage() {
                   discount={pricing.discount}
                   total={pricing.finalPrice}
                   totalTime={pricing.totalTime}
+                  firstTimeDiscount={pricing.firstTimeDiscount}
+                  totalDiscountRate={pricing.totalDiscountRate}
                   onBack={() => setShowPricing(false)}
                   onConfirm={handleConfirmBooking}
                 />

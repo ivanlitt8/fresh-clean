@@ -1,3 +1,4 @@
+// ...existing code...
 import { db } from '@/app/lib/firebase/index';
 import {
     collection,
@@ -16,6 +17,13 @@ import { findAvailableTimeSlots, isTimeSlotAvailable } from '@/app/lib/time-util
 import { addWeeks, addMonths, format, parse, addDays } from 'date-fns';
 
 export class BookingService {
+    // Verifica si el email ya tiene una reserva en la base de datos
+    async emailHasBooking(email: string): Promise<boolean> {
+        const bookingsRef = collection(db, this.COLLECTION_NAME);
+        const q = query(bookingsRef, where('clientInfo.email', '==', email));
+        const snapshot = await getDocs(q);
+        return !snapshot.empty;
+    }
     private readonly COLLECTION_NAME = 'bookings';
 
     private calculateRecurrenceDates(
