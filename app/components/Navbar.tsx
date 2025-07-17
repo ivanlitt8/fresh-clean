@@ -15,13 +15,17 @@ export const Navbar = () => {
   const { navigateToSection } = useNavigation();
   const router = useRouter();
 
-  // const locations = [
-  //   "Downtown",
-  //   "North Side",
-  //   "South Side",
-  //   "East Side",
-  //   "West Side",
-  // ];
+  const locations = [
+    "Northern Beaches",
+    "North Shore",
+    "Eastern Suburbs",
+    "South Sydney",
+    "Sutherland Shire",
+  ];
+
+  // Función para convertir el nombre de la location a slug
+  const locationToSlug = (location: string) =>
+    location.toLowerCase().replace(/ /g, "-");
 
   const servicesList = [
     "House Cleaning",
@@ -73,7 +77,7 @@ export const Navbar = () => {
     // Cerrar menús
     setIsMenuOpen(false);
     setShowServices(false);
-    // setShowLocations(false);
+    setShowLocations(false);
     // Navegar a la sección
     navigateToSection("/", sectionId);
   };
@@ -81,7 +85,7 @@ export const Navbar = () => {
   const handleBookNow = () => {
     setIsMenuOpen(false);
     setShowServices(false);
-    // setShowLocations(false);
+    setShowLocations(false);
     router.push("/book");
   };
 
@@ -177,7 +181,7 @@ export const Navbar = () => {
             </div>
 
             {/* Locations Dropdown */}
-            {/* <div
+            <div
               className="relative"
               onMouseEnter={() => setShowLocations(true)}
               onMouseLeave={() => setShowLocations(false)}
@@ -206,6 +210,11 @@ export const Navbar = () => {
                         variants={menuItemVariants}
                         initial="closed"
                         animate="open"
+                        onClick={() => {
+                          setShowLocations(false);
+                          setIsMenuOpen(false);
+                          router.push(`/locations/${locationToSlug(location)}`);
+                        }}
                       >
                         {location}
                       </motion.button>
@@ -213,7 +222,7 @@ export const Navbar = () => {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </div> */}
+            </div>
 
             <motion.button
               onClick={() => handleNavigation("contact")}
@@ -228,7 +237,7 @@ export const Navbar = () => {
               <Button
                 onClick={handleBookNow}
                 className="bg-[#4BA585] hover:bg-[#3d8a70] text-white shadow-lg hover:shadow-xl transition-all duration-300"
-                >
+              >
                 Book Now
               </Button>
             </motion.div>
@@ -296,7 +305,7 @@ export const Navbar = () => {
                 </div>
 
                 {/* Locations en móvil */}
-                {/* <div className="px-4">
+                <div className="px-4">
                   <motion.button
                     variants={menuItemVariants}
                     custom={2}
@@ -320,7 +329,13 @@ export const Navbar = () => {
                             custom={index + 3}
                             initial="closed"
                             animate="open"
-                            onClick={() => setShowLocations(false)}
+                            onClick={() => {
+                              setShowLocations(false);
+                              setIsMenuOpen(false);
+                              router.push(
+                                `/locations/${locationToSlug(location)}`
+                              );
+                            }}
                             className="block w-full text-left py-2 text-sm text-gray-700 hover:text-primary"
                           >
                             {location}
@@ -329,7 +344,7 @@ export const Navbar = () => {
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </div> */}
+                </div>
 
                 <motion.button
                   variants={menuItemVariants}

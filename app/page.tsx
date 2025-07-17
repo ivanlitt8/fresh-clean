@@ -24,7 +24,9 @@ export default function Home() {
   const [address, setAddress] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [formStatus, setFormStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [formStatus, setFormStatus] = useState<"idle" | "success" | "error">(
+    "idle"
+  );
   const [showLocations, setShowLocations] = useState(false);
   const [showServices, setShowServices] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,43 +37,50 @@ export default function Home() {
   const services = [
     {
       title: "After Construction Cleaning",
-      description: "Post-renovation dust and debris? We handle it. Our team transforms newly built or refurbished spaces into clean, move-in-ready environments with care and precision.",
+      description:
+        "Post-renovation dust and debris? We handle it. Our team transforms newly built or refurbished spaces into clean, move-in-ready environments with care and precision.",
       image:
         "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3",
     },
     {
       title: "End of Lease Cleaning",
-      description:"Moving out? We take care of the full cleaning so you can focus on what's next. Detailed, bond-ready results trusted by tenants and property managers alike.",
+      description:
+        "Moving out? We take care of the full cleaning so you can focus on what's next. Detailed, bond-ready results trusted by tenants and property managers alike.",
       image:
         "https://images.unsplash.com/photo-1558317374-067fb5f30001?ixlib=rb-4.0.3",
     },
     {
       title: "Residential Cleaning",
-      description: "Need help staying on top of the mess? We offer regular or one-off home cleaning services tailored to your lifestyle, with respect and attention to every detail.",
+      description:
+        "Need help staying on top of the mess? We offer regular or one-off home cleaning services tailored to your lifestyle, with respect and attention to every detail.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Deep Cleaning",
-      description: "Perfect for spring resets, special occasions or when things need more than a surface clean. We go deeper to revive your space and make it feel brand new.",
+      description:
+        "Perfect for spring resets, special occasions or when things need more than a surface clean. We go deeper to revive your space and make it feel brand new.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Carpet Cleaning",
-      description: "Bring life back to your carpets. We remove dirt, stains and allergens using fabric-safe methods — for fresher, softer and healthier floors.",
+      description:
+        "Bring life back to your carpets. We remove dirt, stains and allergens using fabric-safe methods — for fresher, softer and healthier floors.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Airbnb Cleaning",
-      description: "We help you keep your short-term rental spotless between bookings. Flexible scheduling, reliable service, and detailed cleaning that impresses every guest — every time.",
+      description:
+        "We help you keep your short-term rental spotless between bookings. Flexible scheduling, reliable service, and detailed cleaning that impresses every guest — every time.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
     {
       title: "Commercial Cleaning",
-      description: "Clean spaces create trust. Our tailored cleaning services for shops, clinics and studios keep your business welcoming, professional and spotless.",
+      description:
+        "Clean spaces create trust. Our tailored cleaning services for shops, clinics and studios keep your business welcoming, professional and spotless.",
       image:
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
     },
@@ -153,45 +162,45 @@ export default function Home() {
   // Función para manejar el envío del formulario
   const handleSubmitContact = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validar campos obligatorios
     if (!name.trim() || !email.trim() || !message.trim()) {
-      setFormStatus('error');
-      toast.error('Por favor, completa todos los campos obligatorios.');
+      setFormStatus("error");
+      toast.error("Por favor, completa todos los campos obligatorios.");
       return;
     }
 
     // Validar formato del email
     if (!isValidEmail(email.trim())) {
-      setFormStatus('error');
-      toast.error('Por favor, ingresa un email válido.');
+      setFormStatus("error");
+      toast.error("Por favor, ingresa un email válido.");
       return;
     }
 
     setIsLoading(true);
-    setFormStatus('idle');
+    setFormStatus("idle");
 
     const contactService = new ContactService();
     const contactEmailService = new ContactEmailService();
 
     try {
       // Crear objeto de contacto
-      const contactData: Omit<Contact, 'id'> = {
+      const contactData: Omit<Contact, "id"> = {
         name: name.trim(),
         email: email.trim(),
         phone: phone.trim() || undefined,
         address: address.trim() || undefined,
         message: message.trim(),
-        status: 'pending',
+        status: "pending",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
 
-      console.log('Enviando formulario de contacto:', contactData);
+      console.log("Enviando formulario de contacto:", contactData);
 
       // Guardar en Firebase
       const contactId = await contactService.createContact(contactData);
-      console.log('Contacto guardado en Firebase con ID:', contactId);
+      console.log("Contacto guardado en Firebase con ID:", contactId);
 
       // Crear objeto completo con ID para enviar por email
       const contactWithId: Contact = {
@@ -202,30 +211,31 @@ export default function Home() {
       // Enviar emails
       try {
         await contactEmailService.sendContactNotification(contactWithId);
-        console.log('Emails enviados exitosamente');
+        console.log("Emails enviados exitosamente");
       } catch (emailError) {
-        console.error('Error enviando emails:', emailError);
+        console.error("Error enviando emails:", emailError);
         // No lanzamos error aquí para no afectar la experiencia del usuario
       }
 
       // Mostrar mensaje de éxito
-      setFormStatus('success');
+      setFormStatus("success");
       resetForm();
-      toast.success('¡Gracias por tu mensaje! Te responderemos pronto.');
-      
+      toast.success("¡Gracias por tu mensaje! Te responderemos pronto.");
+
       // Ocultar mensaje después de 5 segundos
       setTimeout(() => {
-        setFormStatus('idle');
+        setFormStatus("idle");
       }, 5000);
-      
     } catch (error) {
-      console.error('Error enviando formulario de contacto:', error);
-      setFormStatus('error');
-      toast.error('Hubo un problema al enviar tu mensaje. Por favor intentá de nuevo.');
-      
+      console.error("Error enviando formulario de contacto:", error);
+      setFormStatus("error");
+      toast.error(
+        "Hubo un problema al enviar tu mensaje. Por favor intentá de nuevo."
+      );
+
       // Ocultar mensaje después de 5 segundos
       setTimeout(() => {
-        setFormStatus('idle');
+        setFormStatus("idle");
       }, 5000);
     } finally {
       setIsLoading(false);
@@ -325,7 +335,7 @@ export default function Home() {
               size="lg"
               variant="outline"
               className="border-[#4BA585] text-[#4BA585] hover:bg-[#4BA585] hover:text-white transition-all duration-300"
-              onClick={() => scrollToSection('how-it-works')}
+              onClick={() => scrollToSection("how-it-works")}
             >
               Learn More
             </Button>
@@ -480,7 +490,10 @@ export default function Home() {
                               <p className="text-[#264E46] mb-4 opacity-80 flex-grow">
                                 {service.description}
                               </p>
-                              <Button className="w-full bg-[#E6F4F1] text-[#4BA585] hover:bg-[#4BA585] hover:text-white transition-all duration-300 border border-[#4BA585] mt-auto" asChild>
+                              <Button
+                                className="w-full bg-[#E6F4F1] text-[#4BA585] hover:bg-[#4BA585] hover:text-white transition-all duration-300 border border-[#4BA585] mt-auto"
+                                asChild
+                              >
                                 <Link href="/book">BOOK NOW</Link>
                               </Button>
                             </div>
@@ -759,7 +772,9 @@ export default function Home() {
                 </svg>
               </div>
               <blockquote className="text-white text-lg leading-relaxed mb-6 text-center">
-                "The Fresh & Clean team saved our routine. They're fast, meticulous, and always leave everything better than we imagined."
+                &quot;The Fresh & Clean team saved our routine. They&apos;re
+                fast, meticulous, and always leave everything better than we
+                imagined.&quot;
               </blockquote>
               <div className="text-center">
                 <p className="text-white font-semibold font-heading text-xl">
@@ -780,7 +795,9 @@ export default function Home() {
                 </svg>
               </div>
               <blockquote className="text-white text-lg leading-relaxed mb-6 text-center">
-                "I tried several companies in Palm Beach, but they're the only ones who stick to the schedule, communicate well, and do a deep clean. I'm happy."
+                &quot;I tried several companies in Palm Beach, but they&apos;re
+                the only ones who stick to the schedule, communicate well, and
+                do a deep clean. I&apos;m happy.&quot;
               </blockquote>
               <div className="text-center">
                 <p className="text-white font-semibold font-heading text-xl">
@@ -801,7 +818,9 @@ export default function Home() {
                 </svg>
               </div>
               <blockquote className="text-white text-lg leading-relaxed mb-6 text-center">
-                "I felt at home the moment I walked in. They don't just clean — they transform the energy of the place. Highly recommended!"
+                &quot;I felt at home the moment I walked in. They don&apos;t
+                just clean — they transform the energy of the place. Highly
+                recommended!&quot;
               </blockquote>
               <div className="text-center">
                 <p className="text-white font-semibold font-heading text-xl">
@@ -822,7 +841,8 @@ export default function Home() {
                 </svg>
               </div>
               <blockquote className="text-white text-lg leading-relaxed mb-6 text-center">
-                "Reliable, kind, effective. I love the way they work, and the results are excellent."
+                &quot;Reliable, kind, effective. I love the way they work, and
+                the results are excellent.&quot;
               </blockquote>
               <div className="text-center">
                 <p className="text-white font-semibold font-heading text-xl">
@@ -843,10 +863,10 @@ export default function Home() {
               Have a Question?
             </h2>
             <p className="text-xl text-[#264E46] mb-2">
-              We're here to help
+              We&apos;re here to help
             </p>
             <p className="text-[#264E46] opacity-80">
-              Write to us and we'll get back to you as soon as possible.
+              Write to us and we&apos;ll get back to you as soon as possible.
             </p>
           </div>
 
@@ -854,15 +874,15 @@ export default function Home() {
           <Card className="p-8 shadow-xl bg-white border-0">
             <form className="space-y-6" onSubmit={handleSubmitContact}>
               {/* Status Messages */}
-              {formStatus === 'success' && (
+              {formStatus === "success" && (
                 <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-center">
                   <p className="text-green-800 font-medium">
-                    Thank you for your message! We'll get back to you soon.
+                    Thank you for your message! We&apos;ll get back to you soon.
                   </p>
                 </div>
               )}
-              
-              {formStatus === 'error' && (
+
+              {formStatus === "error" && (
                 <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-center">
                   <p className="text-red-800 font-medium">
                     There was a problem sending your message. Please try again.
@@ -874,7 +894,10 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Name Field */}
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-[#264E46] mb-2">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-[#264E46] mb-2"
+                  >
                     Full Name *
                   </label>
                   <Input
@@ -890,7 +913,10 @@ export default function Home() {
 
                 {/* Email Field */}
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-[#264E46] mb-2">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-[#264E46] mb-2"
+                  >
                     Email Address *
                   </label>
                   <Input
@@ -900,11 +926,19 @@ export default function Home() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className={`border-[#CBD5D1] focus:border-[#4BA585] focus:ring-[#4BA585] text-[#264E46] h-12 ${email && !isValidEmail(email) ? 'border-red-500 focus:border-red-500' : ''}`}
-                    aria-invalid={email && !isValidEmail(email) ? 'true' : 'false'}
+                    className={`border-[#CBD5D1] focus:border-[#4BA585] focus:ring-[#4BA585] text-[#264E46] h-12 ${
+                      email && !isValidEmail(email)
+                        ? "border-red-500 focus:border-red-500"
+                        : ""
+                    }`}
+                    aria-invalid={
+                      email && !isValidEmail(email) ? "true" : "false"
+                    }
                   />
                   {email && !isValidEmail(email) && (
-                    <span className="text-red-600 text-xs mt-1 block">Please enter a valid email address.</span>
+                    <span className="text-red-600 text-xs mt-1 block">
+                      Please enter a valid email address.
+                    </span>
                   )}
                 </div>
               </div>
@@ -913,7 +947,10 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Phone Field */}
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-[#264E46] mb-2">
+                  <label
+                    htmlFor="phone"
+                    className="block text-sm font-medium text-[#264E46] mb-2"
+                  >
                     Phone Number
                   </label>
                   <Input
@@ -928,7 +965,10 @@ export default function Home() {
 
                 {/* Address Field */}
                 <div>
-                  <label htmlFor="address" className="block text-sm font-medium text-[#264E46] mb-2">
+                  <label
+                    htmlFor="address"
+                    className="block text-sm font-medium text-[#264E46] mb-2"
+                  >
                     Address or Area
                   </label>
                   <Input
@@ -944,7 +984,10 @@ export default function Home() {
 
               {/* Message Field */}
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-[#264E46] mb-2">
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium text-[#264E46] mb-2"
+                >
                   Message *
                 </label>
                 <Textarea
@@ -964,7 +1007,7 @@ export default function Home() {
                 disabled={isLoading}
                 className="w-full bg-[#4BA585] hover:bg-[#3d8a70] text-white font-semibold py-3 h-12 shadow-lg hover:shadow-xl transition-all duration-300"
               >
-                {isLoading ? 'Sending...' : 'Send Message'}
+                {isLoading ? "Sending..." : "Send Message"}
               </Button>
             </form>
           </Card>

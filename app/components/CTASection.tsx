@@ -19,7 +19,7 @@ export const CTASection = ({
         <div className="bg-gradient-to-r from-[#4BA585] to-[#3d8a70] rounded-2xl overflow-hidden shadow-xl">
           <div className="px-6 py-16 sm:px-12 md:py-20 lg:py-24 relative">
             <div className="max-w-3xl mx-auto text-center relative z-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 font-heading">
                 {title}
               </h2>
               <p className="text-lg text-[#E6F4F1] mb-8">{description}</p>
