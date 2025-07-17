@@ -363,14 +363,15 @@ export default function Home() {
               </div>
               <Button
                 size="lg"
-                className="mt-8 bg-[#4BA585] hover:bg-[#3d8a70] text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                className="mt-8 bg-[#4BA585] hover:bg-[#3d8a70] text-white shadow-lg hover:shadow-xl transition-all duration-300 text-lg"
+                asChild
               >
-                GET INSTANT QUOTE
+                <Link href="/locations/northern-beaches">Where We Work</Link>
               </Button>
             </div>
             <div className="relative h-[400px]">
               <img
-                src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3"
+                src="https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images//first.jpg"
                 alt="Professional cleaning team"
                 className="rounded-lg object-cover w-full h-full"
               />
@@ -423,7 +424,7 @@ export default function Home() {
             </div>
             <div className="relative h-[400px]">
               <img
-                src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3"
+                src="https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images//second.jpg"
                 alt="Cleaning professional at work"
                 className="rounded-lg object-cover w-full h-full shadow-lg"
               />
@@ -552,9 +553,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-start">
             {/* Columna Izquierda - Imagen */}
-            <div className="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden shadow-xl">
+            <div className="relative h-[400px] md:h-[800px] rounded-3xl overflow-hidden shadow-xl">
               <img
-                src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3"
+                src="https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images//third.jpg"
                 alt="Cleaning professional at work"
                 className="w-full h-full object-cover"
               />
@@ -646,7 +647,7 @@ export default function Home() {
             <div className="flex flex-col gap-8 order-2 md:order-1">
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold mb-4 font-heading text-[#264E46]">
-                  Why Choose No Sweat Cleaning?
+                  Why Choose Fresh & Clean?
                 </h2>
                 <p className="text-[#264E46] text-lg opacity-80">
                   Because cleaning is more than just a chore — it&apos;s about
@@ -734,9 +735,9 @@ export default function Home() {
             </div>
 
             {/* Columna Derecha - Imagen */}
-            <div className="relative h-[400px] md:h-[600px] rounded-3xl overflow-hidden shadow-xl order-1 md:order-2">
+            <div className="relative h-[400px] md:h-[650px] rounded-3xl overflow-hidden shadow-xl order-1 md:order-2">
               <img
-                src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3"
+                src="https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images//quarter.jpg"
                 alt="Professional cleaning team at work"
                 className="w-full h-full object-cover"
               />

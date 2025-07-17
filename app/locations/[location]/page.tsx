@@ -39,14 +39,14 @@ export function generateStaticParams() {
   ];
 }
 
-export default function LocationPage({
+export default async function LocationPage({
   params,
 }: {
-  params: { location: string };
+  params: Promise<{ location: string }>;
 }) {
-  const locationKey = params.location as keyof typeof LOCATIONS;
+  const { location } = await params;
+  const locationKey = location as keyof typeof LOCATIONS;
   const locationData = LOCATIONS[locationKey];
-
   if (!locationData) return notFound();
 
   return (
