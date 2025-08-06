@@ -11,6 +11,11 @@ functions = "netlify/functions"
   to = "/.netlify/functions/api/:splat"
   status = 200
 
+[[redirects]]
+  from = "/.netlify/functions/contact"
+  to = "/.netlify/functions/contact"
+  status = 200
+
 [functions]
 node_bundler = "esbuild"
 external_node_modules = ["date-fns", "nodemailer"] 

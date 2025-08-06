@@ -3,7 +3,18 @@ import { Contact } from '@/app/types/contact';
 export class ContactEmailService {
     private async sendEmailViaAPI(contact: Contact) {
         try {
-            const response = await fetch('/api/contact', {
+            // Determinar la URL base según el entorno
+            const isProduction = process.env.NODE_ENV === 'production' ||
+                window.location.hostname !== 'localhost';
+
+            // En producción, usar la Netlify Function; en desarrollo, usar la API route
+            const apiUrl = isProduction
+                ? '/.netlify/functions/contact'
+                : '/api/contact';
+
+            console.log('Using API URL:', apiUrl);
+
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
