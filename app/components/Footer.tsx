@@ -18,7 +18,7 @@ export const Footer = () => {
           <div>
             <div className="flex items-center mb-4">
               <Sparkles className="h-6 w-6" />
-              <span className="ml-2 text-lg font-bold">Fresh & Clean</span>
+              <span className="ml-2 text-lg font-bold">Helping Crew</span>
             </div>
             <p className="text-[#E6F4F1] opacity-80">
               Professional cleaning services for homes and businesses.
@@ -90,8 +90,7 @@ export const Footer = () => {
         </div>
         <div className="border-t border-[#4BA585] mt-8 pt-8 text-center text-[#E6F4F1]">
           <p>
-            &copy; {new Date().getFullYear()} Fresh & Clean. All rights
-            reserved.
+            &copy; {new Date().getFullYear()} Helping Crew. All rights reserved.
           </p>
         </div>
       </div>

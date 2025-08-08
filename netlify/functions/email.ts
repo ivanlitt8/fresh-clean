@@ -40,7 +40,7 @@ const ADMIN_EMAIL_TEMPLATE = `<!DOCTYPE html
                                 <tr>
                                     <td align="center" style="padding-bottom: 30px;">
                                         <img src="https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images//FreshAndCleanName.png"
-                                            alt="Fresh & Clean" width="300" style="display: block;" />
+                                            alt="Helping Crew" width="300" style="display: block;" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -200,7 +200,7 @@ const CLIENT_EMAIL_TEMPLATE = `<!DOCTYPE html
                                 <tr>
                                     <td align="center" style="padding-bottom: 30px;">
                                         <img src="https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images//FreshAndCleanName.png"
-                                            alt="Fresh & Clean" width="300" style="display: block;" />
+                                            alt="Helping Crew" width="300" style="display: block;" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -333,7 +333,7 @@ const CLIENT_EMAIL_TEMPLATE = `<!DOCTYPE html
             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding-top: 20px;">
                 <tr>
                     <td align="center" style="font-family: Arial, sans-serif; font-size: 14px; color: #666666;">
-                        Fresh & Clean
+                        Helping Crew
                     </td>
                 </tr>
                 <tr>
@@ -384,10 +384,10 @@ async function generateAdminEmailHtml(booking: Booking): Promise<string> {
 
         // Calcular total de ambientes
         const totalRooms = (parseInt(booking.serviceDetails.bedrooms) || 0) +
-                          (parseInt(booking.serviceDetails.bathrooms) || 0) +
-                          (parseInt(booking.serviceDetails.kitchens) || 0) +
-                          (parseInt(booking.serviceDetails.livingRooms) || 0) +
-                          (parseInt(booking.serviceDetails.otherSpaces) || 0);
+            (parseInt(booking.serviceDetails.bathrooms) || 0) +
+            (parseInt(booking.serviceDetails.kitchens) || 0) +
+            (parseInt(booking.serviceDetails.livingRooms) || 0) +
+            (parseInt(booking.serviceDetails.otherSpaces) || 0);
 
         const variables = {
             USER_FULL_NAME: `${booking.clientInfo.firstName} ${booking.clientInfo.lastName}`,
@@ -434,10 +434,10 @@ async function generateClientEmailHtml(booking: Booking): Promise<string> {
 
         // Calcular total de ambientes
         const totalRooms = (parseInt(booking.serviceDetails.bedrooms) || 0) +
-                          (parseInt(booking.serviceDetails.bathrooms) || 0) +
-                          (parseInt(booking.serviceDetails.kitchens) || 0) +
-                          (parseInt(booking.serviceDetails.livingRooms) || 0) +
-                          (parseInt(booking.serviceDetails.otherSpaces) || 0);
+            (parseInt(booking.serviceDetails.bathrooms) || 0) +
+            (parseInt(booking.serviceDetails.kitchens) || 0) +
+            (parseInt(booking.serviceDetails.livingRooms) || 0) +
+            (parseInt(booking.serviceDetails.otherSpaces) || 0);
 
         const variables = {
             USER_FULL_NAME: `${booking.clientInfo.firstName} ${booking.clientInfo.lastName}`,

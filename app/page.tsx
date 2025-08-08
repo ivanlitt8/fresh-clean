@@ -351,7 +351,7 @@ export default function Home() {
                 Because cleaning is just the beginning
               </h2>
               <h3 className="text-4xl font-bold mb-8 font-heading">
-                The Fresh & Clean Difference
+                The Helping Crew Difference
               </h3>
               <div className="space-y-4">
                 {features.map((feature, index) => (
@@ -386,10 +386,10 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-4xl font-bold mb-6 font-heading text-[#264E46]">
-                About Fresh & Clean
+                About Helping Crew
               </h2>
               <p className="text-[#264E46] mb-6 opacity-90">
-                At Fresh & Clean, we combine international experience with a
+                At Helping Crew, we combine international experience with a
                 human, personalized approach. Our diverse and professional team
                 has worked in homes and businesses across different countries,
                 bringing excellence, discipline, and warmth to every service.{" "}
@@ -647,7 +647,7 @@ export default function Home() {
             <div className="flex flex-col gap-8 order-2 md:order-1">
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold mb-4 font-heading text-[#264E46]">
-                  Why Choose Fresh & Clean?
+                  Why Choose Helping Crew ?
                 </h2>
                 <p className="text-[#264E46] text-lg opacity-80">
                   Because cleaning is more than just a chore — it&apos;s about
@@ -773,7 +773,7 @@ export default function Home() {
                 </svg>
               </div>
               <blockquote className="text-white text-lg leading-relaxed mb-6 text-center">
-                &quot;The Fresh & Clean team saved our routine. They&apos;re
+                &quot;The Helping Crew team saved our routine. They&apos;re
                 fast, meticulous, and always leave everything better than we
                 imagined.&quot;
               </blockquote>

@@ -99,7 +99,7 @@ export const Navbar = () => {
           >
             <Image
               src="https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images//FreshAndClean.png"
-              alt="Fresh & Clean Logo"
+              alt="Helping Crew"
               width={32}
               height={32}
               className="h-8 w-8 object-contain"
@@ -108,7 +108,7 @@ export const Navbar = () => {
               className="ml-2 text-xl font-bold"
               style={{ color: "#87b7c1" }}
             >
-              Fresh & Clean
+              Helping Crew
             </span>
           </div>
 

@@ -22,7 +22,7 @@ const outfit = Outfit({
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
-  title: "Fresh & Clean",
+  title: "Helping Crew",
   icons: {
     icon: "/favicon.ico",
   },

@@ -49,7 +49,7 @@ function generateClientAutoResponse(contact: Contact): string {
                                 <tr>
                                     <td align="center" style="padding-bottom: 30px;">
                                         <img src="https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images//FreshAndCleanName.png"
-                                            alt="Fresh & Clean" width="300" style="display: block;" />
+                                            alt="Helping Crew" width="300" style="display: block;" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -66,7 +66,7 @@ function generateClientAutoResponse(contact: Contact): string {
                                                         <tr>
                                                             <td style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.4; color: #666666;">
                                                                 <p>Hello ${contact.name}, <br>
-                                                                   Thank you for contacting Fresh & Clean Cleaning Services. We have received your message and will get back to you as soon as possible.
+                                                                   Thank you for contacting Helping Crew Cleaning Services. We have received your message and will get back to you as soon as possible.
                                                                 </p>
                                                             </td>
                                                         </tr>
@@ -81,7 +81,7 @@ function generateClientAutoResponse(contact: Contact): string {
                                                                 </p>
                                                                 <p style="text-align: center;">
                                                                     Best regards, <br>
-                                                                    Fresh & Clean Team
+                                                                    Helping Crew Team
                                                                 </p>
                                                             </td>
                                                         </tr>
@@ -130,7 +130,7 @@ function generateClientAutoResponse(contact: Contact): string {
             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="padding-top: 20px;">
                 <tr>
                     <td align="center" style="font-family: Arial, sans-serif; font-size: 14px; color: #666666;">
-                        Fresh & Clean
+                        Helping Crew
                     </td>
                 </tr>
                 <tr>
@@ -176,7 +176,7 @@ function generateAdminNotification(contact: Contact): string {
                                 <tr>
                                     <td align="center" style="padding-bottom: 30px;">
                                         <img src="https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images//FreshAndCleanName.png"
-                                            alt="Fresh & Clean" width="300" style="display: block;" />
+                                            alt="Helping Crew" width="300" style="display: block;" />
                                     </td>
                                 </tr>
                                 <tr>
@@ -319,7 +319,7 @@ export const handler: Handler = async (event) => {
                 sendEmail({
                     from: process.env.GMAIL_USER,
                     to: contact.email,
-                    subject: 'Thank you for contacting Fresh & Clean - We\'ll be in touch soon!',
+                    subject: 'Thank you for contacting Helping Crew - We\'ll be in touch soon!',
                     html: clientEmailContent,
                 }),
                 // Notificación al administrador (HTML)
