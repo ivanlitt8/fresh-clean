@@ -29,7 +29,7 @@ export const Footer = () => {
             <div className="space-y-2">
               <div className="flex items-center">
                 <PhoneCall className="h-5 w-5 mr-2" />
-                <span>(555) 123-4567</span>
+                <span>(+61) 426459726</span>
               </div>
               <div className="flex items-center">
                 <MessageSquare className="h-5 w-5 mr-2" />

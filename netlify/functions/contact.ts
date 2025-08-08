@@ -105,7 +105,7 @@ function generateClientAutoResponse(contact: Contact): string {
                                 </tr>
                                 <tr>
                                     <td align="center" style="text-align: center;">
-                                        <a href="https://wa.me/1234567890" style="display: inline-block; background-color: #25D366; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; text-decoration: none; padding: 10px 20px; border-radius: 20px;">
+                                        <a href="https://wa.me/61426459726" style="display: inline-block; background-color: #25D366; color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; text-decoration: none; padding: 10px 20px; border-radius: 20px;">
                                             Contact us
                                         </a>
                                     </td>

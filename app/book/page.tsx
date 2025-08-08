@@ -114,11 +114,17 @@ export default function BookingPage() {
         try {
           const bookingService = new BookingService();
           // Verificar si el email ya tiene booking
-          const emailExists = await bookingService.emailHasBooking?.(formData.email);
+          const emailExists = await bookingService.emailHasBooking?.(
+            formData.email
+          );
           setIsFirstTime(emailExists === false);
-          const FIRST_TIME_DISCOUNT = 0.10;
-          const frequencyDiscount = FREQUENCY_DISCOUNTS[formData.frequency as keyof typeof FREQUENCY_DISCOUNTS] || 0;
-          const firstTimeDiscountRate = emailExists === false ? FIRST_TIME_DISCOUNT : 0;
+          const FIRST_TIME_DISCOUNT = 0.1;
+          const frequencyDiscount =
+            FREQUENCY_DISCOUNTS[
+              formData.frequency as keyof typeof FREQUENCY_DISCOUNTS
+            ] || 0;
+          const firstTimeDiscountRate =
+            emailExists === false ? FIRST_TIME_DISCOUNT : 0;
           const totalDiscountRate = frequencyDiscount + firstTimeDiscountRate;
           // Calcula el precio base
           const calculatedPricing = calculatePrice(
@@ -133,12 +139,15 @@ export default function BookingPage() {
           );
           // Calcula los descuentos por separado
           const discount = calculatedPricing.basePrice * frequencyDiscount;
-          const firstTimeDiscount = calculatedPricing.basePrice * firstTimeDiscountRate;
-          const finalPrice = calculatedPricing.basePrice - discount - firstTimeDiscount;
+          const firstTimeDiscount =
+            calculatedPricing.basePrice * firstTimeDiscountRate;
+          const finalPrice =
+            calculatedPricing.basePrice - discount - firstTimeDiscount;
           setPricing({
             ...calculatedPricing,
             discount,
-            firstTimeDiscount: firstTimeDiscount > 0 ? firstTimeDiscount : undefined,
+            firstTimeDiscount:
+              firstTimeDiscount > 0 ? firstTimeDiscount : undefined,
             finalPrice,
             totalDiscountRate,
           });
@@ -289,7 +298,10 @@ export default function BookingPage() {
         basePrice: pricing.basePrice,
         discount: pricing.discount,
         finalPrice: pricing.finalPrice,
-        firstTimeDiscount: typeof pricing.firstTimeDiscount === "number" ? pricing.firstTimeDiscount : 0,
+        firstTimeDiscount:
+          typeof pricing.firstTimeDiscount === "number"
+            ? pricing.firstTimeDiscount
+            : 0,
         totalDiscountRate: pricing.totalDiscountRate,
       },
       status: "pending" as const,
@@ -344,7 +356,7 @@ export default function BookingPage() {
     <main className="min-h-screen relative">
       {/* WhatsApp button */}
       <a
-        href="https://wa.me/1234567890"
+        href="https://wa.me/61426459726"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 w-16 h-16 flex items-center justify-center bg-green-500 text-white rounded-full p-4 shadow-lg hover:bg-green-600 transition-colors z-50"
