@@ -23,63 +23,63 @@ export default function Home() {
       description:
         "Post-renovation dust and debris? We handle it. Our team transforms newly built or refurbished spaces into clean, move-in-ready environments with care and precision.",
       image:
-        "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?ixlib=rb-4.0.3",
+        "https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images/after_construction_cleaning.jpg",
     },
     {
       title: "End of Lease Cleaning",
       description:
         "Moving out? We take care of the full cleaning so you can focus on what's next. Detailed, bond-ready results trusted by tenants and property managers alike.",
       image:
-        "https://images.unsplash.com/photo-1558317374-067fb5f30001?ixlib=rb-4.0.3",
+        "https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images/end_of_lease_cleaning.jpg",
     },
     {
       title: "Residential Cleaning",
       description:
         "Need help staying on top of the mess? We offer regular or one-off home cleaning services tailored to your lifestyle, with respect and attention to every detail.",
       image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+        "https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images/residencial_cleaning.jpg",
     },
     {
       title: "Deep Cleaning",
       description:
         "Perfect for spring resets, special occasions or when things need more than a surface clean. We go deeper to revive your space and make it feel brand new.",
       image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+        "https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images/deep_cleaning.jpg",
     },
     {
       title: "Carpet Cleaning",
       description:
         "Bring life back to your carpets. We remove dirt, stains and allergens using fabric-safe methods — for fresher, softer and healthier floors.",
       image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+        "https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images/carpet_cleaning.jpg",
     },
     {
       title: "Airbnb Cleaning",
       description:
         "We help you keep your short-term rental spotless between bookings. Flexible scheduling, reliable service, and detailed cleaning that impresses every guest — every time.",
       image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+        "https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images/airbnb_cleaning.jpg",
     },
     {
       title: "Commercial Cleaning",
       description:
         "Clean spaces create trust. Our tailored cleaning services for shops, clinics and studios keep your business welcoming, professional and spotless.",
       image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+        "https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images/commercial_cleaning.png",
     },
     {
       title: "Office Cleaning",
       description:
         "A clean office means sharper focus and better morale. We clean outside working hours, respecting your team's space and time.",
       image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+        "https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images/office_cleaning.jpg",
     },
     {
       title: "Strata Cleaning",
       description:
         "We maintain shared areas in buildings or complexes — keeping lobbies, stairs and hallways clean, safe and ready for everyday use.",
       image:
-        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3",
+        "https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images/strata_cleaning.png",
     },
   ];
 
