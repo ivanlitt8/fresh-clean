@@ -182,7 +182,11 @@ export default function LocationClientContent({ name, iframeSrc }: Props) {
         </div>
       </section>
 
-      <CTASection onButtonClick={() => {}} />
+      <CTASection
+        onButtonClick={() =>
+          (window.location.href = "/?fromLocations=true#contact")
+        }
+      />
     </main>
   );
 }

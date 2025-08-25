@@ -33,6 +33,7 @@ export default function Home() {
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [servicesPerPage, setServicesPerPage] = useState(3);
+  const [isFromLocations, setIsFromLocations] = useState(false);
 
   const services = [
     {
@@ -241,6 +242,26 @@ export default function Home() {
       setIsLoading(false);
     }
   };
+
+  // Detectar si viene de locations y redirigir al formulario de contacto
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const fromLocations = urlParams.get("fromLocations");
+
+    if (fromLocations === "true") {
+      setIsFromLocations(true);
+      // Redirigir al formulario de contacto después de un pequeño delay
+      setTimeout(() => {
+        const contactElement = document.getElementById("contact");
+        if (contactElement) {
+          contactElement.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      }, 500);
+    }
+  }, []);
 
   // Cerrar menú móvil al redimensionar ventana
   useEffect(() => {

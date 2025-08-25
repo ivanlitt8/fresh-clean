@@ -263,7 +263,11 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <CTASection onButtonClick={() => scrollToSection("contact")} />
+      <CTASection
+        onButtonClick={() =>
+          (window.location.href = "/?fromLocations=true#contact")
+        }
+      />
     </main>
   );
 }
