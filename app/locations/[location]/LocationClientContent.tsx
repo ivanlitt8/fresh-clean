@@ -13,31 +13,31 @@ const LOCATIONS = [
     slug: "northern-beaches",
     name: "Northern Beaches",
     image:
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+      "https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images/norther_beaches.jpg",
   },
   {
     slug: "north-shore",
     name: "North Shore",
     image:
-      "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80",
+      "https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images/north_shore.jpg",
   },
   {
     slug: "eastern-suburbs",
     name: "Eastern Suburbs",
     image:
-      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+      "https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images/eastern_suburbs.jpg",
   },
   {
     slug: "south-sydney",
     name: "South Sydney",
     image:
-      "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=800&q=80",
+      "https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images/south_sydney.jpg",
   },
   {
     slug: "sutherland-shire",
     name: "Sutherland Shire",
     image:
-      "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=800&q=80",
+      "https://fnelqwybbuyqbopedfhc.supabase.co/storage/v1/object/public/images/sutherland_shire.jpg",
   },
 ];
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { FormData } from "@/app/book/page";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { format } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { Upload } from "lucide-react";
@@ -30,7 +37,7 @@ interface BookingFormProps {
 
 const services = [
   "Airbnb Cleaning",
-  "Builders/Construction", 
+  "Builders/Construction",
   "End of Lease Cleaning",
   "Deep Cleaning",
   "Carpet Cleaning",
@@ -51,13 +58,12 @@ const validateStep1 = (formData: FormData): boolean => {
 
 const validateStep2 = (formData: FormData): boolean => {
   // Al menos debe tener un ambiente seleccionado (mayor a 0)
-  const hasRooms = (
+  const hasRooms =
     parseInt(formData.bedrooms) > 0 ||
     parseInt(formData.bathrooms) > 0 ||
     parseInt(formData.kitchens) > 0 ||
     parseInt(formData.livingRooms) > 0 ||
-    parseInt(formData.otherSpaces) > 0
-  );
+    parseInt(formData.otherSpaces) > 0;
   return hasRooms;
 };
 
@@ -85,6 +91,8 @@ export default function BookingForm({
   steps,
   onConfirm,
 }: BookingFormProps) {
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
+
   // Función para validar el paso actual
   const isCurrentStepValid = (): boolean => {
     switch (currentStep) {
@@ -183,15 +191,14 @@ export default function BookingForm({
             <strong>Total rooms:</strong> {totalRooms} rooms
           </p>
           <p className="text-xs text-blue-600 mt-1">
-            Select the quantity of each room type. At least one must be greater than 0.
+            Select the quantity of each room type. At least one must be greater
+            than 0.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="space-y-2">
-            <Label>
-              Bedrooms
-            </Label>
+            <Label>Bedrooms</Label>
             <Select
               value={formData.bedrooms}
               onValueChange={(value) =>
@@ -212,9 +219,7 @@ export default function BookingForm({
           </div>
 
           <div className="space-y-2">
-            <Label>
-              Bathrooms
-            </Label>
+            <Label>Bathrooms</Label>
             <Select
               value={formData.bathrooms}
               onValueChange={(value) =>
@@ -235,9 +240,7 @@ export default function BookingForm({
           </div>
 
           <div className="space-y-2">
-            <Label>
-              Kitchens
-            </Label>
+            <Label>Kitchens</Label>
             <Select
               value={formData.kitchens}
               onValueChange={(value) =>
@@ -258,9 +261,7 @@ export default function BookingForm({
           </div>
 
           <div className="space-y-2">
-            <Label>
-              Living Rooms
-            </Label>
+            <Label>Living Rooms</Label>
             <Select
               value={formData.livingRooms}
               onValueChange={(value) =>
@@ -281,9 +282,7 @@ export default function BookingForm({
           </div>
 
           <div className="space-y-2">
-            <Label>
-              Other Spaces
-            </Label>
+            <Label>Other Spaces</Label>
             <Select
               value={formData.otherSpaces}
               onValueChange={(value) =>
@@ -443,15 +442,35 @@ export default function BookingForm({
           }
           className={!formData.acceptTerms ? "border-red-200" : ""}
         />
-        <label
-          htmlFor="terms"
-          className={`text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${
-            !formData.acceptTerms ? "text-red-500" : "text-gray-600"
-          }`}
-        >
-          I accept the terms and conditions{" "}
-          <span className="text-red-500">*</span>
-        </label>
+        <Dialog open={isTermsModalOpen} onOpenChange={setIsTermsModalOpen}>
+          <DialogTrigger asChild>
+            <label
+              htmlFor="terms"
+              className={`text-sm underline leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer hover:text-blue-600 ${
+                !formData.acceptTerms ? "text-red-500" : "text-gray-600"
+              }`}
+              onClick={(e) => {
+                e.preventDefault();
+                setIsTermsModalOpen(true);
+              }}
+            >
+              I accept the terms and conditions{" "}
+              <span className="text-red-500">*</span>
+            </label>
+          </DialogTrigger>
+          <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden">
+            <DialogHeader>
+              <DialogTitle className="flex items-center justify-between"></DialogTitle>
+            </DialogHeader>
+            <div className="mt-4 h-[60vh] overflow-hidden">
+              <iframe
+                src="https://docs.google.com/document/d/e/2PACX-1vQ9TBEizZ0oE2DlmYrcM3OBo-yU4kutd5sJbG1snA86Mwn7aDld5v5t5exjdAN2rSI-hFOZy3uosiXv/pub?embedded=true"
+                className="w-full h-full border-0"
+                title="Terms and Conditions"
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
@@ -486,13 +505,16 @@ export default function BookingForm({
             <div>
               <span className="text-gray-600">Breakdown:</span>
               <p className="font-medium text-xs">
-                {formData.bedrooms}B • {formData.bathrooms}Ba • {formData.kitchens}K • {formData.livingRooms}L • {formData.otherSpaces}O
+                {formData.bedrooms}B • {formData.bathrooms}Ba •{" "}
+                {formData.kitchens}K • {formData.livingRooms}L •{" "}
+                {formData.otherSpaces}O
               </p>
             </div>
             <div>
               <span className="text-gray-600">Date:</span>
               <p className="font-medium">
-                {formData.date && format(formData.date, "PPP", { locale: enUS })}
+                {formData.date &&
+                  format(formData.date, "PPP", { locale: enUS })}
               </p>
             </div>
             <div>
@@ -562,11 +584,19 @@ export default function BookingForm({
           Previous
         </Button>
         {currentStep === steps.length ? (
-          <Button className="bg-blue-500 text-white hover:bg-blue-600" onClick={onConfirm} disabled={!isCurrentStepValid()}>
+          <Button
+            className="bg-blue-500 text-white hover:bg-blue-600"
+            onClick={onConfirm}
+            disabled={!isCurrentStepValid()}
+          >
             Confirm Booking
           </Button>
         ) : (
-          <Button className="bg-blue-500 text-white hover:bg-blue-600" onClick={handleNext} disabled={!isCurrentStepValid()}>
+          <Button
+            className="bg-blue-500 text-white hover:bg-blue-600"
+            onClick={handleNext}
+            disabled={!isCurrentStepValid()}
+          >
             {isCurrentStepValid() ? (
               "Next"
             ) : (

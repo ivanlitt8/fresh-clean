@@ -1,15 +1,18 @@
 "use client";
+import { useState } from "react";
+import { Clock, MapPin, PhoneCall, Sparkles, FileText, X } from "lucide-react";
 import {
-  Clock,
-  MapPin,
-  PhoneCall,
-  Sparkles,
-  MessageSquare,
-} from "lucide-react";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useNavigation } from "@/app/context/NavigationContext";
 
 export const Footer = () => {
   const { navigateToSection } = useNavigation();
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
 
   return (
     <footer className="bg-[#264E46] text-white py-12">
@@ -31,10 +34,40 @@ export const Footer = () => {
                 <PhoneCall className="h-5 w-5 mr-2" />
                 <span>(+61) 426459726</span>
               </div>
-              <div className="flex items-center">
-                <MessageSquare className="h-5 w-5 mr-2" />
-                <span>info@freshandclean.com</span>
-              </div>
+              <Dialog
+                open={isTermsModalOpen}
+                onOpenChange={setIsTermsModalOpen}
+              >
+                <DialogTrigger asChild>
+                  <button
+                    className="flex items-center hover:text-[#D8F3A3] transition-colors duration-300"
+                    onClick={() => setIsTermsModalOpen(true)}
+                  >
+                    <FileText className="h-5 w-5 mr-2" />
+                    <span>Terms & Conditions</span>
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden">
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center justify-between">
+                      <span>Terms and Conditions</span>
+                      {/* <button
+                        onClick={() => setIsTermsModalOpen(false)}
+                        className="p-1 hover:bg-gray-100 rounded-full"
+                      >
+                        <X className="h-5 w-5" />
+                      </button> */}
+                    </DialogTitle>
+                  </DialogHeader>
+                  <div className="mt-4 h-[60vh] overflow-hidden">
+                    <iframe
+                      src="https://docs.google.com/document/d/e/2PACX-1vQ9TBEizZ0oE2DlmYrcM3OBo-yU4kutd5sJbG1snA86Mwn7aDld5v5t5exjdAN2rSI-hFOZy3uosiXv/pub?embedded=true"
+                      className="w-full h-full border-0"
+                      title="Terms and Conditions"
+                    />
+                  </div>
+                </DialogContent>
+              </Dialog>
               <div className="flex items-center">
                 <MapPin className="h-5 w-5 mr-2" />
                 <span>123 Clean Street, City</span>
@@ -91,6 +124,15 @@ export const Footer = () => {
         <div className="border-t border-[#4BA585] mt-8 pt-8 text-center text-[#E6F4F1]">
           <p>
             &copy; {new Date().getFullYear()} Helping Crew. All rights reserved.
+            Developed by{" "}
+            <a
+              href="https://portfolio-ivan-litt.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#D8F3A3] hover:text-white transition-colors duration-300 underline"
+            >
+              Studio88
+            </a>
           </p>
         </div>
       </div>
