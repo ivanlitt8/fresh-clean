@@ -8,7 +8,7 @@ export class EmailService {
         }
         // En desarrollo local sin Netlify CLI
         if (process.env.NODE_ENV === 'development') {
-            return 'http://localhost:9999/.netlify/functions/email';
+            return '/api/email'; // Usar Next.js API Route
         }
         // En producción
         return '/.netlify/functions/email';
